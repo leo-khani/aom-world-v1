@@ -1,7 +1,12 @@
 "use client";
-import LeaderBoard from "@/components/main/Leaderboard";
-import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+
+// Dynamically import the LeaderBoard component
+const LeaderBoard = dynamic(() => import("@/components/main/Leaderboard"), {
+  ssr: false,
+});
 
 export default function LeaderBoardPage() {
   const searchParams = useSearchParams();
