@@ -2,6 +2,7 @@ import { Avatar, CircularProgress, Spinner, Tooltip } from "@nextui-org/react";
 import {
   IconAward,
   IconFlame,
+  IconHash,
   IconSkull,
   IconSwords,
 } from "@tabler/icons-react";
@@ -15,6 +16,7 @@ interface PlayerHeaderProfileProps {
   winStreak: number;
   wins: number;
   losses: number;
+  rank: number;
 }
 
 export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
@@ -25,6 +27,7 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
   winStreak,
   wins,
   losses,
+  rank,
 }) => {
   const getProgressColor = (
     winPercent: number
@@ -53,6 +56,12 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
           </Tooltip>
         </div>
         <div className="flex flex-row items-center gap-4">
+          <Tooltip className="bg-neutral-800" content="Total games">
+            <div className="pl-2 flex items-center gap-1">
+              <IconHash size={16} /> {rank}
+            </div>
+          </Tooltip>
+          <div>|</div>
           <Tooltip className="bg-neutral-800" content="Total games">
             <div className="pl-2 flex items-center gap-1">
               <IconSwords size={16} /> {totalGames}

@@ -105,7 +105,7 @@ export default function Player({ params }: { params: { slug: string } }) {
               <Tab
                 key="rmsolo"
                 title="Solo"
-                className="bg-transparent text-sm"
+                className="text-sm"
                 isDisabled={!items[1]}
               >
                 {items[1] && (
@@ -117,6 +117,7 @@ export default function Player({ params }: { params: { slug: string } }) {
                     winStreak={items[1].winStreak}
                     wins={items[1].wins}
                     losses={items[1].losses}
+                    rank={items[1].rank}
                   />
                 )}
               </Tab>
@@ -124,6 +125,7 @@ export default function Player({ params }: { params: { slug: string } }) {
               <Tab
                 key="rmteam"
                 title="Team"
+                className="text-sm"
                 isDisabled={!items[2]} // This will disable the tab if there is no data
               >
                 {" "}
@@ -136,6 +138,7 @@ export default function Player({ params }: { params: { slug: string } }) {
                     winStreak={items[2].winStreak}
                     wins={items[2].wins}
                     losses={items[2].losses}
+                    rank={items[2].rank}
                   />
                 )}
               </Tab>
