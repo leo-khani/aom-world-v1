@@ -167,6 +167,9 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    if (days === 0) {
+      return "Today";
+    }
     return `${days} Days ago`;
   };
 
@@ -204,7 +207,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
         return "/maps/air.png";
     }
   };
-
+  if (!userID) return <div>Loading...</div>;
   if (loading) return <div>Loading match history...</div>;
   if (error) return <div>{error}</div>;
 
@@ -275,28 +278,11 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                     </Link>
                   </TableCell>
                   <TableCell className="text-md">
-                    <div>
-                      {match.matchhistorymember[0].newrating -
-                        match.matchhistorymember[0].oldrating >
-                      0 ? (
-                        <div className="text-green-500 flex items-center gap-1">
-                          <IconArrowNarrowUp size={16} />{" "}
-                          {match.matchhistorymember[0].newrating -
-                            match.matchhistorymember[0].oldrating}{" "}
-                        </div>
-                      ) : (
-                        <div className="text-red-500 flex items-center gap-1">
-                          <IconArrowNarrowDown size={16} />
-                          {Math.abs(
-                            match.matchhistorymember[0].newrating -
-                              match.matchhistorymember[0].oldrating
-                          )}
-                        </div>
-                      )}
-                    </div>
+                    <div>{getRatingChange(match, userID)}</div>
                   </TableCell>
 
                   <TableCell className="flex flex-row gap-2">
+                    {/* Teams */}
                     {Object.entries(
                       match.matchhistorymember.reduce(
                         (acc: { [key: string]: any[] }, member) => {
@@ -323,25 +309,53 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                             return (
                               <div
                                 key={member.profile_id}
-                                className="flex flex-row items-center gap-2 bg-neutral-800 p-2 m-2 rounded-md w-full"
+                                className="flex flex-col gap-2 bg-neutral-800 p-2 m-2 rounded-md w-full"
                               >
-                                <Image
-                                  src={civilization_idFormatter(
-                                    member.civilization_id
-                                  )}
-                                  width={50}
-                                  height={50}
-                                  alt={member.civilization_id.toString()}
-                                  className="rounded-full border-2 border-neutral-600"
-                                />
-                                <div
-                                  className={
-                                    member.profile_id === userID
-                                      ? "font-bold text-yellow-500"
-                                      : ""
-                                  }
-                                >
-                                  {playerAlias}
+                                <div className="flex flex-row items-center gap-2 ">
+                                  <Image
+                                    src={civilization_idFormatter(
+                                      member.civilization_id
+                                    )}
+                                    width={50}
+                                    height={50}
+                                    alt={member.civilization_id.toString()}
+                                    className="rounded-full border-2 border-neutral-600"
+                                  />
+                                  <div>
+                                    <div
+                                      className={
+                                        member.profile_id === userID
+                                          ? "font-bold text-yellow-500"
+                                          : ""
+                                      }
+                                    >
+                                      {playerAlias}
+                                    </div>
+                                    <div>
+                                      <span>
+                                        {member.newrating - member.oldrating >
+                                        0 ? (
+                                          <div className="flex flex-row gap-1">
+                                            {member.newrating}
+                                            <div className="text-green-500 flex items-center gap-1">
+                                              <IconArrowNarrowUp size={16} />
+                                              {member.newrating -
+                                                member.oldrating}
+                                            </div>
+                                          </div>
+                                        ) : (
+                                          <div className="flex flex-row gap-1">
+                                            {Math.abs(member.newrating)}
+                                            <span className="text-red-500 flex items-center gap-1">
+                                              <IconArrowNarrowDown size={16} />
+                                              {member.newrating -
+                                                member.oldrating}
+                                            </span>
+                                          </div>
+                                        )}
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             );
@@ -363,3 +377,32 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
 };
 
 export default MatchHistory;
+
+const getRatingChange = (match: MatchHistoryStat, userID: number) => {
+  const currentPlayerData = match.matchhistorymember.find(
+    (member) => member.profile_id === userID
+  );
+
+  if (currentPlayerData) {
+    const ratingChange =
+      currentPlayerData.newrating - currentPlayerData.oldrating;
+    return (
+      <div>
+        {ratingChange > 0 ? (
+          <div className="text-green-500 flex items-center gap-1">
+            <IconArrowNarrowUp size={16} />
+            {ratingChange}
+          </div>
+        ) : ratingChange < 0 ? (
+          <div className="text-red-500 flex items-center gap-1">
+            <IconArrowNarrowDown size={16} />
+            {Math.abs(ratingChange)}
+          </div>
+        ) : (
+          <div className="text-gray-500">0</div>
+        )}
+      </div>
+    );
+  }
+  return <div className="text-gray-500">N/A</div>;
+};
