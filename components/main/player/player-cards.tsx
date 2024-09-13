@@ -29,9 +29,9 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
   const getProgressColor = (
     winPercent: number
   ): "success" | "warning" | "danger" => {
-    if (winPercent >= 65) return "success"; // High win rate
-    if (winPercent >= 50) return "warning"; // Moderate win rate
-    return "danger"; // Low win rate
+    if (winPercent >= 65) return "success";
+    if (winPercent >= 50) return "warning";
+    return "danger";
   };
 
   const progressColor = getProgressColor(winPercent);

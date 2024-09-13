@@ -7,7 +7,7 @@ import SearchBar from "./SearchBar";
 const Navbar = () => {
   return (
     <>
-      <div className="bg-background container mx-auto py-8">
+      <div className="bg-background container mx-auto py-8 px-8">
         <div className="flex justify-between items-center grap-2 bg-primary">
           {/* Navbar Links */}
           <div className="w-1/3 flex flex-row justify-center items-center gap-12">

@@ -6,6 +6,7 @@ import {
   PlayerHeaderProfile,
 } from "@/components/main/player/player-cards";
 import MatchHistory from "@/components/MatchHistory";
+import { Tabs, Tab, Card, CardBody, Tooltip } from "@nextui-org/react";
 
 interface Profile {
   gameId: string;
@@ -94,16 +95,53 @@ export default function Player({ params }: { params: { slug: string } }) {
     <>
       <div className="w-full py-8">
         <div>
-          {items[1] && (
-            <PlayerHeaderProfile
-              username={items[1].userName}
-              totalGames={items[1].totalGames}
-              winPercent={items[1].winPercent}
-              avatarUrl={items[1].avatarUrl}
-              winStreak={items[1].winStreak}
-              wins={items[1].wins}
-              losses={items[1].losses}
-            />
+          {items[1] || items[2] ? (
+            <Tabs
+              aria-label="Options"
+              className="bg-transparent"
+              placement="start"
+              defaultSelectedKey={items[1] ? "rmsolo" : "rmteam"}
+            >
+              <Tab
+                key="rmsolo"
+                title="Solo"
+                className="bg-transparent text-sm"
+                isDisabled={!items[1]}
+              >
+                {items[1] && (
+                  <PlayerHeaderProfile
+                    username={items[1].userName}
+                    totalGames={items[1].totalGames}
+                    winPercent={items[1].winPercent}
+                    avatarUrl={items[1].avatarUrl}
+                    winStreak={items[1].winStreak}
+                    wins={items[1].wins}
+                    losses={items[1].losses}
+                  />
+                )}
+              </Tab>
+
+              <Tab
+                key="rmteam"
+                title="Team"
+                isDisabled={!items[2]} // This will disable the tab if there is no data
+              >
+                {" "}
+                {items[2] && (
+                  <PlayerHeaderProfile
+                    username={items[2].userName}
+                    totalGames={items[2].totalGames}
+                    winPercent={items[2].winPercent}
+                    avatarUrl={items[2].avatarUrl}
+                    winStreak={items[2].winStreak}
+                    wins={items[2].wins}
+                    losses={items[2].losses}
+                  />
+                )}
+              </Tab>
+            </Tabs>
+          ) : (
+            <p>No data available</p>
           )}
         </div>
       </div>
