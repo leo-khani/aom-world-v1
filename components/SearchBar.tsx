@@ -1,7 +1,6 @@
 "use client";
 
-import { Autocomplete, AutocompleteItem, Button } from "@nextui-org/react";
-import Link from "next/link";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import React, { useState, useEffect } from "react";
 
 // Define the type for your API data
@@ -54,11 +53,17 @@ const SearchBar = () => {
         const result = await response.json();
         console.log("result", result);
         // Assuming result contains players data in a specific format
-        const players = result.items.map((player: any) => ({
-          label: player.userName,
-          value: player.rlUserId.toString(),
-          description: `Elo: ${player.elo}`, // Customize as needed
-        }));
+        const players = result.items.map(
+          (player: {
+            userName: any;
+            rlUserId: { toString: () => any };
+            elo: any;
+          }) => ({
+            label: player.userName,
+            value: player.rlUserId.toString(),
+            description: `Elo: ${player.elo}`, // Customize as needed
+          })
+        );
         setData(players);
         console.log("players", players);
       } catch (error) {

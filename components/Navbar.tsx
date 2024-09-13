@@ -13,6 +13,7 @@ const Navbar = () => {
           <div className="w-1/3 flex flex-row justify-center items-center gap-12">
             {siteConfig.navbarItems.map((item) => (
               <Link
+                key={item.name}
                 href={item.link}
                 className="flex items-center justify-center gap-2 "
               >

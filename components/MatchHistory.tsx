@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
-  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -16,7 +15,6 @@ import {
   IconInfoCircleFilled,
   IconPacman,
 } from "@tabler/icons-react";
-import LeaderboardEloChange from "./main/LeaderboardEloChange";
 import Link from "next/link";
 
 // Types for the match history data
@@ -40,9 +38,9 @@ interface MatchHistoryStat {
   mapname: string;
   matchhistoryitems: MatchHistoryItem[];
   matchhistorymember: {
-    teamid: any;
-    newrating: any;
-    oldrating: any;
+    teamid: number;
+    newrating: number;
+    oldrating: number;
     profile_id: number;
     name: string;
     alias: string;
@@ -79,7 +77,7 @@ interface PlayerData {
 }
 
 interface MatchHistoryProps {
-  userID?: any; // Updated type to 'string' for better clarity
+  userID?: number; // Updated type to 'string' for better clarity
 }
 
 const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
@@ -184,13 +182,13 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
         return "/gods/norse/major-gods/odin_icon.png";
       case 9:
         return "/gods/norse/major-gods/loki_icon.png";
-      case 10:
-        return "/gods/norse/major-gods/freyr_icon.png";
-      case 11:
-        return "/gods/atlantean/major-gods/kronos_icon.png";
-      case 12:
-        return "/gods/atlantean/major-gods/oranos_icon.png";
       case 13:
+        return "/gods/norse/major-gods/freyr_icon.png";
+      case 10:
+        return "/gods/atlantean/major-gods/kronos_icon.png";
+      case 11:
+        return "/gods/atlantean/major-gods/oranos_icon.png";
+      case 12:
         return "/gods/atlantean/major-gods/gaia_icon.png";
       default:
         return "/maps/air.png";
@@ -304,7 +302,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                           Team {parseInt(teamId) + 1}
                         </div>
                         <div className="flex flex-col">
-                          {members.map((member: any) => {
+                          {members.map((member) => {
                             const playerProfile = profiles.find(
                               (profile: any) =>
                                 member.profile_id === profile.profile_id
@@ -328,7 +326,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                                 />
                                 <div
                                   className={
-                                    member.profile_id === parseInt(userID)
+                                    member.profile_id === userID
                                       ? "font-bold text-yellow-500"
                                       : ""
                                   }

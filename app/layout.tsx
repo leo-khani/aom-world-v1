@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { Sen } from "next/font/google";
 
 export const sen = Sen({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-sen",
   weight: ["400", "700"],
 });
 export const metadata: Metadata = {
@@ -24,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sen.variable} antialiased`}>
+      <body className={`${sen} antialiased`}>
         <Header />
 
         <NextUIProvider>

@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { username, matchType } = await req.json();
+    const { username } = await req.json();
 
     console.log({ username })
     

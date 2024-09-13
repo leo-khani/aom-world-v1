@@ -1,18 +1,11 @@
-import {
-  Avatar,
-  CircularProgress,
-  Divider,
-  Spacer,
-  Spinner,
-  Tooltip,
-} from "@nextui-org/react";
+import { Avatar, CircularProgress, Spinner, Tooltip } from "@nextui-org/react";
 import {
   IconAward,
   IconFlame,
   IconSkull,
   IconSwords,
 } from "@tabler/icons-react";
-import React, { Children } from "react";
+import React from "react";
 
 interface PlayerHeaderProfileProps {
   username: string;

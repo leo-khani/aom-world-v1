@@ -9,8 +9,8 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import LeaderboardEloChange from "./LeaderboardEloChange";
-import { IconFlame, IconTrophy, IconTrophyFilled } from "@tabler/icons-react";
-import { Avatar, Button, Pagination, Spinner } from "@nextui-org/react";
+import { IconFlame, IconTrophyFilled } from "@tabler/icons-react";
+import { Avatar, Button, Pagination } from "@nextui-org/react";
 import Link from "next/link";
 
 // Define a TypeScript interface for the player data
