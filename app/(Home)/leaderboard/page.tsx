@@ -1,3 +1,4 @@
+"use client";
 import LeaderBoard from "@/components/main/Leaderboard";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
