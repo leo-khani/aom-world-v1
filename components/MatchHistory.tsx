@@ -106,7 +106,17 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
         }
 
         const data: PlayerData = await response.json();
-        setMatchHistory(data.matchHistoryStats);
+
+        // Sort matches by date in descending order and take the most recent ones
+        const sortedMatches = data.matchHistoryStats.sort((a, b) => {
+          return b.startgametime - a.startgametime; // Latest matches first
+        });
+
+        // Optional: Limit the number of displayed matches if needed
+        const numberOfMatchesToShow = 10; // Show only the latest 10 matches
+        const latestMatches = sortedMatches.slice(0, numberOfMatchesToShow);
+
+        setMatchHistory(latestMatches);
         setProfiles(data.profiles);
       } catch (error) {
         setError("Error fetching match history");
