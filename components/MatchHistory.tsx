@@ -213,176 +213,180 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
 
   return (
     <div>
-      <div className="">
-        {matchHistory && matchHistory.length > 0 ? (
-          <Table
-            aria-label="Match History Table"
-            className=""
-            topContent={
-              <>
-                <div className="flex w-full gap-2 items-center text-2xl font-bold pt-4">
-                  <IconSkull size={32} />
-                  Recent Games
-                </div>
-                <hr className="border-neutral-600" />
-              </>
-            }
-          >
-            <TableHeader>
-              <TableColumn className="uppercase text-xs font-semibold">
-                Map / Mode / Duration
-              </TableColumn>
-              <TableColumn className="uppercase text-xs font-semibold text-right">
-                Date
-              </TableColumn>
-              <TableColumn className="uppercase text-xs font-semibold">
-                Rating Δ
-              </TableColumn>
+      <div className="overflow-x-auto">
+        <div className="md:w-full w-[500px] overflow-y-auto">
+          {matchHistory && matchHistory.length > 0 ? (
+            <Table
+              aria-label="Match History Table"
+              className=""
+              topContent={
+                <>
+                  <div className="flex w-full gap-2 items-center text-2xl font-bold pt-4">
+                    <IconSkull size={32} />
+                    Recent Games
+                  </div>
+                  <hr className="border-neutral-600" />
+                </>
+              }
+            >
+              <TableHeader>
+                <TableColumn className="uppercase text-xs font-semibold">
+                  Map / Mode / Duration
+                </TableColumn>
+                <TableColumn className="uppercase text-xs font-semibold text-right">
+                  Date
+                </TableColumn>
+                <TableColumn className="uppercase text-xs font-semibold">
+                  Rating Δ
+                </TableColumn>
 
-              <TableColumn className="uppercase text-xs font-semibold">
-                Team(s)
-              </TableColumn>
-            </TableHeader>
-            <TableBody>
-              {matchHistory.map((match) => (
-                <TableRow key={match.id}>
-                  <TableCell>
-                    <div className="flex items-center gap-4">
-                      <Image
-                        src={`/maps/${match.mapname.replace(/^rm_/, "")}.png`}
-                        alt={match.mapname}
-                        className="rounded-md border-2 border-neutral-600"
-                        width={100}
-                        height={100}
-                      />
-                      <div className="flex flex-col gap-2">
-                        <div className="flex gap-1 text-sm">
-                          <Tooltip
-                            content={match.id.toString()}
-                            className="bg-neutral-700"
-                          >
-                            <IconInfoCircleFilled size={18} />
-                          </Tooltip>
-                          {match.description}
-                        </div>
-                        <div>{formatMapName(match.mapname)}</div>
-                        <div>
-                          {matchIdFormatter(match.matchtype_id)}{" "}
-                          <span className="text-neutral-400">
-                            {matchDuration(
-                              match.startgametime,
-                              match.completiontime
-                            )}
-                          </span>
+                <TableColumn className="uppercase text-xs font-semibold">
+                  Team(s)
+                </TableColumn>
+              </TableHeader>
+              <TableBody>
+                {matchHistory.map((match) => (
+                  <TableRow key={match.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-4">
+                        <Image
+                          src={`/maps/${match.mapname.replace(/^rm_/, "")}.png`}
+                          alt={match.mapname}
+                          className="rounded-md border-2 border-neutral-600"
+                          width={100}
+                          height={100}
+                        />
+                        <div className="flex flex-col gap-2">
+                          <div className="flex gap-1 text-sm">
+                            <Tooltip
+                              content={match.id.toString()}
+                              className="bg-neutral-700"
+                            >
+                              <IconInfoCircleFilled size={18} />
+                            </Tooltip>
+                            {match.description}
+                          </div>
+                          <div>{formatMapName(match.mapname)}</div>
+                          <div>
+                            {matchIdFormatter(match.matchtype_id)}{" "}
+                            <span className="text-neutral-400">
+                              {matchDuration(
+                                match.startgametime,
+                                match.completiontime
+                              )}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <span className=" text-sm">
-                      {matchDate(match.startgametime)}
-                    </span>
-                    <Link
-                      href={`/match/${match.id}`}
-                      className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1"
-                    >
-                      View Summary <IconPacman size={18} />
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-md">
-                    <div>{getRatingChange(match, userID)}</div>
-                  </TableCell>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <span className=" text-sm">
+                        {matchDate(match.startgametime)}
+                      </span>
+                      <Link
+                        href={`/match/${match.id}`}
+                        className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1"
+                      >
+                        View Summary <IconPacman size={18} />
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-md">
+                      <div>{getRatingChange(match, userID)}</div>
+                    </TableCell>
 
-                  <TableCell className="flex flex-row gap-2">
-                    {/* Teams */}
-                    {Object.entries(
-                      match.matchhistorymember.reduce(
-                        (acc: { [key: string]: any[] }, member) => {
-                          if (!acc[member.teamid]) acc[member.teamid] = [];
-                          acc[member.teamid].push(member);
-                          return acc;
-                        },
-                        {}
-                      )
-                    ).map(([teamId, members]) => (
-                      <div key={teamId} className="mb-2 gap-4 w-1/2">
-                        <div className="font-bold">
-                          Team {parseInt(teamId) + 1}
-                        </div>
-                        <div className="flex flex-col">
-                          {members.map((member) => {
-                            const playerProfile = profiles.find(
-                              (profile: any) =>
-                                member.profile_id === profile.profile_id
-                            );
-                            const playerAlias = playerProfile
-                              ? playerProfile.alias
-                              : "Unknown";
-                            return (
-                              <div
-                                key={member.profile_id}
-                                className="flex flex-col gap-2 bg-neutral-800 p-2 m-2 rounded-md w-full"
-                              >
-                                <div className="flex flex-row items-center gap-2 ">
-                                  <Image
-                                    src={civilization_idFormatter(
-                                      member.civilization_id
-                                    )}
-                                    width={50}
-                                    height={50}
-                                    alt={member.civilization_id.toString()}
-                                    className="rounded-full border-2 border-neutral-600"
-                                  />
-                                  <div>
-                                    <div
-                                      className={
-                                        member.profile_id === userID
-                                          ? "font-bold text-yellow-500"
-                                          : ""
-                                      }
-                                    >
-                                      {playerAlias}
-                                    </div>
+                    <TableCell className="flex flex-row gap-2">
+                      {/* Teams */}
+                      {Object.entries(
+                        match.matchhistorymember.reduce(
+                          (acc: { [key: string]: any[] }, member) => {
+                            if (!acc[member.teamid]) acc[member.teamid] = [];
+                            acc[member.teamid].push(member);
+                            return acc;
+                          },
+                          {}
+                        )
+                      ).map(([teamId, members]) => (
+                        <div key={teamId} className="mb-2 gap-4 w-1/2">
+                          <div className="font-bold">
+                            Team {parseInt(teamId) + 1}
+                          </div>
+                          <div className="flex flex-col">
+                            {members.map((member) => {
+                              const playerProfile = profiles.find(
+                                (profile: any) =>
+                                  member.profile_id === profile.profile_id
+                              );
+                              const playerAlias = playerProfile
+                                ? playerProfile.alias
+                                : "Unknown";
+                              return (
+                                <div
+                                  key={member.profile_id}
+                                  className="flex flex-col gap-2 bg-neutral-800 p-2 m-2 rounded-md w-full"
+                                >
+                                  <div className="flex flex-row items-center gap-2 ">
+                                    <Image
+                                      src={civilization_idFormatter(
+                                        member.civilization_id
+                                      )}
+                                      width={50}
+                                      height={50}
+                                      alt={member.civilization_id.toString()}
+                                      className="rounded-full border-2 border-neutral-600"
+                                    />
                                     <div>
-                                      <span>
-                                        {member.newrating - member.oldrating >
-                                        0 ? (
-                                          <div className="flex flex-row gap-1">
-                                            {member.newrating}
-                                            <div className="text-green-500 flex items-center gap-1">
-                                              <IconArrowNarrowUp size={16} />
-                                              {member.newrating -
-                                                member.oldrating}
+                                      <div
+                                        className={
+                                          member.profile_id === userID
+                                            ? "font-bold text-yellow-500"
+                                            : ""
+                                        }
+                                      >
+                                        {playerAlias}
+                                      </div>
+                                      <div>
+                                        <span>
+                                          {member.newrating - member.oldrating >
+                                          0 ? (
+                                            <div className="flex flex-row gap-1">
+                                              {member.newrating}
+                                              <div className="text-green-500 flex items-center gap-1">
+                                                <IconArrowNarrowUp size={16} />
+                                                {member.newrating -
+                                                  member.oldrating}
+                                              </div>
                                             </div>
-                                          </div>
-                                        ) : (
-                                          <div className="flex flex-row gap-1">
-                                            {Math.abs(member.newrating)}
-                                            <span className="text-red-500 flex items-center gap-1">
-                                              <IconArrowNarrowDown size={16} />
-                                              {member.newrating -
-                                                member.oldrating}
-                                            </span>
-                                          </div>
-                                        )}
-                                      </span>
+                                          ) : (
+                                            <div className="flex flex-row gap-1">
+                                              {Math.abs(member.newrating)}
+                                              <span className="text-red-500 flex items-center gap-1">
+                                                <IconArrowNarrowDown
+                                                  size={16}
+                                                />
+                                                {member.newrating -
+                                                  member.oldrating}
+                                              </span>
+                                            </div>
+                                          )}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          })}
-                        </div>{" "}
-                      </div>
-                    ))}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <div>No match history available</div>
-        )}
+                              );
+                            })}
+                          </div>{" "}
+                        </div>
+                      ))}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div>No match history available</div>
+          )}
+        </div>
       </div>
     </div>
   );

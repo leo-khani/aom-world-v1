@@ -48,17 +48,16 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
   const progressColor = getProgressColor(winPercent);
 
   const shareButton = () => {
-    // add the window url to clipboard
     navigator.clipboard.writeText(window.location.href);
     toast.success("Link copied to clipboard");
   };
 
   return (
-    <>
-      <div className="flex flex-col gap-2 px-2">
-        <div className="text-5xl font-bold flex flex-row gap-4">
-          <Avatar src={avatarUrl} size="lg" radius="md" className="shadow-lg" />
-          {username}
+    <div className="flex flex-col gap-2 px-2">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
+        <Avatar src={avatarUrl} size="lg" radius="md" className="shadow-lg" />
+        <div className="flex flex-row items-center gap-4">
+          <h1 className="text-2xl font-bold">{username}</h1>
           <Tooltip className="bg-neutral-800" content="Win rate">
             <CircularProgress
               aria-label="Loading..."
@@ -69,74 +68,67 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
             />
           </Tooltip>
         </div>
-        <div className="flex flex-row items-center gap-4">
-          <Tooltip className="bg-neutral-800" content="Leaderboard rank">
-            <div className="pl-2 flex items-center gap-1">
-              <IconHash size={16} /> {rank}
-            </div>
-          </Tooltip>
-          <div>|</div>
-          <Tooltip className="bg-neutral-800" content="Total games">
-            <div className="pl-2 flex items-center gap-1">
-              <IconSwords size={16} /> {totalGames}
-            </div>
-          </Tooltip>
-          <div>|</div>
-          <Tooltip className="bg-neutral-800" content="Wins">
-            <div className="flex items-center gap-1 text-green-500">
-              <IconAward size={16} /> {wins}
-            </div>
-          </Tooltip>
-          <div>|</div>
-          <Tooltip className="bg-neutral-800" content="Losses">
-            <div className="flex items-center gap-1 text-red-500">
-              <IconSkull size={16} /> {losses}
-            </div>
-          </Tooltip>
-          <div>|</div>
-          <div>
-            <Tooltip className="bg-neutral-800" content="Win streak">
-              {winStreak > 0 ? (
-                <div className="flex items-center gap-1 text-green-500">
-                  <IconFlame size={16} /> {winStreak}
-                </div>
-              ) : winStreak < 0 ? (
-                <div className="flex items-center gap-1 text-red-500">
-                  <IconFlame size={16} /> {Math.abs(winStreak)}
-                </div>
-              ) : (
-                <div className="flex items-center gap-1 text-gray-500">
-                  <IconFlame size={16} /> {winStreak}
-                </div>
-              )}
-            </Tooltip>
-          </div>
-
-          <div>|</div>
-          <div>
-            <Tooltip className="bg-neutral-800" content="Share profile">
-              <Button
-                isIconOnly
-                color="secondary"
-                size="sm"
-                onClick={() => shareButton()}
-                className="bg-neutral-800"
-              >
-                <IconShare size={16} />
-              </Button>
-            </Tooltip>
-          </div>
-        </div>
       </div>
-    </>
+      <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2">
+        <Tooltip className="bg-neutral-800" content="Leaderboard rank">
+          <div className="flex items-center gap-1">
+            <IconHash size={16} /> {rank}
+          </div>
+        </Tooltip>
+        <div className="hidden sm:block">|</div>
+        <Tooltip className="bg-neutral-800" content="Total games">
+          <div className="flex items-center gap-1">
+            <IconSwords size={16} /> {totalGames}
+          </div>
+        </Tooltip>
+        <div className="hidden sm:block">|</div>
+        <Tooltip className="bg-neutral-800" content="Wins">
+          <div className="flex items-center gap-1 text-green-500">
+            <IconAward size={16} /> {wins}
+          </div>
+        </Tooltip>
+        <div className="hidden sm:block">|</div>
+        <Tooltip className="bg-neutral-800" content="Losses">
+          <div className="flex items-center gap-1 text-red-500">
+            <IconSkull size={16} /> {losses}
+          </div>
+        </Tooltip>
+        <div className="hidden sm:block">|</div>
+        <Tooltip className="bg-neutral-800" content="Win streak">
+          <div
+            className={`flex items-center gap-1 ${
+              winStreak > 0
+                ? "text-green-500"
+                : winStreak < 0
+                ? "text-red-500"
+                : "text-gray-500"
+            }`}
+          >
+            <IconFlame size={16} /> {winStreak}
+          </div>
+        </Tooltip>
+        <div className="hidden sm:block">|</div>
+        <Tooltip className="bg-neutral-800" content="Share profile">
+          <Button
+            isIconOnly
+            color="secondary"
+            size="sm"
+            onClick={shareButton}
+            className="bg-neutral-800"
+          >
+            <IconShare size={16} />
+          </Button>
+        </Tooltip>
+      </div>
+    </div>
   );
 };
 
 interface PlayerCardRank1v1Props {
   children?: React.ReactNode;
-
   isLoading?: boolean;
 }
+
 export const PlayerCardRankSolo: React.FC<PlayerCardRank1v1Props> = ({
   children,
   isLoading = true,
@@ -151,26 +143,22 @@ export const PlayerCardRankSolo: React.FC<PlayerCardRank1v1Props> = ({
     );
   }
   return (
-    <>
-      <div className="bg-secondary rounded-md p-4">
-        <span className="semibold flex gap-2 items-center">
-          <IconSwords size={18} />
-          Ranked Match
-        </span>
-        <div className="mt-4">
-          <div className="grid grid-col items-center gap-2 w-full">
-            <div className="flex flex-row justify-evenly text-sm text-gray-400 gap-4">
-              <div className="w-1/5">Season</div>
-
-              <div className="w-1/5">Points</div>
-              <div className="w-2/5">Win Rate</div>
-            </div>
-
-            {children}
+    <div className="bg-secondary rounded-md p-4">
+      <span className="semibold flex gap-2 items-center">
+        <IconSwords size={18} />
+        Ranked Match
+      </span>
+      <div className="mt-4">
+        <div className="grid grid-col items-center gap-2 w-full">
+          <div className="flex flex-row justify-evenly text-sm text-gray-400 gap-4">
+            <div className="w-1/5">Season</div>
+            <div className="w-1/5">Points</div>
+            <div className="w-2/5">Win Rate</div>
           </div>
+          {children}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
