@@ -1,4 +1,9 @@
-import { IconBinoculars, IconChartBar, IconTrophy } from "@tabler/icons-react";
+import {
+  IconBinoculars,
+  IconChartBar,
+  IconHome,
+  IconTrophy,
+} from "@tabler/icons-react";
 
 export const siteConfig = {
   title: "AOM World",
@@ -6,6 +11,11 @@ export const siteConfig = {
   url: "https://aomworld.com",
 
   navbarItems: [
+    {
+      name: "Home",
+      link: "/",
+      icon: <IconHome stroke={2} size={18} />,
+    },
     {
       name: "Leaderboard",
       link: "/leaderboard/1",
