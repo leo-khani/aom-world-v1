@@ -3,7 +3,6 @@ import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
 import SearchBar from "./SearchBar";
-import { IconMugFilled } from "@tabler/icons-react";
 
 const Navbar = () => {
   return (
