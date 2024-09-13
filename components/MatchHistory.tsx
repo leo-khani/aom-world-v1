@@ -14,6 +14,8 @@ import {
   IconArrowNarrowUp,
   IconInfoCircleFilled,
   IconPacman,
+  IconSkull,
+  IconTrophyFilled,
 } from "@tabler/icons-react";
 import Link from "next/link";
 
@@ -215,7 +217,19 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
     <div>
       <div className="">
         {matchHistory && matchHistory.length > 0 ? (
-          <Table aria-label="Match History Table" className="">
+          <Table
+            aria-label="Match History Table"
+            className=""
+            topContent={
+              <>
+                <div className="flex w-full gap-2 items-center text-2xl font-bold pt-4">
+                  <IconSkull size={32} />
+                  Recent Games
+                </div>
+                <hr className="border-neutral-600" />
+              </>
+            }
+          >
             <TableHeader>
               <TableColumn className="uppercase text-xs font-semibold">
                 Map / Mode / Duration
@@ -228,7 +242,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
               </TableColumn>
 
               <TableColumn className="uppercase text-xs font-semibold">
-                Opponent(s)
+                Team(s)
               </TableColumn>
             </TableHeader>
             <TableBody>

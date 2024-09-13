@@ -162,7 +162,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
         bottomContent={
           <div className="flex w-full justify-center">
             {showLoadMoreBtn ? (
-              <Link href={`/leaderboard?matchType=${matchType}`}>
+              <Link href={`/leaderboard/${matchType}`}>
                 <Button className="rounded-md px-8" isLoading={isLoading}>
                   Load More
                 </Button>

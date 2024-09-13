@@ -8,7 +8,7 @@ export const siteConfig = {
   navbarItems: [
     {
       name: "Leaderboard",
-      link: "/leaderboard",
+      link: "/leaderboard/1",
       icon: <IconTrophy stroke={2} size={18} />,
     },
 

@@ -140,10 +140,10 @@ export default function Player({ params }: { params: { slug: string } }) {
         </div>
 
         <div className="w-full">
-          {items[1] && (
-            <MatchHistory
-              userID={items[1]?.rlUserId || items[2]?.rlUserId || 0}
-            />
+          {items[1] ? (
+            <MatchHistory userID={items[1].rlUserId || 0} />
+          ) : (
+            items[2] && <MatchHistory userID={items[2].rlUserId || 0} />
           )}
         </div>
       </div>
