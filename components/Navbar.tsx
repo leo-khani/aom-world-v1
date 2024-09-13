@@ -26,8 +26,10 @@ const Navbar = () => {
           </div>
 
           {/* Logo */}
-          <div className="w-1/3 text-xl font-bold flex items-center justify-center">
-            <Link href="/">{siteConfig.title}</Link>
+          <div className="w-1/3 text-4xl font-bold flex items-center justify-center">
+            <Link href="/" className="text-yellow-500">
+              {siteConfig.title}
+            </Link>
           </div>
           <div className="w-1/3 flex items-center justify-center">
             {/* Search bar */}

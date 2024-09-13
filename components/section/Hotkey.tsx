@@ -4,7 +4,6 @@ import TitleSection from "../ui/title-section";
 import { IconDownload, IconKeyboardShow } from "@tabler/icons-react";
 import { Card, CardBody, Spinner } from "@nextui-org/react";
 import Link from "next/link";
-import { tr } from "framer-motion/client";
 
 const data = [
   {

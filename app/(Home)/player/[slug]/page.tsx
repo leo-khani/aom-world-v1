@@ -6,7 +6,7 @@ import {
   PlayerHeaderProfile,
 } from "@/components/main/player/player-cards";
 import MatchHistory from "@/components/MatchHistory";
-import { Tabs, Tab, Card, CardBody, Tooltip } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/react";
 
 interface Profile {
   gameId: string;
