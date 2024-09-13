@@ -41,7 +41,7 @@ const data = [
 const Hotkey = () => {
   return (
     <div className="flex flex-col gap-2 py-4">
-      <TitleSection title="Hotkeys" icon={<IconKeyboardShow size={32} />} />
+      <TitleSection title="Hotkeys" icon={<IconKeyboardShow size={32} />} btn />
       <div className="grid grid-cols-5 justify-between items-center gap-5 py-2">
         {data.map((item, index) => (
           <Link href="/hotkey" key={index}>

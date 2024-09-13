@@ -40,6 +40,9 @@ const YoutubeVideos = () => {
       <TitleSection
         title="YouTube Videos"
         icon={<IconBrandYoutubeFilled size={32} />}
+        btn
+        btnText="See more"
+        btnLink="/youtube"
       />
       <div className="grid grid-cols-5 justify-between items-center gap-5 py-2 h-full">
         {youtubeData.map((video, index) => (
