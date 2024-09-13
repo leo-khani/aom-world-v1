@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import TitleSection from "../ui/title-section";
 import { IconDownload, IconKeyboardShow } from "@tabler/icons-react";
@@ -43,19 +44,21 @@ const Hotkey = () => {
       <TitleSection title="Hotkeys" icon={<IconKeyboardShow size={32} />} />
       <div className="grid grid-cols-5 justify-between items-center gap-5 py-2">
         {data.map((item, index) => (
-          <Card isPressable key={index} className="p-2">
-            <CardBody>
-              {item.body}{" "}
-              <div className="flex flex-row justify-between items-center pt-5">
-                <div className="text-sm">Source: {item.footer}</div>
-                <div className="text-sm bg-neutral-800 rounded-full p-2 hover:scale-110 duration-300 cursor-pointer">
-                  <Link href="#">
-                    <IconDownload size={20} className="" />
-                  </Link>
+          <Link href="/hotkey" key={index}>
+            <Card className="p-2 cursor-pointer">
+              <CardBody>
+                {item.body}{" "}
+                <div className="flex flex-row justify-between items-center pt-5">
+                  <div className="text-sm">Source: {item.footer}</div>
+                  <div className="text-sm bg-neutral-800 rounded-full p-2 hover:scale-110 duration-300 cursor-pointer">
+                    <Link href="#">
+                      <IconDownload size={20} className="" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </CardBody>
-          </Card>
+              </CardBody>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>

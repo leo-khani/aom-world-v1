@@ -1,44 +1,36 @@
 import React from "react";
 import TitleSection from "../ui/title-section";
 import { IconBrandYoutubeFilled } from "@tabler/icons-react";
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import Link from "next/link";
 
 const youtubeData = [
   {
     title: "Age of Mythology: Retold - Official Trailer",
-    url: "https://youtube.com/watch?v=dummyurl1",
-    description:
-      "Watch the first official trailer for Age of Mythology: Retold!",
+    url: "https://www.youtube.com/watch?v=O67dQQ9ZAqs&ab_channel=AgeofEmpires",
+
     image: "/content/youtube-videos/01.jpg",
   },
   {
-    title: "Top 10 Tips for Beginners",
-    url: "https://youtube.com/watch?v=dummyurl2",
-    description:
-      "Learn the top strategies to help you get started in Age of Mythology: Retold.",
-    image: "https://via.placeholder.com/150/TipsForBeginners.jpg",
+    title: "Age of Mythology Retold: Tier List!",
+    url: "https://www.youtube.com/watch?v=9a6eIAYrvQU&ab_channel=IamMagic",
+
+    image: "/content/youtube-videos/02.jpg",
   },
   {
-    title: "Advanced Gameplay Mechanics Explained",
-    url: "https://youtube.com/watch?v=dummyurl3",
-    description:
-      "A deep dive into the advanced mechanics and features of the game.",
-    image: "https://via.placeholder.com/150/GameplayMechanics.jpg",
+    title: "Age of Mythology Retold: Kronos Guide + Replay Analysis",
+    url: "https://www.youtube.com/watch?v=uxva7nxQbYI&ab_channel=IamMagic",
+    image: "/content/youtube-videos/03.jpg",
   },
   {
-    title: "Building an Effective Economy",
-    url: "https://youtube.com/watch?v=dummyurl4",
-    description:
-      "Tips and tricks for managing resources and building a strong economy.",
-    image: "https://via.placeholder.com/150/EffectiveEconomy.jpg",
+    title: "Age of Mythology Retold - The Ultimate Hades Guide",
+    url: "https://www.youtube.com/watch?v=ZQt5PmCZGSY&ab_channel=Aussie_Drongo",
+    image: "/content/youtube-videos/04.jpg",
   },
   {
-    title: "Mastering God Powers",
-    url: "https://youtube.com/watch?v=dummyurl5",
-    description:
-      "An overview of all God Powers and how to use them effectively.",
-    image: "https://via.placeholder.com/150/GodPowers.jpg",
+    title: "Age Of Mythology Retold Guide - Tips, Tricks, Tutorials, And More",
+    url: "https://youtube.com/watch?v=wqpGlR_oQAU",
+    image: "/content/youtube-videos/05.jpg",
   },
 ];
 
@@ -49,9 +41,9 @@ const YoutubeVideos = () => {
         title="YouTube Videos"
         icon={<IconBrandYoutubeFilled size={32} />}
       />
-      <div className="grid grid-cols-5 justify-between items-center gap-5 py-2">
+      <div className="grid grid-cols-5 justify-between items-center gap-5 py-2 h-full">
         {youtubeData.map((video, index) => (
-          <Card isPressable key={index} className="p-2">
+          <Card key={index} className="p-2 h-full relative">
             <CardBody>
               <img
                 src={video.image}
@@ -59,18 +51,18 @@ const YoutubeVideos = () => {
                 className="w-full h-32 object-cover rounded mb-2"
               />
               <h3 className="text-lg font-semibold">{video.title}</h3>
-              <p className="text-sm mb-2">{video.description}</p>
-              <div className="flex justify-between items-center pt-2">
-                <Link
-                  href={video.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  Watch on YouTube
-                </Link>
-              </div>
+              <p className="text-sm mb-16"></p>
             </CardBody>
+            <CardFooter className="absolute bottom-0 justify-center items-center pt-2">
+              <Link
+                href={video.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-stone-800 rounded-md px-4 py-2"
+              >
+                Watch on YouTube
+              </Link>
+            </CardFooter>
           </Card>
         ))}
       </div>
