@@ -15,7 +15,6 @@ import {
   IconInfoCircleFilled,
   IconPacman,
   IconSkull,
-  IconTrophyFilled,
 } from "@tabler/icons-react";
 import Link from "next/link";
 
