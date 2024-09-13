@@ -1,12 +1,20 @@
-import { Avatar, CircularProgress, Spinner, Tooltip } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  Spinner,
+  Tooltip,
+} from "@nextui-org/react";
 import {
   IconAward,
   IconFlame,
   IconHash,
+  IconShare,
   IconSkull,
   IconSwords,
 } from "@tabler/icons-react";
 import React from "react";
+import toast from "react-hot-toast";
 
 interface PlayerHeaderProfileProps {
   username: string;
@@ -39,6 +47,12 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
 
   const progressColor = getProgressColor(winPercent);
 
+  const shareButton = () => {
+    // add the window url to clipboard
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Link copied to clipboard");
+  };
+
   return (
     <>
       <div className="flex flex-col gap-2 px-2">
@@ -56,7 +70,7 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
           </Tooltip>
         </div>
         <div className="flex flex-row items-center gap-4">
-          <Tooltip className="bg-neutral-800" content="Total games">
+          <Tooltip className="bg-neutral-800" content="Leaderboard rank">
             <div className="pl-2 flex items-center gap-1">
               <IconHash size={16} /> {rank}
             </div>
@@ -95,6 +109,21 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
                   <IconFlame size={16} /> {winStreak}
                 </div>
               )}
+            </Tooltip>
+          </div>
+
+          <div>|</div>
+          <div>
+            <Tooltip className="bg-neutral-800" content="Share profile">
+              <Button
+                isIconOnly
+                color="secondary"
+                size="sm"
+                onClick={() => shareButton()}
+                className="bg-neutral-800"
+              >
+                <IconShare size={16} />
+              </Button>
             </Tooltip>
           </div>
         </div>

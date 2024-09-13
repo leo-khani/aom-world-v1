@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Sen } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const sen = Sen({ subsets: ["latin"] });
 export const metadata: Metadata = {
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 
 import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/Header";
+import Footer from "@/components/main/Footer";
 
 export default function RootLayout({
   children,
@@ -23,9 +25,11 @@ export default function RootLayout({
 
         <NextUIProvider>
           <main className="container mx-auto dark text-foreground bg-background font-sen">
+            <Toaster position="bottom-right" />
             {children}
           </main>
         </NextUIProvider>
+        <Footer />
       </body>
     </html>
   );
