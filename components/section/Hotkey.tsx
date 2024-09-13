@@ -49,43 +49,40 @@ const Hotkey = () => {
     }, 2000);
   }, []);
   return (
-    <>
-      <div className="flex flex-col gap-2 py-4">
-        {loading ? (
-          <>
-            <Spinner color="success" size="lg" className="py-8" />
-          </>
-        ) : (
-          <>
-            <TitleSection
-              title="Hotkeys"
-              icon={<IconKeyboardShow size={32} />}
-              btn
-            />
-            <div className="grid grid-cols-5 justify-between items-center gap-5 py-2">
-              {data.map((item, index) => (
-                <Link href="/hotkey" key={index}>
-                  <Card className="p-2 cursor-pointer">
-                    <CardBody>
-                      {item.body}{" "}
-                      <div className="flex flex-row justify-between items-center pt-5">
-                        <div className="text-sm">Source: {item.footer}</div>
-                        <div className="text-sm bg-neutral-800 rounded-full p-2 hover:scale-110 duration-300 cursor-pointer">
-                          <Link href="#">
-                            <IconDownload size={20} className="" />
-                          </Link>
-                        </div>
+    <div className="flex flex-col gap-2 py-4 px-4 sm:px-6 lg:px-8">
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <Spinner color="success" size="lg" />
+        </div>
+      ) : (
+        <>
+          <TitleSection
+            title="Hotkeys"
+            icon={<IconKeyboardShow size={32} />}
+            btn
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2">
+            {data.map((item, index) => (
+              <Link href="/hotkey" key={index}>
+                <Card className="p-2 cursor-pointer h-full">
+                  <CardBody className="flex flex-col justify-between">
+                    <p className="text-sm mb-4">{item.body}</p>
+                    <div className="flex flex-row justify-between items-center mt-auto">
+                      <div className="text-xs">Source: {item.footer}</div>
+                      <div className="text-sm bg-neutral-800 rounded-full p-2 hover:scale-110 duration-300 cursor-pointer">
+                        <Link href="#">
+                          <IconDownload size={20} />
+                        </Link>
                       </div>
-                    </CardBody>
-                  </Card>
-                </Link>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-    </>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
   );
 };
-
 export default Hotkey;

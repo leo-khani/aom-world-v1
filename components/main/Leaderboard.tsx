@@ -102,138 +102,133 @@ const Leaderboard: React.FC<leaderboardData> = ({
     return data.slice(start, end);
   }, [page, data, matchType]);
 
+  const renderModeButtons = () => (
+    <div className="flex flex-wrap gap-2 items-center justify-center sm:justify-end">
+      {[
+        { id: 1, label: "RM 1v1" },
+        { id: 2, label: "RM Team" },
+        { id: 3, label: "Deathmatch" },
+        { id: 4, label: "Team Deathmatch" },
+      ].map((button) => (
+        <Button
+          key={button.id}
+          className="rounded-md px-4 sm:px-8 hover:bg-white hover:text-black font-semibold"
+          style={{
+            backgroundColor: matchType === button.id ? "#F5F5F5" : "",
+            color: matchType === button.id ? "#000000" : "",
+          }}
+          onClick={() => setMatchType(button.id)}
+        >
+          {button.label}
+        </Button>
+      ))}
+    </div>
+  );
+
   return (
     <>
-      <Table
-        isStriped
-        aria-label="Leaderboard"
-        topContent={
-          <div className="flex w-full justify-between items-center">
-            <div>
-              <p className="text-3xl font-bold flex items-center gap-1">
-                <IconTrophyFilled size={28} />
-                Leaderboard
-              </p>
+      <div className="w-full overflow-x-auto">
+        <Table
+          isStriped
+          aria-label="Leaderboard"
+          className="min-w-full"
+          topContent={
+            <div className="flex flex-col sm:flex-row w-full justify-between items-center gap-4">
+              <div>
+                <p className="text-2xl sm:text-3xl font-bold flex items-center gap-1">
+                  <IconTrophyFilled size={28} />
+                  Leaderboard
+                </p>
+              </div>
+              {renderModeButtons()}
             </div>
-            <div className="flex gap-2 items-center">
-              <Button
-                className="rounded-md px-8 hover:bg-white hover:text-black font-semibold"
-                style={{
-                  backgroundColor: matchType === 1 ? "#F5F5F5" : "",
-                  color: matchType === 1 ? "#000000" : "",
-                }}
-                onClick={() => setMatchType(1)}
-              >
-                RM 1v1
-              </Button>
-              <Button
-                className="rounded-md px-8 hover:bg-white hover:text-black font-semibold"
-                style={{
-                  backgroundColor: matchType === 2 ? "#F5F5F5" : "",
-                  color: matchType === 2 ? "#000000" : "",
-                }}
-                onClick={() => setMatchType(2)}
-              >
-                RM Team
-              </Button>
-              <Button
-                className="rounded-md px-8 hover:bg-white hover:text-black font-semibold"
-                style={{
-                  backgroundColor: matchType === 3 ? "#F5F5F5" : "",
-                  color: matchType === 3 ? "#000000" : "",
-                }}
-                onClick={() => setMatchType(3)}
-              >
-                Deathmatch
-              </Button>
-              <Button
-                className="rounded-md px-8 hover:bg-white hover:text-black font-semibold"
-                style={{
-                  backgroundColor: matchType === 4 ? "#F5F5F5" : "",
-                  color: matchType === 4 ? "#000000" : "",
-                }}
-                onClick={() => setMatchType(4)}
-              >
-                Team Deathmatch
-              </Button>
-            </div>
-          </div>
-        }
-        bottomContent={
-          <div className="flex w-full justify-center">
-            {showLoadMoreBtn ? (
-              <Link href={`/leaderboard/${matchType}`}>
-                <Button className="rounded-md px-8" isLoading={isLoading}>
-                  Load More
-                </Button>
-              </Link>
-            ) : (
-              <Pagination
-                isCompact
-                showControls
-                showShadow
-                color="secondary"
-                page={page}
-                total={pages}
-                onChange={(page) => setPage(page)}
-              />
-            )}
-          </div>
-        }
-      >
-        <TableHeader>
-          <TableColumn>#</TableColumn>
-          <TableColumn>Name</TableColumn>
-          <TableColumn>Elo</TableColumn>
-          <TableColumn>Win %</TableColumn>
-          <TableColumn>Win/Losses</TableColumn>
-          <TableColumn>Total Games</TableColumn>
-          <TableColumn>Streak</TableColumn>
-        </TableHeader>
-        <TableBody isLoading={isLoading}>
-          {items.map((player, index) => (
-            <TableRow key={player.rlUserId} href={`/player/${player.userName}`}>
-              <TableCell className="text-neutral-500">
-                {(page - 1) * rowsPerPage + index + 1}.
-              </TableCell>
-              <TableCell className="flex items-center justify-start gap-2 cursor-pointer hover:underline border-white group">
-                <Avatar
-                  className="rounded-sm w-8 h-8 duration-200 group-hover:scale-110"
-                  src={player.avatarUrl}
+          }
+          bottomContent={
+            <div className="flex w-full justify-center">
+              {showLoadMoreBtn ? (
+                <Link href={`/leaderboard/${matchType}`}>
+                  <Button className="rounded-md px-8" isLoading={isLoading}>
+                    Load More
+                  </Button>
+                </Link>
+              ) : (
+                <Pagination
+                  isCompact
+                  showControls
+                  showShadow
+                  color="secondary"
+                  page={page}
+                  total={pages}
+                  onChange={(page) => setPage(page)}
                 />
-                {player.userName}
-              </TableCell>
-              <TableCell className="">
-                <div className="flex items-center gap-2">
-                  {player.elo}
-                  <LeaderboardEloChange rlUserId={player.rlUserId} />
-                </div>
-              </TableCell>
-              <TableCell className="">{player.winPercent}%</TableCell>
-              <TableCell>
-                {player.wins}/{player.losses}
-              </TableCell>
-              <TableCell className="">{player.totalGames}</TableCell>
-              <TableCell>
-                {player.winStreak > 0 ? (
-                  <div className="flex items-center gap-1 text-green-500">
-                    <IconFlame size={16} /> {player.winStreak}
+              )}
+            </div>
+          }
+        >
+          <TableHeader>
+            <TableColumn className="w-10">#</TableColumn>
+            <TableColumn>Name</TableColumn>
+            <TableColumn className="hidden sm:table-cell">Elo</TableColumn>
+            <TableColumn className="hidden md:table-cell">Win %</TableColumn>
+            <TableColumn className="hidden lg:table-cell">
+              Win/Losses
+            </TableColumn>
+            <TableColumn className="hidden xl:table-cell">
+              Total Games
+            </TableColumn>
+            <TableColumn>Streak</TableColumn>
+          </TableHeader>
+          <TableBody isLoading={isLoading}>
+            {items.map((player, index) => (
+              <TableRow
+                key={player.rlUserId}
+                href={`/player/${player.userName}`}
+              >
+                <TableCell className="text-neutral-500">
+                  {(page - 1) * rowsPerPage + index + 1}.
+                </TableCell>
+                <TableCell className="flex items-center justify-start gap-2 cursor-pointer hover:underline border-white group">
+                  <Avatar
+                    className="rounded-sm w-8 h-8 duration-200 group-hover:scale-110"
+                    src={player.avatarUrl}
+                  />
+                  <span className="truncate">{player.userName}</span>
+                </TableCell>
+                <TableCell className="hidden sm:table-cell">
+                  <div className="flex items-center gap-2">
+                    {player.elo}
+                    <LeaderboardEloChange rlUserId={player.rlUserId} />
                   </div>
-                ) : player.winStreak < 0 ? (
-                  <div className="flex items-center gap-1 text-red-500">
-                    <IconFlame size={16} /> {Math.abs(player.winStreak)}
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1 text-gray-500">
-                    <IconFlame size={16} /> {player.winStreak}
-                  </div>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <div className="flex justify-center items-center py-4"></div>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {player.winPercent}%
+                </TableCell>
+                <TableCell className="hidden lg:table-cell">
+                  {player.wins}/{player.losses}
+                </TableCell>
+                <TableCell className="hidden xl:table-cell">
+                  {player.totalGames}
+                </TableCell>
+                <TableCell>
+                  {player.winStreak > 0 ? (
+                    <div className="flex items-center gap-1 text-green-500">
+                      <IconFlame size={16} /> {player.winStreak}
+                    </div>
+                  ) : player.winStreak < 0 ? (
+                    <div className="flex items-center gap-1 text-red-500">
+                      <IconFlame size={16} /> {Math.abs(player.winStreak)}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1 text-gray-500">
+                      <IconFlame size={16} /> {player.winStreak}
+                    </div>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </>
   );
 };

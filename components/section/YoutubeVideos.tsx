@@ -36,7 +36,7 @@ const youtubeData = [
 
 const YoutubeVideos = () => {
   return (
-    <div className="flex flex-col gap-2 py-4">
+    <div className="flex flex-col gap-2 py-4 px-4 sm:px-6 lg:px-8">
       <TitleSection
         title="YouTube Videos"
         icon={<IconBrandYoutubeFilled size={32} />}
@@ -44,24 +44,25 @@ const YoutubeVideos = () => {
         btnText="See more"
         btnLink="/youtube"
       />
-      <div className="grid grid-cols-5 justify-between items-center gap-5 py-2 h-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2">
         {youtubeData.map((video, index) => (
-          <Card key={index} className="p-2 h-full relative">
-            <CardBody>
+          <Card key={index} className="flex flex-col h-full">
+            <CardBody className="flex-grow">
               <img
                 src={video.image}
                 alt={video.title}
                 className="w-full h-32 object-cover rounded mb-2"
               />
-              <h3 className="text-lg font-semibold">{video.title}</h3>
-              <p className="text-sm mb-16"></p>
+              <h3 className="text-lg font-semibold line-clamp-2">
+                {video.title}
+              </h3>
             </CardBody>
-            <CardFooter className="absolute bottom-0 justify-center items-center pt-2">
+            <CardFooter className="justify-center items-center pt-2">
               <Link
                 href={video.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-stone-800 rounded-md px-4 py-2"
+                className="bg-stone-800 rounded-md px-4 py-2 w-full text-center"
               >
                 Watch on YouTube
               </Link>

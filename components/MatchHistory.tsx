@@ -17,7 +17,6 @@ import {
   IconSkull,
 } from "@tabler/icons-react";
 import Link from "next/link";
-
 // Types for the match history data
 interface MatchHistoryItem {
   matchhistory_id: number;
@@ -83,7 +82,7 @@ interface MatchHistoryProps {
 
 const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
   const [matchHistory, setMatchHistory] = useState<MatchHistoryStat[] | null>(
-    null
+    []
   );
   const [profiles, setProfiles] = useState<Profile[]>([]);
 
