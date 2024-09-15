@@ -17,6 +17,8 @@ import {
   IconSkull,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import MapImage from "./main/match/MapImage";
+import CivImage from "./main/match/CivImage";
 // Types for the match history data
 interface MatchHistoryItem {
   matchhistory_id: number;
@@ -88,7 +90,6 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
     []
   );
   const [profiles, setProfiles] = useState<Profile[]>([]);
-
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -179,40 +180,6 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
     return `${days} Days ago`;
   };
 
-  const civilization_idFormatter = (civilizations_id: number) => {
-    switch (civilizations_id) {
-      case 1:
-        return "/gods/greeks/major-gods/zeus_icon.png";
-      case 2:
-        return "/gods/greeks/major-gods/hades_icon.png";
-      case 3:
-        return "/gods/greeks/major-gods/poseidon_icon.png";
-      case 4:
-        return "/gods/egyptians/major-gods/ra_icon.png";
-
-      case 5:
-        return "/gods/egyptians/major-gods/isis_icon.png";
-
-      case 6:
-        return "/gods/egyptians/major-gods/set_icon.png";
-      case 7:
-        return "/gods/norse/major-gods/thor_icon.png";
-      case 8:
-        return "/gods/norse/major-gods/odin_icon.png";
-      case 9:
-        return "/gods/norse/major-gods/loki_icon.png";
-      case 13:
-        return "/gods/norse/major-gods/freyr_icon.png";
-      case 10:
-        return "/gods/atlantean/major-gods/kronos_icon.png";
-      case 11:
-        return "/gods/atlantean/major-gods/oranos_icon.png";
-      case 12:
-        return "/gods/atlantean/major-gods/gaia_icon.png";
-      default:
-        return "/maps/air.png";
-    }
-  };
   if (!userID) return <div>Loading...</div>;
   if (loading) return <div>Loading match history...</div>;
   if (error) return <div>{error}</div>;
@@ -255,10 +222,8 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                   <TableRow key={match.id}>
                     <TableCell className="">
                       <div className="flex items-center gap-4">
-                        <Image
-                          src={`/maps/${match.mapname.replace(/^rm_/, "")}.png`}
-                          alt={match.mapname}
-                          className="rounded-md border-2 border-neutral-600"
+                        <MapImage
+                          mapname={match.mapname}
                           width={100}
                           height={100}
                         />
@@ -290,7 +255,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                         {matchDate(match.startgametime)}
                       </span>
                       <Link
-                        href={`/match/${match.id}`}
+                        href={`/match/${userID}/${match.id}`}
                         className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1"
                       >
                         View Summary <IconPacman size={18} />
@@ -331,15 +296,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                                   className="flex flex-col gap-2 bg-neutral-800 p-2 m-2 rounded-md w-full"
                                 >
                                   <div className="flex flex-row items-center gap-2 ">
-                                    <Image
-                                      src={civilization_idFormatter(
-                                        member.civilization_id
-                                      )}
-                                      width={50}
-                                      height={50}
-                                      alt={member.civilization_id.toString()}
-                                      className="rounded-full border-2 border-neutral-600"
-                                    />
+                                    <CivImage civid={member.civilization_id} />
                                     <div>
                                       <div
                                         className={
