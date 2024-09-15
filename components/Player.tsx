@@ -48,7 +48,6 @@ const Player = ({ username }: PlayerProps) => {
   // Function to fetch data for all match types
   const fetchPlayerData = async (): Promise<(Profile | null)[]> => {
     try {
-      console.log("username", process.env.NEXT_PUBLIC_API_KEY);
       const response = await fetch(
         "/api/auth/leaderboard/playerMatchTypeRanks",
         {
@@ -82,7 +81,6 @@ const Player = ({ username }: PlayerProps) => {
       setIsLoading(true);
       const fetchedItems = await fetchPlayerData();
       setItems(fetchedItems);
-      console.log(fetchedItems);
       setIsLoading(false);
     };
 

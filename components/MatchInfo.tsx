@@ -31,7 +31,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
   useEffect(() => {
     const fetchMatchHistory = async () => {
       if (!userID) return;
-      console.log("Fetching match history for user:", matchID);
       try {
         const response = await fetch("/api/auth/player/getPlayerMatchHistory", {
           method: "POST",
@@ -58,8 +57,6 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
 
         setMatch(foundMatch);
         setProfiles(data.profiles);
-
-        console.log("Match found:", foundMatch);
       } catch (error) {
         setError("Error fetching match history");
         console.error("Error fetching match history:", error);

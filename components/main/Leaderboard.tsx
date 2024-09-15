@@ -82,8 +82,6 @@ const Leaderboard: React.FC<leaderboardData> = ({
         const result = await response.json();
         setData(result.items);
 
-        console.log(result);
-
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);

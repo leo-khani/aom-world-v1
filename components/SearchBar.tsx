@@ -25,7 +25,6 @@ const SearchBar = () => {
 
       setIsLoading(true);
       try {
-        console.log("searchValue", searchValue);
         const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
           method: "POST",
           headers: {
@@ -49,7 +48,6 @@ const SearchBar = () => {
         }
 
         const result = await response.json();
-        console.log("result", result);
         // Assuming result contains players data in a specific format
         const players = result.items.map(
           (player: {
@@ -63,7 +61,6 @@ const SearchBar = () => {
           })
         );
         setData(players);
-        console.log("players", players);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -80,9 +77,7 @@ const SearchBar = () => {
   };
 
   // Handle Autocomplete events
-  const handleOpenChange = (isOpen: boolean) => {
-    console.log("Autocomplete opened:", isOpen);
-  };
+  const handleOpenChange = (isOpen: boolean) => {};
 
   const handleSelectionChange = (key: React.Key | null) => {
     if (key !== null) {

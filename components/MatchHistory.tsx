@@ -122,8 +122,6 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
 
         setMatchHistory(latestMatches);
         setProfiles(data.profiles);
-        console.log(latestMatches, "Latest Matches");
-        console.log(data.profiles, "Profiles");
       } catch (error) {
         setError("Error fetching match history");
         console.error("Error fetching match history:", error);
@@ -253,12 +251,18 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                       <span className=" text-sm">
                         {matchDate(match.startgametime)}
                       </span>
-                      <Link
-                        href={`/match/${userID}/${match.id}`}
-                        className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1"
-                      >
-                        View Summary <IconPacman size={18} />
-                      </Link>
+                      {match.matchtype_id == 0 ? (
+                        <div className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1 cursor-not-allowed">
+                          View Summary <IconPacman size={18} />
+                        </div>
+                      ) : (
+                        <Link
+                          href={`/match/${userID}/${match.id}`}
+                          className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1"
+                        >
+                          View Summary <IconPacman size={18} />
+                        </Link>
+                      )}
                     </TableCell>
                     <TableCell className="text-md">
                       <div>{getRatingChange(match, userID)}</div>

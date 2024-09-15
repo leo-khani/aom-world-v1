@@ -47,8 +47,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const { username, matchType } = await req.json();
-
-    console.log({ username, matchType })
     
     const response = await getLeaderboard(username, matchType);
     return NextResponse.json(response);

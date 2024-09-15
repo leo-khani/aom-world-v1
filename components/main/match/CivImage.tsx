@@ -23,10 +23,8 @@ const MapImage: React.FC<MapImageProps> = ({
         return "/gods/greeks/major-gods/poseidon_icon.png";
       case 4:
         return "/gods/egyptians/major-gods/ra_icon.png";
-
       case 5:
         return "/gods/egyptians/major-gods/isis_icon.png";
-
       case 6:
         return "/gods/egyptians/major-gods/set_icon.png";
       case 7:
