@@ -1,5 +1,6 @@
 import BodyCard from "@/components/main/BodyCard";
 
+/*
 interface Match {
   id: number;
   creator_profile_id: number;
@@ -53,6 +54,7 @@ interface MatchHistoryMember {
   reporttype: number;
   civilization_id: number;
 }
+  */
 
 export default function MatchPage() {
   return <BodyCard />;
