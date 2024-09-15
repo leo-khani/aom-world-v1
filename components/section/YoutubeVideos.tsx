@@ -42,7 +42,7 @@ const YoutubeVideos = () => {
         icon={<IconBrandYoutubeFilled size={32} />}
         btn
         btnText="See more"
-        btnLink="/youtube"
+        btnLink="/watch"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2">
         {youtubeData.map((video, index) => (

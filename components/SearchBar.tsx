@@ -26,25 +26,23 @@ const SearchBar = () => {
       setIsLoading(true);
       try {
         console.log("searchValue", searchValue);
-        const response = await fetch(
-          "https://api.ageofempires.com/api/agemyth/Leaderboard",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              region: "7",
-              matchType: "1",
-              consoleMatchType: 15,
-              searchPlayer: searchValue,
-              page: 1,
-              count: 10, // Fetch more results for better autocomplete suggestions
-              sortColumn: "rank",
-              sortDirection: "ASC",
-            }),
-          }
-        );
+        const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
+          },
+          body: JSON.stringify({
+            region: "7",
+            matchType: "1",
+            consoleMatchType: 15,
+            searchPlayer: searchValue,
+            page: 1,
+            count: 10, // Fetch more results for better autocomplete suggestions
+            sortColumn: "rank",
+            sortDirection: "ASC",
+          }),
+        });
 
         if (!response.ok) {
           throw new Error("Network response was not ok");

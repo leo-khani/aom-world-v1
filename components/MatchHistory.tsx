@@ -96,10 +96,11 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
     const fetchMatchHistory = async () => {
       if (!userID) return;
       try {
-        const response = await fetch("/api/player/getPlayerMatchHistory", {
+        const response = await fetch("/api/auth/player/getPlayerMatchHistory", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
           },
           body: JSON.stringify({ userID }),
         });
@@ -116,7 +117,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
         });
 
         // Optional: Limit the number of displayed matches if needed
-        const numberOfMatchesToShow = 10; // Show only the latest 10 matches
+        const numberOfMatchesToShow = 20; // Show only the latest 10 matches
         const latestMatches = sortedMatches.slice(0, numberOfMatchesToShow);
 
         setMatchHistory(latestMatches);

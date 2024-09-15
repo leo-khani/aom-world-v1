@@ -57,10 +57,11 @@ const Leaderboard: React.FC<leaderboardData> = ({
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch("/api/leaderboard/getLeaderboard", {
+        const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
           },
           body: JSON.stringify({
             region: 7,
@@ -80,6 +81,8 @@ const Leaderboard: React.FC<leaderboardData> = ({
 
         const result = await response.json();
         setData(result.items);
+
+        console.log(result);
 
         setIsLoading(false);
       } catch (error) {
@@ -167,27 +170,49 @@ const Leaderboard: React.FC<leaderboardData> = ({
           }
         >
           <TableHeader>
+            {/* Rank Place */}
             <TableColumn className="w-10">#</TableColumn>
+
+            {/* Player Name */}
             <TableColumn>Name</TableColumn>
+
+            {/* ELO */}
             <TableColumn className="hidden sm:table-cell">Elo</TableColumn>
+
+            {/* Win % */}
             <TableColumn className="hidden md:table-cell">Win %</TableColumn>
+
+            {/* Win/Losses */}
             <TableColumn className="hidden lg:table-cell">
               Win/Losses
             </TableColumn>
+
+            {/* Total Games */}
             <TableColumn className="hidden xl:table-cell">
               Total Games
             </TableColumn>
+
+            {/* Streak */}
             <TableColumn>Streak</TableColumn>
           </TableHeader>
           <TableBody isLoading={isLoading}>
-            {items.map((player, index) => (
+            {items.map((player) => (
               <TableRow
                 key={player.rlUserId}
                 href={`/player/${player.userName}`}
               >
+                {/* Rank Place */}
                 <TableCell className="text-neutral-500">
-                  {(page - 1) * rowsPerPage + index + 1}.
+                  {player.rank == 1
+                    ? "🥇"
+                    : player.rank == 2
+                    ? "🥈"
+                    : player.rank == 3
+                    ? "🥉"
+                    : player.rank}
                 </TableCell>
+
+                {/* Player Name, Avatar, Elo Calc */}
                 <TableCell className="flex items-center justify-start gap-2 cursor-pointer hover:underline border-white group">
                   <Avatar
                     className="rounded-sm w-8 h-8 duration-200 group-hover:scale-110"
@@ -195,21 +220,31 @@ const Leaderboard: React.FC<leaderboardData> = ({
                   />
                   <span className="truncate">{player.userName}</span>
                 </TableCell>
+
+                {/* ELO */}
                 <TableCell className="hidden sm:table-cell">
                   <div className="flex items-center gap-2">
                     {player.elo}
                     <LeaderboardEloChange rlUserId={player.rlUserId} />
                   </div>
                 </TableCell>
+
+                {/* Win % */}
                 <TableCell className="hidden md:table-cell">
                   {player.winPercent}%
                 </TableCell>
+
+                {/* Win/Losses */}
                 <TableCell className="hidden lg:table-cell">
                   {player.wins}/{player.losses}
                 </TableCell>
+
+                {/* Total Games */}
                 <TableCell className="hidden xl:table-cell">
                   {player.totalGames}
                 </TableCell>
+
+                {/* Win Streak */}
                 <TableCell>
                   {player.winStreak > 0 ? (
                     <div className="flex items-center gap-1 text-green-500">

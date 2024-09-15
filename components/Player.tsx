@@ -48,15 +48,20 @@ const Player = ({ username }: PlayerProps) => {
   // Function to fetch data for all match types
   const fetchPlayerData = async (): Promise<(Profile | null)[]> => {
     try {
-      const response = await fetch("/api/leaderboard/playerMatchTypeRanks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-        }),
-      });
+      console.log("username", process.env.NEXT_PUBLIC_API_KEY);
+      const response = await fetch(
+        "/api/auth/leaderboard/playerMatchTypeRanks",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
+          },
+          body: JSON.stringify({
+            username: username,
+          }),
+        }
+      );
 
       if (!response.ok) {
         console.error("Server error:", response.statusText);
