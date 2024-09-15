@@ -17,7 +17,6 @@ import {
   IconSkull,
 } from "@tabler/icons-react";
 import Link from "next/link";
-import { decodeBase64Zlib } from "@/util/decoder";
 // Types for the match history data
 interface MatchHistoryItem {
   matchhistory_id: number;
