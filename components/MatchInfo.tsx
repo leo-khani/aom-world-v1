@@ -186,11 +186,14 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
 
                       {/* Badge and Stats */}
                       <div className="flex flex-col">
+                        {/* Win or Lose
                         <div className="text-xl font-bold text-center pb-5">
                           {playerCounters.civDefeated_1 === 1
                             ? "Defeated"
-                            : "Victorious"}
-                        </div>
+                            : playerCounters.civDefeated_1 === 2
+                            ? "Victorious"
+                            : "-"}
+                        </div> */}
                         <div className="flex flex-row justify-center items-center gap-2">
                           {Object.entries(playerCounters).map((counter) => (
                             <>
