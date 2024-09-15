@@ -3,6 +3,7 @@ import TitleSection from "../ui/title-section";
 import { IconBrandYoutubeFilled } from "@tabler/icons-react";
 import { Card, CardBody, CardFooter } from "@nextui-org/react";
 import Link from "next/link";
+import Image from "next/image";
 
 const youtubeData = [
   {
@@ -48,7 +49,7 @@ const YoutubeVideos = () => {
         {youtubeData.map((video, index) => (
           <Card key={index} className="flex flex-col h-full">
             <CardBody className="flex-grow">
-              <img
+              <Image
                 src={video.image}
                 alt={video.title}
                 className="w-full h-32 object-cover rounded mb-2"

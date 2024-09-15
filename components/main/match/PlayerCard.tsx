@@ -60,7 +60,7 @@ export const StatDisplay: React.FC<{
 export const CounterDisplay: React.FC<{
   counter: [keyof Counters, number];
 }> = ({ counter }) => {
-  const [key, value] = counter;
+  const [key] = counter;
 
   const isBadgeItem = (key: string): boolean => {
     return key.startsWith("postGameAward_");
