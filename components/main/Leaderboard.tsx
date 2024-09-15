@@ -105,21 +105,22 @@ const Leaderboard: React.FC<leaderboardData> = ({
   const renderModeButtons = () => (
     <div className="flex flex-wrap gap-2 items-center justify-center sm:justify-end">
       {[
-        { id: 1, label: "RM 1v1" },
-        { id: 2, label: "RM Team" },
-        { id: 3, label: "Deathmatch" },
-        { id: 4, label: "Team Deathmatch" },
+        { id: 1, label: "Rank Solo", mobileLabel: "RM Solo" },
+        { id: 2, label: "Rank Team", mobileLabel: "RM team" },
+        { id: 3, label: "Deathmatch", mobileLabel: "DM solo" },
+        { id: 4, label: "Team Deathmatch", mobileLabel: "DM team" },
       ].map((button) => (
         <Button
           key={button.id}
-          className="rounded-md px-4 sm:px-8 hover:bg-white hover:text-black font-semibold"
+          className="rounded-md px-2 sm:px-2 hover:bg-white hover:text-black font-semibold "
           style={{
             backgroundColor: matchType === button.id ? "#F5F5F5" : "",
             color: matchType === button.id ? "#000000" : "",
           }}
           onClick={() => setMatchType(button.id)}
         >
-          {button.label}
+          <span className="sm:hidden">{button.mobileLabel}</span>
+          <span className="hidden sm:inline">{button.label}</span>
         </Button>
       ))}
     </div>
@@ -127,7 +128,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
 
   return (
     <>
-      <div className="w-full overflow-x-auto">
+      <div className="w-full overflow-x-auto px-4">
         <Table
           isStriped
           aria-label="Leaderboard"

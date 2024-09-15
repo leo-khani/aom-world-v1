@@ -16,5 +16,9 @@ export function generateMetadata({
 }
 
 export default function PlayerPage({ params }: { params: { slug: string } }) {
-  return <Player username={params.slug} />;
+  return (
+    <div>
+      <Player username={params.slug} />
+    </div>
+  );
 }

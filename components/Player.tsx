@@ -1,5 +1,5 @@
 "use client";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tabs, Tab, BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import {
   PlayerHeaderProfile,
@@ -96,101 +96,110 @@ const Player = ({ username }: PlayerProps) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="w-full mb-8">
-        {items[1] || items[2] ? (
-          <Tabs
-            aria-label="Options"
-            className="bg-transparent"
-            placement="start"
-            defaultSelectedKey={items[1] ? "rmsolo" : "rmteam"}
-          >
-            <Tab
-              key="rmsolo"
-              title="Solo"
-              className="text-sm"
-              isDisabled={!items[1]}
-            >
-              {items[1] && (
-                <PlayerHeaderProfile
-                  username={items[1].userName}
-                  totalGames={items[1].totalGames}
-                  winPercent={items[1].winPercent}
-                  avatarUrl={items[1].avatarUrl}
-                  winStreak={items[1].winStreak}
-                  wins={items[1].wins}
-                  losses={items[1].losses}
-                  rank={items[1].rank}
-                />
-              )}
-            </Tab>
-
-            <Tab
-              key="rmteam"
-              title="Team"
-              className="text-sm"
-              isDisabled={!items[2]}
-            >
-              {items[2] && (
-                <PlayerHeaderProfile
-                  username={items[2].userName}
-                  totalGames={items[2].totalGames}
-                  winPercent={items[2].winPercent}
-                  avatarUrl={items[2].avatarUrl}
-                  winStreak={items[2].winStreak}
-                  wins={items[2].wins}
-                  losses={items[2].losses}
-                  rank={items[2].rank}
-                />
-              )}
-            </Tab>
-          </Tabs>
-        ) : (
-          <p className="text-center">No data available</p>
-        )}
+    <>
+      <div className="px-8 py-1">
+        <Breadcrumbs>
+          <BreadcrumbItem href="/">Home</BreadcrumbItem>
+          <BreadcrumbItem isDisabled>Player</BreadcrumbItem>
+          <BreadcrumbItem isCurrent>{username}</BreadcrumbItem>
+        </Breadcrumbs>
       </div>
-      <div className="flex flex-col lg:flex-row gap-4">
-        <div className="w-full lg:w-1/5 mb-4 lg:mb-0">
-          <PlayerCardRankSolo isLoading={isLoading}>
-            {items.slice(1, 3).map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-row justify-between gap-2 mb-2"
+      <div className="container mx-auto px-4 py-8">
+        <div className="w-full mb-8">
+          {items[1] || items[2] ? (
+            <Tabs
+              aria-label="Options"
+              className="bg-transparent"
+              placement="start"
+              defaultSelectedKey={items[1] ? "rmsolo" : "rmteam"}
+            >
+              <Tab
+                key="rmsolo"
+                title="Solo"
+                className="text-sm"
+                isDisabled={!items[1]}
               >
-                <div className="w-1/4 text-sm">{matchTypeNames[index]}</div>
-                {item ? (
-                  <>
-                    <div className="w-1/4 text-center">{item.elo}</div>
-                    <div className="w-2/4 flex items-center justify-end gap-1 text-sm">
-                      {item.winPercent}%
-                      <span className="text-green-500/80 text-xs">
-                        {item.wins}W
-                      </span>
-                      <span className="text-red-500/80 text-xs">
-                        {item.losses}L
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-1/4 text-center">-</div>
-                    <div className="w-2/4 text-center">-</div>
-                  </>
+                {items[1] && (
+                  <PlayerHeaderProfile
+                    username={items[1].userName}
+                    totalGames={items[1].totalGames}
+                    winPercent={items[1].winPercent}
+                    avatarUrl={items[1].avatarUrl}
+                    winStreak={items[1].winStreak}
+                    wins={items[1].wins}
+                    losses={items[1].losses}
+                    rank={items[1].rank}
+                  />
                 )}
-              </div>
-            ))}
-          </PlayerCardRankSolo>
-        </div>
+              </Tab>
 
-        <div className="w-full lg:w-4/5">
-          {items[1] ? (
-            <MatchHistory userID={items[1].rlUserId || 0} />
+              <Tab
+                key="rmteam"
+                title="Team"
+                className="text-sm"
+                isDisabled={!items[2]}
+              >
+                {items[2] && (
+                  <PlayerHeaderProfile
+                    username={items[2].userName}
+                    totalGames={items[2].totalGames}
+                    winPercent={items[2].winPercent}
+                    avatarUrl={items[2].avatarUrl}
+                    winStreak={items[2].winStreak}
+                    wins={items[2].wins}
+                    losses={items[2].losses}
+                    rank={items[2].rank}
+                  />
+                )}
+              </Tab>
+            </Tabs>
           ) : (
-            items[2] && <MatchHistory userID={items[2].rlUserId || 0} />
+            <p className="text-center">No data available</p>
           )}
         </div>
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="w-full lg:w-1/5 mb-4 lg:mb-0">
+            <PlayerCardRankSolo isLoading={isLoading}>
+              {items.slice(1, 3).map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row justify-between gap-2 mb-2"
+                >
+                  <div className="w-1/4 text-sm">{matchTypeNames[index]}</div>
+                  {item ? (
+                    <>
+                      <div className="w-1/4 text-center">{item.elo}</div>
+                      <div className="w-2/4 flex items-center justify-end gap-1 text-sm">
+                        {item.winPercent}%
+                        <span className="text-green-500/80 text-xs">
+                          {item.wins}W
+                        </span>
+                        <span className="text-red-500/80 text-xs">
+                          {item.losses}L
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-1/4 text-center">-</div>
+                      <div className="w-2/4 text-center">-</div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </PlayerCardRankSolo>
+          </div>
+
+          <div className="w-full lg:w-4/5">
+            {items[1] ? (
+              <MatchHistory userID={items[1].rlUserId || 0} />
+            ) : (
+              items[2] && <MatchHistory userID={items[2].rlUserId || 0} />
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

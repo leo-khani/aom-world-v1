@@ -218,8 +218,8 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
 
   return (
     <div>
-      <div className="overflow-x-auto">
-        <div className="md:w-full w-[500px] overflow-y-auto">
+      <div className="w-full overflow-x-auto sm:overflow-x-visible">
+        <div className="w-[800px] sm:w-full">
           {matchHistory && matchHistory.length > 0 ? (
             <Table
               aria-label="Match History Table"
@@ -252,7 +252,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
               <TableBody>
                 {matchHistory.map((match) => (
                   <TableRow key={match.id}>
-                    <TableCell>
+                    <TableCell className="">
                       <div className="flex items-center gap-4">
                         <Image
                           src={`/maps/${match.mapname.replace(/^rm_/, "")}.png`}
