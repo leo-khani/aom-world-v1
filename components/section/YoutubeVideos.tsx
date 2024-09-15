@@ -52,6 +52,8 @@ const YoutubeVideos = () => {
               <Image
                 src={video.image}
                 alt={video.title}
+                width={257}
+                height={127}
                 className="w-full h-32 object-cover rounded mb-2"
               />
               <h3 className="text-lg font-semibold line-clamp-2">
