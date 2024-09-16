@@ -13,31 +13,6 @@ import { IconFlame, IconTrophyFilled } from "@tabler/icons-react";
 import { Avatar, Button, Pagination } from "@nextui-org/react";
 import Link from "next/link";
 import { LeaderboardData, LeaderboardItem } from "@/types/leaderboardTypes";
-import TopThreeLeaderboard from "./leaderboard/TopThreeLeaderboard";
-
-// Define a TypeScript interface for the player data
-interface Player {
-  gameId: string;
-  userId: string | null;
-  rlUserId: number;
-  userName: string;
-  avatarUrl: string;
-  playerNumber: string | null;
-  elo: number;
-  eloRating: number;
-  eloHighest: number;
-  rank: number;
-  rankTotal: number;
-  region: string;
-  wins: number;
-  winPercent: number;
-  losses: number;
-  winStreak: number;
-  totalGames: number;
-  rankLevel: string;
-  rankIcon: string;
-  leaderboardKey: string;
-}
 
 interface leaderboardData {
   length?: number;
