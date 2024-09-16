@@ -93,11 +93,11 @@ const SearchBar = () => {
       <Autocomplete
         placeholder="Search player"
         value={searchValue}
-        onInputChange={handleSearchChange} // Use onInputChange to handle changes
+        onInputChange={handleSearchChange}
         onSelectionChange={handleSelectionChange}
         onClose={handleClose}
         labelPlacement="outside"
-        className="max-w-xs text-gray-800"
+        className="max-w-md w-full text-gray-800"
         disableSelectorIconRotation
         selectorIcon={<SelectorIcon />}
         isLoading={isLoading}
