@@ -1,13 +1,7 @@
 "use client";
 import MatchInfo from "@/components/MatchInfo";
-import { MatchData } from "@/types/MatchTypes";
-import { PlayerProfileData } from "@/types/PlayerProfileTypes";
 import { useParams } from "next/navigation";
 
-type PlayerData = {
-  matchHistoryStats: MatchData[];
-  profiles: PlayerProfileData[];
-};
 export default async function MatchPage() {
   const params = useParams<{ id: string; matchId: string }>();
 
