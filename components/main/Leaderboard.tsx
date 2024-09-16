@@ -12,6 +12,8 @@ import LeaderboardEloChange from "./LeaderboardEloChange";
 import { IconFlame, IconTrophyFilled } from "@tabler/icons-react";
 import { Avatar, Button, Pagination } from "@nextui-org/react";
 import Link from "next/link";
+import { LeaderboardData, LeaderboardItem } from "@/types/leaderboardTypes";
+import TopThreeLeaderboard from "./leaderboard/TopThreeLeaderboard";
 
 // Define a TypeScript interface for the player data
 interface Player {
@@ -48,7 +50,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
   showLoadMoreBtn = false,
   mode = 1,
 }) => {
-  const [data, setData] = useState<Player[]>([]);
+  const [data, setData] = useState<LeaderboardItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [matchType, setMatchType] = useState(mode);
 
@@ -79,7 +81,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
           throw new Error("Network response was not ok");
         }
 
-        const result = await response.json();
+        const result: LeaderboardData = await response.json();
         setData(result.items);
 
         setIsLoading(false);
@@ -262,7 +264,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
             ))}
           </TableBody>
         </Table>
-      </div>
+      </div>{" "}
     </>
   );
 };

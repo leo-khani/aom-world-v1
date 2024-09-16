@@ -76,9 +76,6 @@ const SearchBar = () => {
     setSearchValue(value);
   };
 
-  // Handle Autocomplete events
-  const handleOpenChange = (isOpen: boolean) => {};
-
   const handleSelectionChange = (key: React.Key | null) => {
     if (key !== null) {
       console.log("Selected key:", key);
@@ -97,7 +94,6 @@ const SearchBar = () => {
         placeholder="Search player"
         value={searchValue}
         onInputChange={handleSearchChange} // Use onInputChange to handle changes
-        onOpenChange={handleOpenChange}
         onSelectionChange={handleSelectionChange}
         onClose={handleClose}
         labelPlacement="outside"
