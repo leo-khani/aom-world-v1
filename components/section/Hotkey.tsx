@@ -46,7 +46,7 @@ const Hotkey = () => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 500);
   }, []);
   return (
     <div className="flex flex-col gap-2 py-4 px-4 sm:px-6 lg:px-8">
