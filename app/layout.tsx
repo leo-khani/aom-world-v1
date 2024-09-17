@@ -4,7 +4,12 @@ import { Sen } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
 
-const sen = Sen({ subsets: ["latin"] });
+const nycd = Sen({
+  subsets: ["latin"],
+  variable: "--font-nycd",
+  weight: "400",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -43,7 +48,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sen} antialiased`}>
+      <body className={`${nycd.variable} antialiased font-nycd`}>
         <Analytics />
         <Header />
 

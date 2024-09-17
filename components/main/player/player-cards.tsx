@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Avatar,
   Button,
@@ -13,9 +14,9 @@ import {
   IconSkull,
   IconSwords,
 } from "@tabler/icons-react";
-import React from "react";
 import toast from "react-hot-toast";
 
+// Types
 interface PlayerHeaderProfileProps {
   username: string;
   totalGames: number;
@@ -27,6 +28,26 @@ interface PlayerHeaderProfileProps {
   rank: number;
 }
 
+interface PlayerCardRank1v1Props {
+  children?: React.ReactNode;
+  isLoading?: boolean;
+}
+
+// Helper functions
+const getProgressColor = (
+  winPercent: number
+): "success" | "warning" | "danger" => {
+  if (winPercent >= 65) return "success";
+  if (winPercent >= 50) return "warning";
+  return "danger";
+};
+
+const shareButton = () => {
+  navigator.clipboard.writeText(window.location.href);
+  toast.success("Link copied to clipboard");
+};
+
+// Components
 export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
   username,
   totalGames,
@@ -37,20 +58,7 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
   losses,
   rank,
 }) => {
-  const getProgressColor = (
-    winPercent: number
-  ): "success" | "warning" | "danger" => {
-    if (winPercent >= 65) return "success";
-    if (winPercent >= 50) return "warning";
-    return "danger";
-  };
-
   const progressColor = getProgressColor(winPercent);
-
-  const shareButton = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast.success("Link copied to clipboard");
-  };
 
   return (
     <div className="flex flex-col gap-2 px-2">
@@ -60,7 +68,7 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
           <h1 className="text-2xl font-bold">{username}</h1>
           <Tooltip className="bg-neutral-800" content="Win rate">
             <CircularProgress
-              aria-label="Loading..."
+              aria-label="Win rate"
               size="lg"
               value={winPercent}
               color={progressColor}
@@ -70,44 +78,45 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
         </div>
       </div>
       <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2">
-        <Tooltip className="bg-neutral-800" content="Leaderboard rank">
-          <div className="flex items-center gap-1">
-            <IconHash size={16} /> {rank}
-          </div>
-        </Tooltip>
-        <div className="hidden sm:block">|</div>
-        <Tooltip className="bg-neutral-800" content="Total games">
-          <div className="flex items-center gap-1">
-            <IconSwords size={16} /> {totalGames}
-          </div>
-        </Tooltip>
-        <div className="hidden sm:block">|</div>
-        <Tooltip className="bg-neutral-800" content="Wins">
-          <div className="flex items-center gap-1 text-green-500">
-            <IconAward size={16} /> {wins}
-          </div>
-        </Tooltip>
-        <div className="hidden sm:block">|</div>
-        <Tooltip className="bg-neutral-800" content="Losses">
-          <div className="flex items-center gap-1 text-red-500">
-            <IconSkull size={16} /> {losses}
-          </div>
-        </Tooltip>
-        <div className="hidden sm:block">|</div>
-        <Tooltip className="bg-neutral-800" content="Win streak">
-          <div
-            className={`flex items-center gap-1 ${
-              winStreak > 0
-                ? "text-green-500"
-                : winStreak < 0
-                ? "text-red-500"
-                : "text-gray-500"
-            }`}
-          >
-            <IconFlame size={16} /> {winStreak}
-          </div>
-        </Tooltip>
-        <div className="hidden sm:block">|</div>
+        <StatItem
+          icon={<IconHash size={16} />}
+          value={rank}
+          tooltip="Leaderboard rank"
+        />
+        <Divider />
+        <StatItem
+          icon={<IconSwords size={16} />}
+          value={totalGames}
+          tooltip="Total games"
+        />
+        <Divider />
+        <StatItem
+          icon={<IconAward size={16} />}
+          value={wins}
+          tooltip="Wins"
+          className="text-green-500"
+        />
+        <Divider />
+        <StatItem
+          icon={<IconSkull size={16} />}
+          value={losses}
+          tooltip="Losses"
+          className="text-red-500"
+        />
+        <Divider />
+        <StatItem
+          icon={<IconFlame size={16} />}
+          value={winStreak}
+          tooltip="Win streak"
+          className={
+            winStreak > 0
+              ? "text-green-500"
+              : winStreak < 0
+              ? "text-red-500"
+              : "text-gray-500"
+          }
+        />
+        <Divider />
         <Tooltip className="bg-neutral-800" content="Share profile">
           <Button
             isIconOnly
@@ -123,11 +132,6 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
     </div>
   );
 };
-
-interface PlayerCardRank1v1Props {
-  children?: React.ReactNode;
-  isLoading?: boolean;
-}
 
 export const PlayerCardRankSolo: React.FC<PlayerCardRank1v1Props> = ({
   children,
@@ -162,51 +166,28 @@ export const PlayerCardRankSolo: React.FC<PlayerCardRank1v1Props> = ({
   );
 };
 
+// Helper components
+const StatItem: React.FC<{
+  icon: React.ReactNode;
+  value: number;
+  tooltip: string;
+  className?: string;
+}> = ({ icon, value, tooltip, className = "" }) => (
+  <Tooltip className="bg-neutral-800" content={tooltip}>
+    <div className={`flex items-center gap-1 ${className}`}>
+      {icon} {value}
+    </div>
+  </Tooltip>
+);
+
+const Divider: React.FC = () => <div className="hidden sm:block">|</div>;
+
+// TODO: Implement getPlayerMatchHistory function
 export const getPlayerMatchHistory = () => {
-  <>
-    {/*    
-    {playerData.matchHistoryStats.length === 0 ? (
-      <p>No match history available</p>
-    ) : (
-      <ul className="w-full">
-        {playerData.matchHistoryStats.map((match) => (
-          <div className="" key={match.id}>
-            <div className="flex justify-between items-center">
-              <div>{convertUnixToDate(match.completiontime)}</div>
-              <div className="text-3xl">test</div>
-            </div>
-            <div className="flex flex-row justify-start items-center gap-8">
-              
-              <div className="flex flex-col justify-center items-center gap-2">
-                <Image
-                  src={`/maps/${match.mapname.replace(/^rm_/, "")}.png`}
-                  alt={match.mapname}
-                  width={200}
-                  height={200}
-                />
-                <span>
-                  {formattedMapName(match.mapname.replace(/^rm_/, ""))}
-                </span>
-              </div>
-              <li className="flex flex-col gap-1 justify-start items-start">
-                <p>
-                  {convertUnixToTime(
-                    match.completiontime - match.startgametime
-                  )}
-                </p>
-                <p>{match.description}</p>
-                <p>{match.matchtype_id}</p>
-              </li>
-              <div>
-                {match.matchhistorymember.map((member) => (
-                  <p>{member.arbitration}</p>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
-      </ul>
-    )}
-    */}
-  </>;
+  // Implementation goes here
 };
+
+// TODO: Add error handling for API calls
+// TODO: Implement lazy loading for Avatar and other images
+// TODO: Consider using React.memo for performance optimization on frequently re-rendered components
+// TODO: Explore using CSS modules or styled-components for more maintainable styles

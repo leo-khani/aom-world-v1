@@ -90,6 +90,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
       ].map((button) => (
         <Button
           key={button.id}
+          size="sm"
           className="rounded-md px-2 sm:px-2 hover:bg-white hover:text-black font-semibold "
           style={{
             backgroundColor: matchType === button.id ? "#F5F5F5" : "",

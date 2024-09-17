@@ -7,6 +7,7 @@ import {
 
 export const siteConfig = {
   title: "AOM World",
+  beta: true,
   description: "AOM World",
   url: "https://aomworld.com",
 

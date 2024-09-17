@@ -1,8 +1,10 @@
 "use client";
+
 import { Spinner } from "@nextui-org/react";
 import { IconArrowNarrowDown, IconArrowNarrowUp } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 
+// Interfaces
 interface Match {
   oldrating: number;
   newrating: number;
@@ -18,64 +20,74 @@ interface LeaderboardEloChangeProps {
   rlUserId: number;
 }
 
+// Main component
 const LeaderboardEloChange: React.FC<LeaderboardEloChangeProps> = ({
   rlUserId,
 }) => {
-  const [eloChange, setEloChange] = useState<number | null>(null); // State to store the calculated ELO change
+  const [eloChange, setEloChange] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
         const response = await fetch(`/api/matchHistory?playerId=${rlUserId}`);
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Failed to fetch match history");
         }
 
         const result: MatchData = await response.json();
-
-        // Access match history map for the given player
         const playerMatches = result.mappedMatchHistoryData
-          .map((match) => match.matchHistoryMap[rlUserId.toString()])
-          .flat()
-          .slice(0, 2); // Get the last two matches
+          .flatMap((match) => match.matchHistoryMap[rlUserId.toString()])
+          .slice(0, 2);
 
-        // Calculate the ELO change between the last two matches
         if (playerMatches.length === 2) {
-          const eloChange =
-            playerMatches[1].newrating - playerMatches[0].newrating;
-          setEloChange(eloChange);
+          const change =
+            playerMatches[0].newrating - playerMatches[1].newrating;
+          setEloChange(change);
         }
       } catch (error) {
+        setError("Error fetching data. Please try again.");
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [rlUserId]);
 
+  // Helper function to render ELO change
+  const renderEloChange = () => {
+    if (eloChange === null) return null;
+    const Icon = eloChange > 0 ? IconArrowNarrowUp : IconArrowNarrowDown;
+    const colorClass = eloChange > 0 ? "text-green-500" : "text-red-500";
+    return (
+      <div className={`flex items-center gap-1 ${colorClass}`}>
+        <Icon size={16} />
+        <span>{Math.abs(eloChange)}</span>
+      </div>
+    );
+  };
+
   return (
-    <div>
-      {eloChange !== null ? (
-        <div>
-          {eloChange > 0 ? (
-            <div className="text-green-500 flex items-center gap-1">
-              <IconArrowNarrowUp size={16} /> {eloChange}{" "}
-            </div>
-          ) : (
-            <div className="text-red-500 flex items-center gap-1">
-              <IconArrowNarrowDown size={16} />
-              {Math.abs(eloChange)}
-            </div>
-          )}
-        </div>
+    <div className="flex justify-center items-center">
+      {isLoading ? (
+        <Spinner size="sm" color="success" />
+      ) : error ? (
+        <div className="text-red-500">{error}</div>
       ) : (
-        <div>
-          <Spinner size="sm" color="success" />
-        </div>
+        renderEloChange()
       )}
     </div>
   );
 };
 
 export default LeaderboardEloChange;
+
+// TODO: Implement error boundary for better error handling
+// TODO: Add unit tests for component and helper functions
+// TODO: Optimize performance by memoizing expensive calculations
+// TODO: Implement caching strategy for API responses

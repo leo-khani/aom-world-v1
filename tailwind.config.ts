@@ -12,7 +12,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sen: ['var(--font-sen)'],
+        inter: ['var(--font-inter)', 'sans-serif'],
+        'playfair-display': ['var(--font-playfair-display)', 'serif'],
+        'nycd': ['var(--font-nycd)', 'cursive'],
       },
       colors: {
         'text': '#ffffff',

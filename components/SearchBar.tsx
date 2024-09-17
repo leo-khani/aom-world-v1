@@ -1,98 +1,152 @@
 "use client";
 
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import React, { useState, useEffect } from "react";
+import { IconCaretUpDown } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
-// Define the type for your API data
+// Define types
 interface Player {
   label: string;
   value: string;
   description: string;
 }
 
+interface ApiResponse {
+  items: Array<{
+    userName: string;
+    rlUserId: string | number;
+    elo: number;
+  }>;
+}
+
+// SelectorIcon component
+const SelectorIcon = () => <IconCaretUpDown stroke={1} size={16} />;
+
+// Cache implementation
+const useCache = () => {
+  const cache = useRef(new Map());
+  return {
+    get: (key: string) => cache.current.get(key),
+    set: (key: string, value: Player[]) => cache.current.set(key, value),
+  };
+};
+
+// Main SearchBar component
+// Main SearchBar component
 const SearchBar = () => {
   const [data, setData] = useState<Player[]>([]);
   const [searchValue, setSearchValue] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
-  // Fetch data from the API whenever searchValue changes
+  const cache = useCache();
+  const router = useRouter();
+
+  // Ensure component is mounted before running client-side code
   useEffect(() => {
-    const fetchData = async () => {
-      if (searchValue.trim() === "") {
-        setData([]);
+    setIsMounted(true);
+  }, []);
+
+  // Fetch data from API
+  const fetchData = useCallback(async () => {
+    if (searchValue.trim() === "") {
+      setData([]);
+      return;
+    }
+
+    // Check cache first
+    const cachedData = cache.get(searchValue);
+    if (cachedData) {
+      setData(cachedData);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // if search value is > 3 characters return
+      if (searchValue.length < 3) {
         return;
       }
+      const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
+        },
+        body: JSON.stringify({
+          region: "7",
+          matchType: "1",
+          consoleMatchType: 15,
+          searchPlayer: searchValue,
+          page: 1,
+          count: 10,
+          sortColumn: "rank",
+          sortDirection: "ASC",
+        }),
+      });
 
-      setIsLoading(true);
-      try {
-        const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
-          },
-          body: JSON.stringify({
-            region: "7",
-            matchType: "1",
-            consoleMatchType: 15,
-            searchPlayer: searchValue,
-            page: 1,
-            count: 10, // Fetch more results for better autocomplete suggestions
-            sortColumn: "rank",
-            sortDirection: "ASC",
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const result = await response.json();
-        // Assuming result contains players data in a specific format
-        const players = result.items.map(
-          (player: {
-            userName: any;
-            rlUserId: { toString: () => any };
-            elo: any;
-          }) => ({
-            label: player.userName,
-            value: player.rlUserId.toString(),
-            description: `Elo: ${player.elo}`, // Customize as needed
-          })
-        );
-        setData(players);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
       }
-    };
 
-    fetchData();
-  }, [searchValue]);
+      const result: ApiResponse = await response.json();
+      const players = result.items.map((player) => ({
+        label: player.userName,
+        value: player.rlUserId.toString(),
+        description: `Elo: ${player.elo}`,
+      }));
+      setData(players);
+      cache.set(searchValue, players);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setData([{ label: "...", value: "...", description: "" }]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchValue, cache]);
+
+  // Fetch data when searchValue changes
+  useEffect(() => {
+    if (isMounted) {
+      const debounceTimer = setTimeout(() => {
+        fetchData();
+      }, 300); // Debounce API calls
+
+      return () => clearTimeout(debounceTimer);
+    }
+  }, [fetchData, searchValue, isMounted]);
 
   // Handle search input change
   const handleSearchChange = (value: string) => {
     setSearchValue(value);
   };
 
+  // Handle selection change
   const handleSelectionChange = (key: React.Key | null) => {
-    if (key !== null) {
-      console.log("Selected key:", key);
-    } else {
-      console.log("Selection cleared");
+    if (key !== null && isMounted) {
+      const selectedItem = data.find((item) => item.value === key);
+      if (selectedItem) {
+        router.push(`/player/${selectedItem.label}`);
+      }
     }
   };
 
+  // Handle autocomplete close
   const handleClose = () => {
-    console.log("Autocomplete closed");
+    setSearchValue("");
+    setData([]);
   };
+
+  if (!isMounted) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
       <Autocomplete
-        placeholder="Search player"
-        value={searchValue}
+        placeholder={"Search for player..."}
+        inputValue={searchValue}
         onInputChange={handleSearchChange}
         onSelectionChange={handleSelectionChange}
         onClose={handleClose}
@@ -101,40 +155,22 @@ const SearchBar = () => {
         disableSelectorIconRotation
         selectorIcon={<SelectorIcon />}
         isLoading={isLoading}
+        items={data}
+        classNames={{
+          base: "text-gray-950",
+        }}
       >
-        {data.slice(0, 10).map((item) => (
+        {(item) => (
           <AutocompleteItem
             className="text-gray-800"
             key={item.value}
-            href={`/player/${item.label}`}
+            value={item.value}
           >
             {item.label}
           </AutocompleteItem>
-        ))}
+        )}
       </Autocomplete>
     </div>
   );
 };
-
-export const SelectorIcon = (props: any) => (
-  <svg
-    aria-hidden="true"
-    fill="none"
-    focusable="false"
-    height="1em"
-    role="presentation"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
-    width="1em"
-    {...props}
-  >
-    <path d="M0 0h24v24H0z" fill="none" stroke="none" />
-    <path d="M8 9l4 -4l4 4" />
-    <path d="M16 15l-4 4l-4 -4" />
-  </svg>
-);
-
 export default SearchBar;
