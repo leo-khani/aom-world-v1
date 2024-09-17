@@ -3,44 +3,61 @@ import "./globals.css";
 import { Sen } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { Analytics } from "@vercel/analytics/react";
-
-const nycd = Sen({
-  subsets: ["latin"],
-  variable: "--font-nycd",
-  weight: "400",
-  display: "swap",
-});
-
-export const metadata: Metadata = {
-  title: {
-    default: "Aom World Live Leaderboard",
-    template: "%s | Aom World",
-  },
-  description: "View the leaderboard of the live AOM World.",
-
-  /*twitter: {
-    card: "summary_large_image",
-  },*/
-
-  keywords: [
-    "aom",
-    "aom world",
-    "aom world live leaderboard",
-    "aom live leaderboard",
-    "aom live",
-    "aom leaderboard",
-    "aom world leaderboard",
-    "aom leaderboard live",
-    "aom leaderboard live leaderboard",
-    "aom leaderboard live leaderboard",
-    "aom leaderboard live leaderboard",
-  ],
-};
-
 import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/Header";
 import Footer from "@/components/main/Footer";
 
+// Font configuration
+const sen = Sen({
+  subsets: ["latin"],
+  variable: "--font-sen",
+  weight: "400",
+  display: "swap",
+});
+
+// SEO Metadata
+export const metadata: Metadata = {
+  title: {
+    default: "AoM World Live Leaderboard",
+    template: "%s | AoM World",
+  },
+  description:
+    "View real-time leaderboard rankings for Age of Mythology World. Track top players and their stats.",
+  keywords: [
+    "Age of Mythology",
+    "AoM World",
+    "live leaderboard",
+    "RTS game",
+    "competitive gaming",
+    "player rankings",
+    "AoM stats",
+  ],
+  openGraph: {
+    title: "AoM World Live Leaderboard",
+    description:
+      "Real-time rankings and stats for Age of Mythology World players.",
+    type: "website",
+    url: "https://aomworld.com/",
+    // TODO: Add actual image URL
+    images: [
+      {
+        url: "/images/logo-portrait.png",
+        width: 1200,
+        height: 630,
+        alt: "AoM World Leaderboard",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AoM World Live Leaderboard",
+    description: "Track top players and their stats in Age of Mythology World.",
+    // TODO: Add actual image URL
+    images: ["/images/logo-portrait.png"],
+  },
+};
+
+// Root Layout Component
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,12 +65,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${nycd.variable} antialiased font-nycd`}>
+      <body className={`${sen.variable} antialiased font-sen`}>
         <Analytics />
         <Header />
-
         <NextUIProvider>
-          <main className="container mx-auto dark text-foreground bg-background font-sen">
+          <main className="container mx-auto dark text-foreground bg-background">
             <Toaster position="bottom-right" />
             {children}
           </main>
@@ -63,3 +79,7 @@ export default function RootLayout({
     </html>
   );
 }
+
+// TODO: Add error boundary for better error handling
+// TODO: Optimize performance with React.memo or useMemo where appropriate
+// TODO: Add accessibility features (ARIA attributes, keyboard navigation)
