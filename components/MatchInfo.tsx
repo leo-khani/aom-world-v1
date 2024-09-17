@@ -22,7 +22,6 @@ interface PlayerData {
 }
 
 const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
-  // Changed from userID to userId
   const [match, setMatch] = useState<MatchData>({} as MatchData);
   const [profiles, setProfiles] = useState<PlayerProfileData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -74,9 +73,9 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
 
   const formatMapName = (mapname: string) => {
     return mapname
-      .replace(/^rm_/, "") // Remove "rm_"
-      .replace(/_/g, " ") // Replace underscores with spaces
-      .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+      .replace(/^rm_/, "")
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   if (loading) return <div>Loading...</div>;
@@ -106,7 +105,8 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
           </div>
         </div>
 
-        <div className="flex flex-col-2 w-full gap-4">
+        {/* Responsive team display */}
+        <div className="flex flex-wrap w-full gap-8 justify-center">
           {Object.entries(
             match.matchhistorymember.reduce(
               (acc: { [key: string]: MatchHistoryMember[] }, member) => {
@@ -117,7 +117,10 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
               {}
             )
           ).map(([teamId, members]) => (
-            <div key={teamId} className="bg-neutral-900 rounded-lg w-1/2 gap-2">
+            <div
+              key={teamId}
+              className="bg-neutral-900 rounded-lg w-full md:w-1/2 lg:w-1/3 gap-4"
+            >
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-1">
                 {parseInt(teamId) + 1 === 1 ? (
                   <IconSword size={20} />
@@ -126,7 +129,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
                 )}{" "}
                 Team {parseInt(teamId) + 1}
               </h2>
-              <div className="">
+              <div>
                 {members.map((member) => {
                   const playerProfile = profiles.find(
                     (profile) => member.profile_id === profile.profile_id
@@ -143,7 +146,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
                   return (
                     <div
                       key={member.profile_id}
-                      className="bg-neutral-800 p-4 rounded-md flex flex-col gap-4"
+                      className="bg-neutral-800 p-4 rounded-md flex flex-col gap-4 justify-center mb-2"
                     >
                       {/* PlayerCard */}
                       <div className="flex justify-center items-center gap-4">
@@ -153,7 +156,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
                           height={100}
                         />
                         <div>
-                          <div className={`font-bold text-lg `}>
+                          <div className={`font-bold text-lg`}>
                             {playerAlias}
                             {member.profile_id === Number(userID) ? (
                               <span className="text-yellow-500"> (You)</span>
@@ -184,57 +187,51 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
                         </div>
                       </div>
 
-                      {/* Badge and Stats */}
-                      <div className="flex flex-col">
-                        {/* Win or Lose
-                        <div className="text-xl font-bold text-center pb-5">
-                          {playerCounters.civDefeated_1 === 1
-                            ? "Defeated"
-                            : playerCounters.civDefeated_1 === 2
-                            ? "Victorious"
-                            : "-"}
-                        </div> */}
-                        <div className="flex flex-row justify-center items-center gap-2">
-                          {Object.entries(playerCounters).map((counter) => (
-                            <>
-                              <CounterDisplay
-                                key={counter[0]}
-                                counter={counter as [keyof Counters, number]}
-                              />
-                            </>
-                          ))}
-                        </div>
-                        <div className="py-4">
-                          <div className="grid grid-cols-2 gap-2">
-                            <StatDisplay
-                              label="Economic Score"
-                              value={playerCounters.score_Economic}
-                            />
-                            <StatDisplay
-                              label="Military Score"
-                              value={playerCounters.score_Military}
-                            />
-                            <StatDisplay
-                              label="Technology Score"
-                              value={playerCounters.score_Technology}
-                            />
-                            <StatDisplay
-                              label="Total Score"
-                              value={playerCounters.score_Total}
-                            />
-                            <StatDisplay
-                              label="Buildings Razed"
-                              value={playerCounters.stat_BuildingsRazed}
-                            />
-                            <StatDisplay
-                              label="Units Killed"
-                              value={playerCounters.stat_UnitsKilled}
-                            />
-                            <StatDisplay
-                              label="Units Lost"
-                              value={playerCounters.stat_UnitsLost}
+                      {/* Counters */}
+                      <div className="grid grid-cols-9 sm:grid-cols-9 md:grid-cols-9 gap-2 justify-center text-sm text-gray-400">
+                        {Object.entries(playerCounters).map((counter) => (
+                          <div
+                            key={counter[0]}
+                            className="flex justify-between"
+                          >
+                            <CounterDisplay
+                              counter={counter as [keyof Counters, number]}
                             />
                           </div>
+                        ))}
+                      </div>
+
+                      {/* Stats */}
+                      <div className="py-4">
+                        <div className="grid grid-cols-2 gap-2">
+                          <StatDisplay
+                            label="Economic Score"
+                            value={playerCounters.score_Economic}
+                          />
+                          <StatDisplay
+                            label="Military Score"
+                            value={playerCounters.score_Military}
+                          />
+                          <StatDisplay
+                            label="Technology Score"
+                            value={playerCounters.score_Technology}
+                          />
+                          <StatDisplay
+                            label="Total Score"
+                            value={playerCounters.score_Total}
+                          />
+                          <StatDisplay
+                            label="Buildings Razed"
+                            value={playerCounters.stat_BuildingsRazed}
+                          />
+                          <StatDisplay
+                            label="Units Killed"
+                            value={playerCounters.stat_UnitsKilled}
+                          />
+                          <StatDisplay
+                            label="Units Lost"
+                            value={playerCounters.stat_UnitsLost}
+                          />
                         </div>
                       </div>
                     </div>

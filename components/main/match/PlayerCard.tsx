@@ -58,9 +58,7 @@ export const CounterDisplay: React.FC<{
   const isBadgeItem = key.startsWith("postGameAward_");
 
   return (
-    <div className="flex flex-row justify-center items-center">
-      {isBadgeItem && <BadgeDisplay counter={counter} />}
-    </div>
+    <div className="">{isBadgeItem && <BadgeDisplay counter={counter} />}</div>
   );
 };
 
