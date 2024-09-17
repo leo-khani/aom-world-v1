@@ -17,6 +17,7 @@ const sen = Sen({
 
 // SEO Metadata
 export const metadata: Metadata = {
+  metadataBase: new URL("https://aomworld.pro/"),
   title: {
     default: "AoM World Live Leaderboard",
     template: "%s | AoM World",
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     description:
       "Real-time rankings and stats for Age of Mythology World players.",
     type: "website",
-    url: "https://aomworld.com/",
+    url: "https://aomworld.pro/",
     // TODO: Add actual image URL
     images: [
       {
