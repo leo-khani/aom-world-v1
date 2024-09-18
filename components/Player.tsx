@@ -124,6 +124,7 @@ const Player = ({ username }: PlayerProps) => {
               >
                 {items[1] && (
                   <PlayerHeaderProfile
+                    playerId={items[1].rlUserId}
                     username={items[1].userName}
                     totalGames={items[1].totalGames}
                     winPercent={items[1].winPercent}
@@ -144,6 +145,7 @@ const Player = ({ username }: PlayerProps) => {
               >
                 {items[2] && (
                   <PlayerHeaderProfile
+                    playerId={items[2].rlUserId}
                     username={items[2].userName}
                     totalGames={items[2].totalGames}
                     winPercent={items[2].winPercent}

@@ -253,7 +253,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                       </span>
                       {match.matchtype_id == 0 ? (
                         <div className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1 cursor-not-allowed">
-                          View Summary <IconPacman size={18} />
+                          No Summary <IconPacman size={18} />
                         </div>
                       ) : (
                         <Link
@@ -265,7 +265,13 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                       )}
                     </TableCell>
                     <TableCell className="text-md">
-                      <div>{getRatingChange(match, userID)}</div>
+                      <div className="text-center">
+                        {match.matchtype_id !== 0 ? (
+                          getRatingChange(match, userID)
+                        ) : (
+                          <div className="text-neutral-400 text-xs">N/A</div>
+                        )}
+                      </div>
                     </TableCell>
 
                     <TableCell className="flex flex-row gap-2">
@@ -324,30 +330,35 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                                         )}
                                       </div>
                                       <div>
-                                        <span>
-                                          {member.newrating - member.oldrating >
-                                          0 ? (
-                                            <div className="flex flex-row gap-1">
-                                              {member.newrating}
-                                              <div className="text-green-500 flex items-center gap-1">
-                                                <IconArrowNarrowUp size={16} />
-                                                {member.newrating -
-                                                  member.oldrating}
+                                        {match.matchtype_id !== 0 && (
+                                          <span>
+                                            {member.newrating -
+                                              member.oldrating >
+                                            0 ? (
+                                              <div className="flex flex-row gap-1">
+                                                {member.newrating}
+                                                <div className="text-green-500 flex items-center gap-1">
+                                                  <IconArrowNarrowUp
+                                                    size={16}
+                                                  />
+                                                  {member.newrating -
+                                                    member.oldrating}
+                                                </div>
                                               </div>
-                                            </div>
-                                          ) : (
-                                            <div className="flex flex-row gap-1">
-                                              {Math.abs(member.newrating)}
-                                              <span className="text-red-500 flex items-center gap-1">
-                                                <IconArrowNarrowDown
-                                                  size={16}
-                                                />
-                                                {member.newrating -
-                                                  member.oldrating}
-                                              </span>
-                                            </div>
-                                          )}
-                                        </span>
+                                            ) : (
+                                              <div className="flex flex-row gap-1">
+                                                {Math.abs(member.newrating)}
+                                                <span className="text-red-500 flex items-center gap-1">
+                                                  <IconArrowNarrowDown
+                                                    size={16}
+                                                  />
+                                                  {member.newrating -
+                                                    member.oldrating}
+                                                </span>
+                                              </div>
+                                            )}
+                                          </span>
+                                        )}
                                       </div>
                                     </div>
                                   </div>

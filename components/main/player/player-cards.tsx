@@ -8,6 +8,7 @@ import {
 } from "@nextui-org/react";
 import {
   IconAward,
+  IconCopy,
   IconFlame,
   IconHash,
   IconShare,
@@ -18,6 +19,7 @@ import toast from "react-hot-toast";
 
 // Types
 interface PlayerHeaderProfileProps {
+  playerId: number;
   username: string;
   totalGames: number;
   winPercent: number;
@@ -49,6 +51,7 @@ const shareButton = () => {
 
 // Components
 export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
+  playerId,
   username,
   totalGames,
   winPercent,
@@ -126,6 +129,18 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
             className="bg-neutral-800"
           >
             <IconShare size={16} />
+          </Button>
+        </Tooltip>
+
+        <Tooltip className="bg-neutral-800" content="Copy profile id">
+          <Button
+            isIconOnly
+            color="secondary"
+            size="sm"
+            onClick={() => navigator.clipboard.writeText(playerId.toString())}
+            className="bg-neutral-800"
+          >
+            <IconCopy size={16} />
           </Button>
         </Tooltip>
       </div>

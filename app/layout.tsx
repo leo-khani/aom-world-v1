@@ -32,6 +32,7 @@ export const metadata: Metadata = {
     "competitive gaming",
     "player rankings",
     "AoM stats",
+    "AoM Leaderboard",
   ],
   openGraph: {
     title: "AoM World Live Leaderboard",
