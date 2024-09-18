@@ -2,9 +2,9 @@
 
 import { Spinner } from "@nextui-org/react";
 import { IconArrowNarrowDown, IconArrowNarrowUp } from "@tabler/icons-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
-// Interfaces
+// Interfaces (unchanged)
 interface Match {
   oldrating: number;
   newrating: number;
@@ -20,6 +20,9 @@ interface LeaderboardEloChangeProps {
   rlUserId: number;
 }
 
+// Helper function for delay
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 // Main component
 const LeaderboardEloChange: React.FC<LeaderboardEloChangeProps> = ({
   rlUserId,
@@ -28,13 +31,15 @@ const LeaderboardEloChange: React.FC<LeaderboardEloChangeProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
+  const fetchDataWithRetry = useCallback(
+    async (retries = 3, backoff = 300) => {
       try {
         const response = await fetch(`/api/matchHistory?playerId=${rlUserId}`);
         if (!response.ok) {
+          if (response.status === 429) {
+            // Too Many Requests
+            throw new Error("Too many requests. Please wait.");
+          }
           throw new Error("Failed to fetch match history");
         }
 
@@ -49,17 +54,49 @@ const LeaderboardEloChange: React.FC<LeaderboardEloChangeProps> = ({
           setEloChange(change);
         }
       } catch (error) {
-        setError("Error fetching data. Please try again.");
         console.error("Error fetching data:", error);
+        if (retries > 0) {
+          if (error instanceof Error) {
+            setError(
+              `${error.message} Retrying in ${backoff / 1000} seconds...`
+            );
+          } else {
+            setError(`Unknown error. Retrying in ${backoff / 1000} seconds...`);
+          }
+          await delay(backoff);
+          return fetchDataWithRetry(retries - 1, backoff * 2);
+        }
+        setError("Error fetching data. Please wait and try again later.");
+      }
+    },
+    [rlUserId]
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        await fetchDataWithRetry();
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchData();
-  }, [rlUserId]);
 
-  // Helper function to render ELO change
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [fetchDataWithRetry]);
+
+  // Helper function to render ELO change (unchanged)
   const renderEloChange = () => {
     if (eloChange === null) return null;
     const Icon = eloChange > 0 ? IconArrowNarrowUp : IconArrowNarrowDown;
@@ -86,8 +123,3 @@ const LeaderboardEloChange: React.FC<LeaderboardEloChangeProps> = ({
 };
 
 export default LeaderboardEloChange;
-
-// TODO: Implement error boundary for better error handling
-// TODO: Add unit tests for component and helper functions
-// TODO: Optimize performance by memoizing expensive calculations
-// TODO: Implement caching strategy for API responses
