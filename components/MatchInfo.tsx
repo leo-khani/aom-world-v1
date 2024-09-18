@@ -10,6 +10,7 @@ import {
 } from "@tabler/icons-react";
 import CivImage from "./main/match/CivImage";
 import { CounterDisplay, StatDisplay } from "./main/match/PlayerCard";
+import Link from "next/link";
 
 interface MatchInfoProps {
   userID: string;
@@ -157,11 +158,18 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
                         />
                         <div>
                           <div className={`font-bold text-lg`}>
-                            {playerAlias}
-                            {member.profile_id === Number(userID) ? (
-                              <span className="text-yellow-500"> (You)</span>
+                            {member.profile_id !== Number(userID) ? (
+                              <Link
+                                href={`/profile/${member.profile_id}`}
+                                className="hover:underline"
+                              >
+                                {playerAlias}
+                              </Link>
                             ) : (
-                              ""
+                              <span>{playerAlias}</span>
+                            )}
+                            {member.profile_id === Number(userID) && (
+                              <span className="text-yellow-500"> (You)</span>
                             )}
                           </div>
                           <div className="flex items-center gap-2 mt-1">

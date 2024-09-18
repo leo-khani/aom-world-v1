@@ -21,64 +21,57 @@ interface leaderboardData {
 }
 
 const Leaderboard: React.FC<leaderboardData> = ({
-  length = 100,
+  length = null,
   showLoadMoreBtn = false,
   mode = 1,
 }) => {
   const [data, setData] = useState<LeaderboardItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [matchType, setMatchType] = useState(mode);
+  const [totalItems, setTotalItems] = useState(0);
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 100;
+
+  const pages = Math.ceil(totalItems / rowsPerPage);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
+        },
+        body: JSON.stringify({
+          region: 7,
+          matchType: matchType,
+          consoleMatchType: 15,
+          searchPlayer: "",
+          page: page,
+          count: rowsPerPage, // Use rowsPerPage here
+          sortColumn: "rank",
+          sortDirection: "ASC",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result: LeaderboardData = await response.json();
+      setData(result.items);
+      setTotalItems(result.count);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    // Fetch data from API
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
-          },
-          body: JSON.stringify({
-            region: 7,
-            matchType: matchType,
-            consoleMatchType: 15,
-            searchPlayer: "",
-            page: 1,
-            count: 50,
-            sortColumn: "rank",
-            sortDirection: "ASC",
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const result: LeaderboardData = await response.json();
-        setData(result.items);
-
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
-  }, [matchType]);
-
-  const [page, setPage] = React.useState(1);
-  const rowsPerPage = length;
-
-  const pages = Math.ceil(data.length / rowsPerPage);
-
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return data.slice(start, end);
-  }, [page, data, matchType]);
+  }, [matchType, page]);
 
   const renderModeButtons = () => (
     <div className="flex flex-wrap gap-2 items-center justify-center sm:justify-end">
@@ -137,9 +130,9 @@ const Leaderboard: React.FC<leaderboardData> = ({
                   showControls
                   showShadow
                   color="secondary"
-                  page={page}
                   total={pages}
-                  onChange={(page) => setPage(page)}
+                  page={page}
+                  onChange={(newPage) => setPage(newPage)}
                 />
               )}
             </div>
@@ -172,7 +165,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
             <TableColumn>Streak</TableColumn>
           </TableHeader>
           <TableBody isLoading={isLoading}>
-            {items.map((player) => (
+            {(length ? data.slice(0, length) : data).map((player) => (
               <TableRow
                 key={player.rlUserId}
                 href={`/player/${player.userName}`}

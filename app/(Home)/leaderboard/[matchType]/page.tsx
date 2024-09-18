@@ -15,7 +15,7 @@ export default function LeaderBoardPage({ params }: LeaderBoardPageProps) {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <LeaderBoard length={15} mode={Number(matchType) || 1} />
+      <LeaderBoard mode={Number(matchType) || 1} />
     </Suspense>
   );
 }

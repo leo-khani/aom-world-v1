@@ -301,14 +301,27 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                                   <div className="flex flex-row items-center gap-2 ">
                                     <CivImage civid={member.civilization_id} />
                                     <div>
-                                      <div
-                                        className={
-                                          member.profile_id === userID
-                                            ? "font-bold text-yellow-500"
-                                            : ""
-                                        }
-                                      >
-                                        {playerAlias}
+                                      <div>
+                                        {member.profile_id !== userID ? (
+                                          <Link
+                                            href={`/profile/${member.profile_id}`}
+                                            className="hover:underline"
+                                          >
+                                            <div
+                                              className={
+                                                member.profile_id === userID
+                                                  ? "font-bold text-yellow-500"
+                                                  : ""
+                                              }
+                                            >
+                                              {playerAlias}
+                                            </div>
+                                          </Link>
+                                        ) : (
+                                          <div className="font-bold text-yellow-500">
+                                            {playerAlias}
+                                          </div>
+                                        )}
                                       </div>
                                       <div>
                                         <span>
