@@ -14,7 +14,7 @@ const menuVariants = {
     opacity: 1,
     height: "auto",
     transition: {
-      duration: 0.3,
+      duration: 0.01,
       when: "beforeChildren",
       staggerChildren: 0.1,
     },
@@ -23,7 +23,7 @@ const menuVariants = {
     opacity: 0,
     height: 0,
     transition: {
-      duration: 0.3,
+      duration: 0.1,
       when: "afterChildren",
       staggerChildren: 0.1,
     },

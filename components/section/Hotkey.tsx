@@ -58,6 +58,7 @@ const Hotkey = () => {
         <>
           <TitleSection
             title="Hotkeys"
+            subTitle="ComingSoon"
             icon={<IconKeyboardShow size={32} />}
             btn
           />

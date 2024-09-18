@@ -42,7 +42,7 @@ export function generateMetadata({
 export default function PlayerPage({ params }: { params: { slug: string } }) {
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="text-3xl font-bold mb-6 hidden">
         {params.slug}'s AoM: Retold Profile
       </h1>
       <Player username={params.slug} />

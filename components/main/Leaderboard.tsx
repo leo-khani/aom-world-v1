@@ -9,8 +9,19 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import LeaderboardEloChange from "./LeaderboardEloChange";
-import { IconFlame, IconTrophyFilled } from "@tabler/icons-react";
-import { Avatar, Button, Pagination } from "@nextui-org/react";
+import {
+  IconAward,
+  IconFlame,
+  IconSkull,
+  IconTrophyFilled,
+} from "@tabler/icons-react";
+import {
+  Avatar,
+  Button,
+  CircularProgress,
+  Pagination,
+  Tooltip,
+} from "@nextui-org/react";
 import Link from "next/link";
 import { LeaderboardData, LeaderboardItem } from "@/types/leaderboardTypes";
 
@@ -98,6 +109,14 @@ const Leaderboard: React.FC<leaderboardData> = ({
     </div>
   );
 
+  const getProgressColor = (
+    winPercent: number
+  ): "success" | "warning" | "danger" => {
+    if (winPercent >= 65) return "success";
+    if (winPercent >= 50) return "warning";
+    return "danger";
+  };
+
   return (
     <>
       <div className="w-full overflow-x-auto px-4">
@@ -138,7 +157,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
             </div>
           }
         >
-          <TableHeader>
+          <TableHeader className="">
             {/* Rank Place */}
             <TableColumn className="w-10">#</TableColumn>
 
@@ -167,6 +186,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
           <TableBody isLoading={isLoading}>
             {(length ? data.slice(0, length) : data).map((player) => (
               <TableRow
+                className="h-full"
                 key={player.rlUserId}
                 href={`/player/${player.userName}`}
               >
@@ -182,7 +202,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
                 </TableCell>
 
                 {/* Player Name, Avatar, Elo Calc */}
-                <TableCell className="flex items-center justify-start gap-2 cursor-pointer hover:underline border-white group">
+                <TableCell className="flex items-center justify-start gap-2 cursor-pointer hover:underline border-white group h-14">
                   <Avatar
                     className="rounded-sm w-8 h-8 duration-200 group-hover:scale-110"
                     src={player.avatarUrl}
@@ -194,18 +214,36 @@ const Leaderboard: React.FC<leaderboardData> = ({
                 <TableCell className="hidden sm:table-cell">
                   <div className="flex items-center gap-2">
                     {player.elo}
-                    {/* <LeaderboardEloChange rlUserId={player.rlUserId} /> */}
+                    <LeaderboardEloChange rlUserId={player.rlUserId} />
                   </div>
                 </TableCell>
 
                 {/* Win % */}
                 <TableCell className="hidden md:table-cell">
-                  {player.winPercent}%
+                  <Tooltip className="bg-neutral-800" content="Win rate">
+                    <CircularProgress
+                      aria-label="Win rate"
+                      size="md"
+                      value={player.winPercent}
+                      color={getProgressColor(player.winPercent)}
+                      showValueLabel={true}
+                    />
+                  </Tooltip>
                 </TableCell>
 
                 {/* Win/Losses */}
                 <TableCell className="hidden lg:table-cell">
-                  {player.wins}/{player.losses}
+                  <div className="flex flex-row gap-1 items-center">
+                    <span className="text-green-500">
+                      <IconAward size={16} />
+                    </span>
+                    {player.wins}
+                    <span className="text-neutral-500">/</span>
+                    <span className="text-red-500">
+                      <IconSkull size={16} />
+                    </span>
+                    {player.losses}
+                  </div>
                 </TableCell>
 
                 {/* Total Games */}
