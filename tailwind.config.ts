@@ -15,6 +15,7 @@ const config: Config = {
         inter: ['var(--font-inter)', 'sans-serif'],
         'playfair-display': ['var(--font-playfair-display)', 'serif'],
         'nycd': ['var(--font-nycd)', 'cursive'],
+        'sen': ['var(--font-sen)', 'sans-serif'],
       },
       colors: {
         'text': '#ffffff',
