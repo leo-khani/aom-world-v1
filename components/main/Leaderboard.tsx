@@ -194,7 +194,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
                 <TableCell className="hidden sm:table-cell">
                   <div className="flex items-center gap-2">
                     {player.elo}
-                    <LeaderboardEloChange rlUserId={player.rlUserId} />
+                    {/* <LeaderboardEloChange rlUserId={player.rlUserId} /> */}
                   </div>
                 </TableCell>
 
