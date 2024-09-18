@@ -57,50 +57,45 @@ const Feedback = () => {
           </div>
           <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="p-2">
             <ModalContent className="bg-neutral-800">
-              {(onClose) => (
-                <>
-                  <ModalHeader className="flex flex-col gap-1">
-                    <TitleSection
-                      title="Feedback"
-                      icon={<IconStairsUp size={32} />}
-                    />
-                  </ModalHeader>
-                  <ModalBody>
-                    <p className="mb-3">
-                      AoM world is in development and beta testing, feel free to
-                      share your feedback or suggestions.
-                    </p>
-                    <form
-                      action="https://formspree.io/f/xovazzjd"
-                      method="POST"
-                    >
-                      <div className="flex flex-col gap-2">
-                        <Input
-                          name="email"
-                          type="email"
-                          label="Your Email (optional)"
-                          className=""
-                        />
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  <TitleSection
+                    title="Feedback"
+                    icon={<IconStairsUp size={32} />}
+                  />
+                </ModalHeader>
+                <ModalBody>
+                  <p className="mb-3">
+                    AoM world is in development and beta testing, feel free to
+                    share your feedback or suggestions.
+                  </p>
+                  <form action="https://formspree.io/f/xovazzjd" method="POST">
+                    <div className="flex flex-col gap-2">
+                      <Input
+                        name="email"
+                        type="email"
+                        label="Your Email (optional)"
+                        className=""
+                      />
 
-                        <Textarea
-                          name="feedback"
-                          label="Feedback"
-                          className=""
-                          isRequired
-                        />
-                        <Button
-                          type="submit"
-                          color="warning"
-                          className="font-bold"
-                        >
-                          Send
-                        </Button>
-                      </div>
-                    </form>
-                  </ModalBody>
-                  <ModalFooter></ModalFooter>
-                </>
-              )}
+                      <Textarea
+                        name="feedback"
+                        label="Feedback"
+                        className=""
+                        isRequired
+                      />
+                      <Button
+                        type="submit"
+                        color="warning"
+                        className="font-bold"
+                      >
+                        Send
+                      </Button>
+                    </div>
+                  </form>
+                </ModalBody>
+                <ModalFooter></ModalFooter>
+              </>
             </ModalContent>
           </Modal>
         </>
