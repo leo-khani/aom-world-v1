@@ -116,7 +116,6 @@ async function processAndSaveMatchData(data: PlayerData, userId: number, playerA
     match_type: matchType
   };
 
-  console.log('ELO Data to be saved:', eloData);
 
   // Step 4: Upsert ELO data in `player_elos` (Update if exists, Insert if not)
   const { data: savedData, error } = await supabase

@@ -310,7 +310,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
                                       <div>
                                         {member.profile_id !== userID ? (
                                           <Link
-                                            href={`/profile/${member.profile_id}`}
+                                            href={`/player/${member.profile_id}`}
                                             className="hover:underline"
                                           >
                                             <div

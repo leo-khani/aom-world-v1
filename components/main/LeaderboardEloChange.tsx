@@ -1,5 +1,6 @@
 "use client";
 
+import { apiData } from "@/config/api";
 import { globalRequestQueue } from "@/utils/requestQueue";
 import { Spinner } from "@nextui-org/react";
 import { IconArrowNarrowDown, IconArrowNarrowUp } from "@tabler/icons-react";
@@ -30,7 +31,7 @@ const LeaderboardEloChange: React.FC<LeaderboardEloChangeProps> = ({
   const fetchDataWithRetry = useCallback(async () => {
     try {
       const response = await fetch(
-        `/api/public/getPlayerElo?userId=${playerId}&matchType=${matchType}`
+        `${apiData.url}${apiData.public.getPlayerElo}?userId=${playerId}&matchType=${matchType}`
       );
       if (!response.ok) {
         if (response.status === 429) {

@@ -127,7 +127,7 @@ const SearchBar = () => {
     if (key !== null && isMounted) {
       const selectedItem = data.find((item) => item.value === key);
       if (selectedItem) {
-        router.push(`/player/${selectedItem.label}`);
+        router.push(`/player/${selectedItem.value}`);
       }
     }
   };

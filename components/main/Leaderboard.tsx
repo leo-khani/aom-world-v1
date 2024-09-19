@@ -188,7 +188,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
               <TableRow
                 className="h-full"
                 key={player.rlUserId}
-                href={`/player/${player.userName}`}
+                href={`/player/${player.rlUserId}`}
               >
                 {/* Rank Place */}
                 <TableCell className="text-neutral-500">
