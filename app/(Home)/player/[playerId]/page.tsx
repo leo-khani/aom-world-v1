@@ -5,16 +5,6 @@ import { apiData } from "@/config/api";
 
 export const revalidate = 0;
 
-type PlayerEloAPI = {
-  player_id: number;
-  match_type: number;
-  player_name: string;
-  elo: number;
-  elo_change: number;
-  last_updated: string;
-  source: string;
-};
-
 // SEO Metadata
 export async function generateMetadata({
   params: { playerId },
