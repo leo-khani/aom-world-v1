@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPlayerMatchHistory } from './service';
 
 interface RateLimitInfo {
   count: number;
@@ -75,4 +74,8 @@ export function POST() {
     { error: 'POST method not allowed' },
     { status: 405 }
   );
+}
+
+function getPlayerMatchHistory(userId: string, arg1: number) {
+  throw new Error('Function not implemented.');
 }
