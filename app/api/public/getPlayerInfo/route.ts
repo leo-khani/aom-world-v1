@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const response = await getPlayerElo(parseInt(userId, 10), parseInt(matchType, 10));
+    const response = await getPlayerElo(Number(userId), Number(matchType))
     if (response === null) {
       throw new Error('Error fetching data');
     }
