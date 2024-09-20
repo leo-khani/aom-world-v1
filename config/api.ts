@@ -8,7 +8,7 @@ export const apiData = {
     url: apiUrl,
     version: "v1",
     public: {
-        getLeaderboard: "api/getLeaderboard",
+        getLeaderboard: "/getLeaderboard",
         getPlayerElo: "/getPlayerElo",
         playerMatchTypeRanks: "/leaderboard/playerMatchTypeRanks",
         getPlayerMatchHistory: "/player/getPlayerMatchHistory",

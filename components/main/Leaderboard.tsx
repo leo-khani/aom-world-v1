@@ -49,22 +49,25 @@ const Leaderboard: React.FC<leaderboardData> = ({
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${apiData.public.getLeaderboard}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          region: 7,
-          matchType: matchType,
-          consoleMatchType: 15,
-          searchPlayer: "",
-          page: page,
-          count: rowsPerPage, // Use rowsPerPage here
-          sortColumn: "rank",
-          sortDirection: "ASC",
-        }),
-      });
+      const response = await fetch(
+        `${apiData.url}${apiData.public.getLeaderboard}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            region: 7,
+            matchType: matchType,
+            consoleMatchType: 15,
+            searchPlayer: "",
+            page: page,
+            count: rowsPerPage, // Use rowsPerPage here
+            sortColumn: "rank",
+            sortDirection: "ASC",
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
