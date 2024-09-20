@@ -127,6 +127,7 @@ const StatisticsMain = () => {
     columnKey: Key
   ) => {
     const cellValue = item[columnKey];
+    if (cellValue === undefined) return null;
 
     switch (columnKey) {
       case "race_id":
@@ -179,7 +180,7 @@ const StatisticsMain = () => {
         </TableHeader>
         <TableBody items={data.items}>
           {(item) => (
-            <TableRow key={item.race_id}>
+            <TableRow key={item.race_id.toString()}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
