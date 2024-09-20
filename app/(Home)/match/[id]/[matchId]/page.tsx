@@ -1,3 +1,5 @@
+"use client";
+
 import MatchInfo from "@/components/MatchInfo";
 import { useParams } from "next/navigation";
 
