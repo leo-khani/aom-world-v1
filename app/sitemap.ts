@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 }
 
 async function fetchTopPlayers() {
-    const response = await fetch("/api/getLeaderboard", {
+    const response = await fetch("https://api.ageofempires.com/api/agemyth/Leaderboard", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
