@@ -49,7 +49,7 @@ const Hotkey = () => {
     }, 500);
   }, []);
   return (
-    <div className="flex flex-col gap-2 py-4 px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col gap-2 py-4 px-0 sm:px-0 lg:px-0">
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <Spinner color="success" size="lg" />
