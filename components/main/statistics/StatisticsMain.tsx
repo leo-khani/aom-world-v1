@@ -95,6 +95,8 @@ const StatisticsMain = () => {
         <Progress
           size="sm"
           isIndeterminate
+          label="Loading..."
+          color="success"
           aria-label="Loading..."
           className="max-w-md"
         />
