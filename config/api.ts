@@ -8,11 +8,11 @@ export const apiData = {
     url: apiUrl,
     version: "v1",
     public: {
-        getLeaderboard: "/public/getLeaderboard",
-        getPlayerElo: "/public/getPlayerElo",
-        playerMatchTypeRanks: "/public/leaderboard/playerMatchTypeRanks",
-        getPlayerMatchHistory: "/public/player/getPlayerMatchHistory",
-        getPlayerRanks: "/public/player/getPlayerRanks"
+        getLeaderboard: "/getLeaderboard",
+        getPlayerElo: "/getPlayerElo",
+        playerMatchTypeRanks: "/leaderboard/playerMatchTypeRanks",
+        getPlayerMatchHistory: "/player/getPlayerMatchHistory",
+        getPlayerRanks: "/player/getPlayerRanks"
     },
    
 }

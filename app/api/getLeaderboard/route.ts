@@ -10,7 +10,7 @@ const rateLimit = new Map();
  */
 function handleRateLimiting(ip: string) {
   const now = Date.now();
-  const timeWindow = 60 * 1000; // 1 minute
+  const timeWindow = 60 * 1000;
   const maxRequests = 20;
 
   if (!rateLimit.has(ip)) {
@@ -54,7 +54,6 @@ export async function POST(req: NextRequest) {
     console.error('Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
-
 }
 
 /**
