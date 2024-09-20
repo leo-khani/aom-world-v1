@@ -35,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 }
 
 async function fetchTopPlayers() {
-    const response = await fetch("https://www.aomworld.pro/api/auth/leaderboard/getLeaderboard", {
+    const response = await fetch("https://www.aomworld.pro/api/leaderboard/getLeaderboard", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
