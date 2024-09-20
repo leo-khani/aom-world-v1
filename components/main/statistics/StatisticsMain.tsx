@@ -50,6 +50,8 @@ const civilizationIcons = {
 
 const StatisticsMain = () => {
   interface StatisticsData {
+    message: string;
+    count: number;
     match_count: number;
     items: Array<{
       race_id: number;
@@ -59,6 +61,8 @@ const StatisticsMain = () => {
       win_rate: number;
       pick_rate: number;
     }>;
+    lastCheck: number;
+    source: "cache" | "database";
   }
 
   const [data, setData] = useState<StatisticsData | null>(null);
@@ -180,7 +184,7 @@ const StatisticsMain = () => {
         </TableHeader>
         <TableBody items={data.items}>
           {(item) => (
-            <TableRow key={item.race_id.toString()}>
+            <TableRow key={item.race_id ? item.race_id.toString() : "unknown"}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
