@@ -39,7 +39,6 @@ async function fetchTopPlayers() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
       },
       body: JSON.stringify({
         region: "7",
