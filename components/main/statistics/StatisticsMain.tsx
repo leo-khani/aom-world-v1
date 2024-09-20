@@ -63,7 +63,7 @@ const StatisticsMain = () => {
 
   const [data, setData] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const apiurl = apiData.url + apiData.public.getStatistics;
+  const apiurl = apiData.public.getStatistics;
 
   useEffect(() => {
     const fetchData = async () => {
