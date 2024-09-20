@@ -1,4 +1,5 @@
 "use client";
+
 import { Tabs, Tab, BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import {
@@ -68,8 +69,7 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
         return [null, null, null, null, null];
       }
 
-      const result = await response.json();
-      console.log("test", result);
+      const result: (Profile | null)[] = await response.json();
       return result;
     } catch (error) {
       console.error("Error fetching data:", error);

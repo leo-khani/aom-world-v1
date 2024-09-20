@@ -1,4 +1,3 @@
-import { supabase } from '../../../../client/supabase';
 import { MatchHistoryStat, Profile } from '../../auth/player/getPlayerMatchHistory/types';
 
 interface PlayerData {
@@ -13,11 +12,11 @@ interface EloData {
   elo_change: number;
   last_updated: string;
   match_type: number;
-  source: 'API' | 'DB';
+  source: 'API';
 }
 
 /**
- * Fetches the player's ELO data from the DB or API.
+ * Fetches the player's ELO data from the API.
  *
  * @param {number} playerId The ID of the player to fetch.
  * @param {number} matchType The ID of the match type to fetch.
@@ -25,26 +24,10 @@ interface EloData {
  */
 export const getPlayerElo = async (
   playerId: number,
-  matchType: number,
+  matchType: number
 ): Promise<EloData> => {
-
   if (!playerId || !matchType) {
     throw new Error('playerId and matchType are required');
-  }
-
-  const { data: existingData, error: fetchError } = await supabase
-    .from('player_elos')
-    .select('*')
-    .eq('player_id', playerId)
-    .eq('match_type', matchType)
-    .single();
-
-  if (existingData && !fetchError) {
-    const timeDiffMinutes = (Date.now() - new Date(existingData.last_updated).getTime()) / (1000 * 60);
-
-    if (timeDiffMinutes < 20) {
-      return { ...existingData, source: 'DB' };
-    }
   }
 
   // Fetch from API
@@ -74,27 +57,24 @@ export const getPlayerElo = async (
     playerAlias = profile.alias;
   }
 
-  // Process and save the data
-  const savedData = await processAndSaveMatchData(data, playerId, playerAlias, matchType);
-
-  // Return data indicating it came from the API
-  return { ...savedData, source: 'API' };
+  // Process the data
+  return processMatchData(data, playerId, playerAlias, matchType);
 };
 
 /**
- * Processes the match data and saves the ELO data to the database
+ * Processes the match data and returns the ELO data
  * @param {PlayerData} data The match data from the API
  * @param {number} userId The ID of the player
  * @param {string} playerAlias The alias of the player
  * @param {number} matchType The type of match to process (1 = RM Solo, 2 = RM Team, etc.)
- * @returns {Promise<EloData>} The saved ELO data
+ * @returns {EloData} The processed ELO data
  */
-async function processAndSaveMatchData(
+function processMatchData(
   data: PlayerData,
   userId: number,
   playerAlias: string,
   matchType: number
-): Promise<EloData> {
+): EloData {
   // Step 1: Filter the last 2 matches for the specified match type
   const filteredMatches = data.matchHistoryStats?.filter(match => match.matchtype_id === matchType)?.slice(0, 2);
   if (!filteredMatches || filteredMatches.length < 2) {
@@ -107,7 +87,7 @@ async function processAndSaveMatchData(
       last_updated: new Date().toISOString(),
       match_type: matchType,
       source: 'API'
-    } as EloData;
+    };
   }
 
   // Step 2: Calculate ELO and ELO change
@@ -115,8 +95,8 @@ async function processAndSaveMatchData(
   const previousElo = filteredMatches[1].matchhistorymember?.find((m: { profile_id: number; }) => m.profile_id === userId)?.newrating || 0;
   const eloChange = latestElo - previousElo;
 
-  // Step 3: Prepare ELO data for `player_elos`
-  const eloData: EloData = {
+  // Step 3: Prepare and return ELO data
+  return {
     player_id: userId,
     player_name: playerAlias,
     elo: latestElo,
@@ -125,29 +105,4 @@ async function processAndSaveMatchData(
     match_type: matchType,
     source: 'API'
   };
-
-  try {
-    // Step 4: Upsert ELO data in `player_elos` (Update if exists, Insert if not)
-    const { data: savedData, error } = await supabase
-      .from('player_elos')
-      .upsert(eloData, {
-        onConflict: 'player_id,match_type',
-        ignoreDuplicates: false
-      })
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error upserting ELO data:', error);
-      throw error;
-    }
-
-    console.log('Saved data:', savedData);
-
-    return savedData;
-  } catch (error) {
-    console.error('Error saving ELO data:', error);
-    throw error;
-  }
 }
-
