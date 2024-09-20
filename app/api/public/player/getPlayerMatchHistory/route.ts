@@ -13,6 +13,7 @@ const rateLimit = new Map<string, RateLimitInfo>();
  * @param ip The IP address of the incoming request.
  * @returns Whether the request is within the rate limit.
  */
+
 function handleRateLimiting(ip: string): boolean {
   const now = Date.now();
   const timeWindow = 60 * 1000; // 1 minute
