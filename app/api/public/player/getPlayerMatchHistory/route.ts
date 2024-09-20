@@ -16,7 +16,7 @@ const rateLimit = new Map<string, RateLimitInfo>();
 function handleRateLimiting(ip: string): boolean {
   const now = Date.now();
   const timeWindow = 60 * 1000; // 1 minute
-  const maxRequests = 20;
+  const maxRequests = 500;
 
   const requestInfo = rateLimit.get(ip);
 

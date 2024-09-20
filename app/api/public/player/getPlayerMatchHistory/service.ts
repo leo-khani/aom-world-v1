@@ -30,10 +30,10 @@ export const saveMatchData = async (data: MatchHistoryResponse) => {
     return;
   }
 
-  // Collect all match history report results
-  const allMatchHistoryReportResults = data.matchHistoryStats.flatMap(stat => 
-    stat.matchhistoryreportresults || []
-  );
+  // Collect all match history report results with matchtype_id 1
+  const allMatchHistoryReportResults = data.matchHistoryStats
+    .filter(stat => stat.matchtype_id === 1) // Filter for matchtype_id 1
+    .flatMap(stat => stat.matchhistoryreportresults || []);
 
   if (allMatchHistoryReportResults.length === 0) {
     console.log("No match history report results to save");
