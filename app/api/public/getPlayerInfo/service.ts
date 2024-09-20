@@ -1,4 +1,4 @@
-import { MatchHistoryStat, Profile } from '../../auth/player/getPlayerMatchHistory/types';
+import { MatchHistoryStat, Profile } from '../player/getPlayerMatchHistory/types';
 
 interface PlayerData {
   matchHistoryStats: MatchHistoryStat[];

@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import MapImage from "./main/match/MapImage";
 import CivImage from "./main/match/CivImage";
+import { apiData } from "@/config/api";
 // Types for the match history data
 interface MatchHistoryItem {
   matchhistory_id: number;
@@ -81,7 +82,7 @@ interface PlayerData {
 }
 
 interface MatchHistoryProps {
-  userID?: number; // Updated type to 'string' for better clarity
+  userID: number;
 }
 
 const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
@@ -96,14 +97,18 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
     const fetchMatchHistory = async () => {
       if (!userID) return;
       try {
-        const response = await fetch("/api/auth/player/getPlayerMatchHistory", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
-          },
-          body: JSON.stringify({ userID }),
-        });
+        const response = await fetch(
+          `${apiData.url}${apiData.public.getPlayerMatchHistory}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              profileId: userID,
+            }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch match history");

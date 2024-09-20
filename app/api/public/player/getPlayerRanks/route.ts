@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPlayerMatchHistory } from './service';
+import { getPlayerRanks } from './service';
 
 interface RateLimitInfo {
   count: number;
@@ -8,15 +8,10 @@ interface RateLimitInfo {
 
 const rateLimit = new Map<string, RateLimitInfo>();
 
-/**
- * Handles rate limiting for incoming requests.
- * @param ip The IP address of the incoming request.
- * @returns Whether the request is within the rate limit.
- */
 function handleRateLimiting(ip: string): boolean {
   const now = Date.now();
-  const timeWindow = 60 * 1000; // 1 minute
-  const maxRequests = 20;
+  const timeWindow = 60 * 1000; 
+  const maxRequests = 500;
 
   const requestInfo = rateLimit.get(ip);
 
@@ -37,14 +32,11 @@ function handleRateLimiting(ip: string): boolean {
   return requestInfo.count <= maxRequests;
 }
 
-/**
- * Handles the POST request to create a palette.
- * @param req The incoming request.
- * @returns A JSON response with the saved palette data.
- */
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for') || req.ip;
-  if (ip && !handleRateLimiting(ip)) {
+  const ip = req.headers.get('x-forwarded-for') || req.ip || '';
+  
+  // Check if rate limit is exceeded
+  if (!handleRateLimiting(ip)) {
     return NextResponse.json(
       { error: 'Rate limit exceeded' },
       { status: 429 }
@@ -52,32 +44,37 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { userID } = await req.json();
+    // Parse the JSON body from the POST request
+    const body = await req.json();
+    const { userName } = body;
 
-    if (!userID) {
+    if (!userName) {
       return NextResponse.json(
-        { error: 'profileId is required' },
+        { error: 'userName is required' },
         { status: 400 }
       );
-    } 
+    }
 
-    const response = await getPlayerMatchHistory(userID);
+    // Fetch player ranks using the provided username
+    const response = await getPlayerRanks(userName);
+    if (!response) {
+      throw new Error('Error fetching data');
+    }
+
     return NextResponse.json(response);
   } catch (error) {
+    console.error('Error fetching data:', error);
     return NextResponse.json(
-        { error: 'Error fetching data', details: (error as Error).message },
-        { status: 500 }
+      { error: 'Error fetching data', details: (error as Error).message },
+      { status: 500 }
     );
+  }
 }
-}
-
-/**
- * Handles the GET request to the API.
- * @returns A JSON response indicating the method is not allowed.
- */
 export function GET() {
   return NextResponse.json(
     { error: 'GET method not allowed' },
     { status: 405 }
   );
 }
+
+

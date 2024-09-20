@@ -10,8 +10,9 @@ export const apiData = {
     public: {
         getLeaderboard: "/public/getLeaderboard",
         getPlayerElo: "/public/getPlayerElo",
+        playerMatchTypeRanks: "/public/leaderboard/playerMatchTypeRanks",
+        getPlayerMatchHistory: "/public/player/getPlayerMatchHistory",
+        getPlayerRanks: "/public/player/getPlayerRanks"
     },
-    auth: {
-        playerMatchTypeRanks: "/auth/leaderboard/playerMatchTypeRanks",
-    }
+   
 }

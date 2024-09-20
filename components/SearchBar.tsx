@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { IconCaretUpDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { apiData } from "@/config/api";
 
 // Define types
 interface Player {
@@ -68,23 +69,25 @@ const SearchBar = () => {
       if (searchValue.length < 3) {
         return;
       }
-      const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
-        },
-        body: JSON.stringify({
-          region: "7",
-          matchType: "1",
-          consoleMatchType: 15,
-          searchPlayer: searchValue,
-          page: 1,
-          count: 10,
-          sortColumn: "rank",
-          sortDirection: "ASC",
-        }),
-      });
+      const response = await fetch(
+        `${apiData.url}${apiData.public.getLeaderboard}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            region: "7",
+            matchType: "1",
+            consoleMatchType: 15,
+            searchPlayer: searchValue,
+            page: 1,
+            count: 10,
+            sortColumn: "rank",
+            sortDirection: "ASC",
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -145,6 +148,7 @@ const SearchBar = () => {
   return (
     <div>
       <Autocomplete
+        aria-label="SearchPlayer"
         placeholder={"Search for player..."}
         inputValue={searchValue}
         onInputChange={handleSearchChange}
@@ -162,6 +166,7 @@ const SearchBar = () => {
       >
         {(item) => (
           <AutocompleteItem
+            aria-label={item.label}
             className="text-gray-800"
             key={item.value}
             value={item.value}

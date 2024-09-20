@@ -1,4 +1,4 @@
-import { MatchHistoryStat, Profile } from '../../auth/player/getPlayerMatchHistory/types';
+import { MatchHistoryStat, Profile } from '../player/getPlayerMatchHistory/types';
 
 interface PlayerData {
   matchHistoryStats: MatchHistoryStat[];
@@ -35,30 +35,33 @@ export const getPlayerElo = async (
     JSON.stringify([playerId])
   )}`;
 
-  const response = await fetch(url, { method: "GET" });
+  try {
+    const response = await fetch(url, { method: "GET" });
 
-  if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}: ${response.statusText}`);
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}: ${response.statusText}`);
+    }
+
+    const data: PlayerData = await response.json();
+
+    if (!data || !Array.isArray(data.profiles) || !Array.isArray(data.matchHistoryStats)) {
+      throw new Error('Invalid response from API');
+    }
+
+    // Find the profile row for the player from data 
+    const profile = data.profiles.find((profile: Profile) => profile.profile_id === playerId);
+    const playerAlias = profile ? profile.alias : `Unknown Player (${playerId})`;
+
+    // Process the data
+    return processMatchData(data, playerId, playerAlias, matchType);
+  } catch (error) {
+    console.error("Error fetching player's ELO data:", error);
+    if (error instanceof Error) {
+      throw new Error(`Failed to get ELO data for player ID ${playerId}: ${error.message}`);
+    } else {
+      throw new Error(`Failed to get ELO data for player ID ${playerId}: ${String(error)}`);
+    }
   }
-
-  const data: PlayerData = await response.json();
-
-  if (!data || !data.profiles || !data.matchHistoryStats) {
-    throw new Error('Invalid response from API');
-  }
-
-  // Find the profile row for the player from data 
-  const profile = data.profiles.find((profile: Profile) => profile.profile_id === playerId);
-  let playerAlias: string;
-  
-  if (!profile) { 
-    playerAlias = `Unknown Player (${playerId})`;
-  } else {
-    playerAlias = profile.alias;
-  }
-
-  // Process the data
-  return processMatchData(data, playerId, playerAlias, matchType);
 };
 
 /**
@@ -76,8 +79,9 @@ function processMatchData(
   matchType: number
 ): EloData {
   // Step 1: Filter the last 2 matches for the specified match type
-  const filteredMatches = data.matchHistoryStats?.filter(match => match.matchtype_id === matchType)?.slice(0, 2);
-  if (!filteredMatches || filteredMatches.length < 2) {
+  const filteredMatches = data.matchHistoryStats.filter(match => match.matchtype_id === matchType).slice(0, 2);
+  
+  if (filteredMatches.length < 2) {
     console.log('Not enough relevant matches found');
     return {
       player_id: userId,

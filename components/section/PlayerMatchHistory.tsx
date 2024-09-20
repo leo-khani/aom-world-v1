@@ -6,98 +6,60 @@ import {
   PlayerHeaderProfile,
   PlayerCardRankSolo,
 } from "../main/player/player-cards";
-import MatchHistory from "../MatchHistory";
 import { apiData } from "@/config/api";
-
-interface Profile {
-  gameId: string;
-  userId: string | null;
-  rlUserId: number;
-  userName: string;
-  avatarUrl: string;
-  playerNumber: string | null;
-  elo: number;
-  eloRating: number;
-  eloHighest: number;
-  rank: number;
-  rankTotal: number;
-  region: string;
-  wins: number;
-  winPercent: number;
-  losses: number;
-  winStreak: number;
-  totalGames: number;
-  rankLevel: string;
-  rankIcon: string;
-  leaderboardKey: string;
-}
+import { LeaderboardPlayer } from "@/types/getPlayerRanksTypes";
+import MatchHistory from "../MatchHistory";
 
 interface PlayerMatchHistoryProps {
   username: string;
 }
 
 const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
-  // Your code here
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [items, setItems] = useState<(Profile | null)[]>([
-    null,
-    null,
-    null,
-    null,
-    null,
-  ]);
+  const [items, setItems] = useState<(LeaderboardPlayer[] | null)[]>([]); // Adjusted for two items
 
-  // Function to fetch data for all match types
-  const fetchPlayerData = async (): Promise<(Profile | null)[]> => {
+  const fetchPlayerData = async (): Promise<(LeaderboardPlayer[] | null)[]> => {
     try {
       const response = await fetch(
-        `${apiData.url}${apiData.auth.playerMatchTypeRanks}`,
+        `${apiData.url}${apiData.public.getPlayerRanks}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
           },
           body: JSON.stringify({
-            username: username,
+            userName: username,
           }),
         }
       );
 
-      if (!response.ok) {
-        console.error("Server error:", response.statusText);
-        return [null, null, null, null, null];
-      }
-
-      const result: (Profile | null)[] = await response.json();
-      return result;
+      const result = await response.json();
+      console.log({ result });
+      return result; // Assume this returns exactly two items
     } catch (error) {
       console.error("Error fetching data:", error);
-      return [null, null, null, null, null];
+      return [null, null]; // Ensure fallback to nulls if error occurs
     }
   };
 
-  // Fetch data for match types 0 to 4
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       const fetchedItems = await fetchPlayerData();
       setItems(fetchedItems);
-      console.log(items);
       setIsLoading(false);
     };
 
     fetchData();
   }, [username]);
 
-  // Match type names
-  const matchTypeNames = ["Solo", "Team", "Deathmatch", "Team Deathmatch"];
+  const matchTypeNames = ["Solo", "Team"];
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!items.some((item) => item !== null)) {
+  if (!Array.isArray(items) || items.every((item) => item === null)) {
     return <div>No data available</div>;
   }
 
@@ -112,53 +74,29 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
       </div>
       <div className="container mx-auto px-4 py-8">
         <div className="w-full mb-8">
-          {items[1] || items[2] ? (
+          {items[0] || items[1] ? (
             <Tabs
               aria-label="Options"
               className="bg-transparent"
               placement="start"
-              defaultSelectedKey={items[1] ? "rmsolo" : "rmteam"}
+              defaultSelectedKey={items[0] ? "rmsolo" : "rmteam"}
             >
               <Tab
                 key="rmsolo"
                 title="Solo"
                 className="text-sm"
-                isDisabled={!items[1]}
+                isDisabled={!items[0]}
               >
-                {items[1] && (
-                  <PlayerHeaderProfile
-                    playerId={items[1].rlUserId}
-                    username={items[1].userName}
-                    totalGames={items[1].totalGames}
-                    winPercent={items[1].winPercent}
-                    avatarUrl={items[1].avatarUrl}
-                    winStreak={items[1].winStreak}
-                    wins={items[1].wins}
-                    losses={items[1].losses}
-                    rank={items[1].rank}
-                  />
-                )}
+                {items[0] && <PlayerHeaderProfile item={items[0][0]} />}
               </Tab>
 
               <Tab
                 key="rmteam"
                 title="Team"
                 className="text-sm"
-                isDisabled={!items[2]}
+                isDisabled={!items[1]}
               >
-                {items[2] && (
-                  <PlayerHeaderProfile
-                    playerId={items[2].rlUserId}
-                    username={items[2].userName}
-                    totalGames={items[2].totalGames}
-                    winPercent={items[2].winPercent}
-                    avatarUrl={items[2].avatarUrl}
-                    winStreak={items[2].winStreak}
-                    wins={items[2].wins}
-                    losses={items[2].losses}
-                    rank={items[2].rank}
-                  />
-                )}
+                {items[1] && <PlayerHeaderProfile item={items[1][0]} />}
               </Tab>
             </Tabs>
           ) : (
@@ -168,7 +106,7 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="w-full lg:w-1/5 mb-4 lg:mb-0">
             <PlayerCardRankSolo isLoading={isLoading}>
-              {items.slice(1, 3).map((item, index) => (
+              {items.map((item, index) => (
                 <div
                   key={index}
                   className="flex flex-row justify-between gap-2 mb-2"
@@ -176,14 +114,16 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
                   <div className="w-1/4 text-sm">{matchTypeNames[index]}</div>
                   {item ? (
                     <>
-                      <div className="w-1/4 text-center">{item.elo}</div>
+                      <div className="w-1/4 text-center">
+                        {item[0]?.elo || "-"}
+                      </div>
                       <div className="w-2/4 flex items-center justify-end gap-1 text-sm">
-                        {item.winPercent}%
+                        {item[0]?.winPercent}%
                         <span className="text-green-500/80 text-xs">
-                          {item.wins}W
+                          {item[0]?.wins}W
                         </span>
                         <span className="text-red-500/80 text-xs">
-                          {item.losses}L
+                          {item[0]?.losses}L
                         </span>
                       </div>
                     </>
@@ -199,10 +139,10 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
           </div>
 
           <div className="w-full lg:w-4/5">
-            {items[1] ? (
-              <MatchHistory userID={items[1].rlUserId || 0} />
+            {items[0] ? (
+              <MatchHistory userID={items[0][0].rlUserId || 0} />
             ) : (
-              items[2] && <MatchHistory userID={items[2].rlUserId || 0} />
+              items[1] && <MatchHistory userID={items[1][0].rlUserId || 0} />
             )}
           </div>
         </div>

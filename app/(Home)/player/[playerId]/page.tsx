@@ -13,6 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   // Fetch player data
   let playerName;
+
   if (playerId) {
     playerName = await fetch(
       `${apiData.url}${apiData.public.getPlayerElo}?userId=${playerId}&matchType=1`

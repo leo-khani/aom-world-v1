@@ -16,18 +16,11 @@ import {
   IconSwords,
 } from "@tabler/icons-react";
 import toast from "react-hot-toast";
+import { LeaderboardPlayer } from "@/types/getPlayerRanksTypes";
 
 // Types
 interface PlayerHeaderProfileProps {
-  playerId: number;
-  username: string;
-  totalGames: number;
-  winPercent: number;
-  avatarUrl: string;
-  winStreak: number;
-  wins: number;
-  losses: number;
-  rank: number;
+  item: LeaderboardPlayer; // Define a proper type
 }
 
 interface PlayerCardRank1v1Props {
@@ -51,29 +44,26 @@ const shareButton = () => {
 
 // Components
 export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
-  playerId,
-  username,
-  totalGames,
-  winPercent,
-  avatarUrl,
-  winStreak,
-  wins,
-  losses,
-  rank,
+  item,
 }) => {
-  const progressColor = getProgressColor(winPercent);
+  const progressColor = getProgressColor(item.winPercent);
 
   return (
     <div className="flex flex-col gap-2 px-2">
       <div className="flex flex-col sm:flex-row items-center gap-4">
-        <Avatar src={avatarUrl} size="lg" radius="md" className="shadow-lg" />
+        <Avatar
+          src={item.avatarUrl}
+          size="lg"
+          radius="md"
+          className="shadow-lg"
+        />
         <div className="flex flex-row items-center gap-4">
-          <h1 className="text-2xl font-bold">{username}</h1>
+          <h1 className="text-2xl font-bold">{item.userName}</h1>
           <Tooltip className="bg-neutral-800" content="Win rate">
             <CircularProgress
               aria-label="Win rate"
               size="lg"
-              value={winPercent}
+              value={item.winPercent}
               color={progressColor}
               showValueLabel={true}
             />
@@ -83,38 +73,38 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
       <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2">
         <StatItem
           icon={<IconHash size={16} />}
-          value={rank}
+          value={item.rank}
           tooltip="Leaderboard rank"
         />
         <Divider />
         <StatItem
           icon={<IconSwords size={16} />}
-          value={totalGames}
+          value={item.totalGames}
           tooltip="Total games"
         />
         <Divider />
         <StatItem
           icon={<IconAward size={16} />}
-          value={wins}
+          value={item.wins}
           tooltip="Wins"
           className="text-green-500"
         />
         <Divider />
         <StatItem
           icon={<IconSkull size={16} />}
-          value={losses}
+          value={item.losses}
           tooltip="Losses"
           className="text-red-500"
         />
         <Divider />
         <StatItem
           icon={<IconFlame size={16} />}
-          value={winStreak}
+          value={item.winStreak}
           tooltip="Win streak"
           className={
-            winStreak > 0
+            item.winStreak > 0
               ? "text-green-500"
-              : winStreak < 0
+              : item.winStreak < 0
               ? "text-red-500"
               : "text-gray-500"
           }
@@ -131,13 +121,14 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
             <IconShare size={16} />
           </Button>
         </Tooltip>
-
-        <Tooltip className="bg-neutral-800" content="Copy profile id">
+        <Tooltip className="bg-neutral-800" content="Copy profile ID">
           <Button
             isIconOnly
             color="secondary"
             size="sm"
-            onClick={() => navigator.clipboard.writeText(playerId.toString())}
+            onClick={() =>
+              navigator.clipboard.writeText(item.rlUserId.toString())
+            }
             className="bg-neutral-800"
           >
             <IconCopy size={16} />
@@ -161,6 +152,7 @@ export const PlayerCardRankSolo: React.FC<PlayerCardRank1v1Props> = ({
       </div>
     );
   }
+
   return (
     <div className="bg-secondary rounded-md p-4">
       <span className="semibold flex gap-2 items-center">
@@ -196,11 +188,6 @@ const StatItem: React.FC<{
 );
 
 const Divider: React.FC = () => <div className="hidden sm:block">|</div>;
-
-// TODO: Implement getPlayerMatchHistory function
-export const getPlayerMatchHistory = () => {
-  // Implementation goes here
-};
 
 // TODO: Add error handling for API calls
 // TODO: Implement lazy loading for Avatar and other images

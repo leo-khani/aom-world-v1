@@ -24,6 +24,7 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { LeaderboardData, LeaderboardItem } from "@/types/leaderboardTypes";
+import { apiData } from "@/config/api";
 
 interface leaderboardData {
   length?: number;
@@ -48,23 +49,25 @@ const Leaderboard: React.FC<leaderboardData> = ({
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/auth/leaderboard/getLeaderboard", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.API_SECRET_KEY}`,
-        },
-        body: JSON.stringify({
-          region: 7,
-          matchType: matchType,
-          consoleMatchType: 15,
-          searchPlayer: "",
-          page: page,
-          count: rowsPerPage, // Use rowsPerPage here
-          sortColumn: "rank",
-          sortDirection: "ASC",
-        }),
-      });
+      const response = await fetch(
+        `${apiData.url}${apiData.public.getLeaderboard}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            region: 7,
+            matchType: matchType,
+            consoleMatchType: 15,
+            searchPlayer: "",
+            page: page,
+            count: rowsPerPage, // Use rowsPerPage here
+            sortColumn: "rank",
+            sortDirection: "ASC",
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
