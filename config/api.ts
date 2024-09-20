@@ -12,7 +12,8 @@ export const apiData = {
         getPlayerElo: "/getPlayerElo",
         playerMatchTypeRanks: "/leaderboard/playerMatchTypeRanks",
         getPlayerMatchHistory: "/player/getPlayerMatchHistory",
-        getPlayerRanks: "/player/getPlayerRanks"
+        getPlayerRanks: "/player/getPlayerRanks",
+        getStatistics: "/getStatistics",
     },
    
 }
