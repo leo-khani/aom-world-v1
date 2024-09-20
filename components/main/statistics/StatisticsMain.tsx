@@ -16,6 +16,7 @@ import {
 import { Key } from "@react-types/shared";
 import React, { useState, useEffect } from "react";
 
+// Mapping civilization IDs to names
 const civilizationNames = {
   1: "Zeus",
   2: "Hades",
@@ -32,6 +33,7 @@ const civilizationNames = {
   13: "Freyr",
 };
 
+// Mapping civilization IDs to icon paths
 const civilizationIcons = {
   1: "/gods/greeks/major-gods/zeus_icon.png",
   2: "/gods/greeks/major-gods/hades_icon.png",
@@ -49,26 +51,24 @@ const civilizationIcons = {
 };
 
 const StatisticsMain = () => {
+  // Type for the API response data structure
   interface StatisticsData {
-    message: string;
-    count: number;
     match_count: number;
     items: Array<{
-      race_id: number;
+      civilization_id: number;
       count: number;
       wins: number;
       losses: number;
       win_rate: number;
       pick_rate: number;
     }>;
-    lastCheck: number;
-    source: "cache" | "database";
   }
 
   const [data, setData] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const apiurl = apiData.url + apiData.public.getStatistics;
 
+  // Fetch data from the API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -78,6 +78,7 @@ const StatisticsMain = () => {
         }
         const result = await response.json();
         setData(result);
+        console.log(result);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -92,14 +93,10 @@ const StatisticsMain = () => {
     return (
       <div className="flex justify-center items-center h-screen">
         <Progress
-          label="Loading..."
-          aria-labelledby="loading-label"
           size="sm"
           isIndeterminate
           aria-label="Loading..."
-          color="success"
           className="max-w-md"
-          classNames={{ label: "text-white" }}
         />
       </div>
     );
@@ -110,7 +107,7 @@ const StatisticsMain = () => {
   }
 
   const columns = [
-    { key: "race_id", label: "GOD" },
+    { key: "civilization_id", label: "GOD" },
     { key: "count", label: "MATCHES" },
     { key: "wins", label: "WINS" },
     { key: "losses", label: "LOSSES" },
@@ -118,10 +115,11 @@ const StatisticsMain = () => {
     { key: "pick_rate", label: "PICK RATE" },
   ];
 
+  // Render the content of each cell based on the column
   const renderCell = (
     item: {
       [x: string]: any;
-      race_id?: number;
+      civilization_id?: number;
       count?: number;
       wins?: number;
       losses?: number;
@@ -131,10 +129,9 @@ const StatisticsMain = () => {
     columnKey: Key
   ) => {
     const cellValue = item[columnKey];
-    if (cellValue === undefined) return null;
 
     switch (columnKey) {
-      case "race_id":
+      case "civilization_id":
         return (
           <div className="flex items-center gap-2">
             <Image
@@ -173,9 +170,7 @@ const StatisticsMain = () => {
   return (
     <Card className="p-4">
       <h2 className="text-2xl font-bold mb-4">Statistics</h2>
-      <p className="mb-4">
-        Total Analysed Matches: {data.match_count.toLocaleString("en-US")}
-      </p>
+      <p className="mb-4">Total Matches: {data.match_count}</p>
       <Table aria-label="God Statistics" selectionMode="single">
         <TableHeader columns={columns}>
           {(column) => (
@@ -184,7 +179,7 @@ const StatisticsMain = () => {
         </TableHeader>
         <TableBody items={data.items}>
           {(item) => (
-            <TableRow key={item.race_id ? item.race_id.toString() : "unknown"}>
+            <TableRow key={item.civilization_id}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
