@@ -81,7 +81,7 @@ const MapImage: React.FC<MapImageProps> = ({
 }) => {
   // Function to get the civilization icon path
   const getCivilizationIcon = (civid: number): string => {
-    return civilizationIcons[civid] || "/maps/air.png";
+    return civilizationIcons[civid] || "/maps/the_unknown.png";
   };
 
   return (

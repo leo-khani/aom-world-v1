@@ -4,8 +4,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch top players for the sitemap
   const topPlayers = await fetchTopPlayers();
 
-  const playerUrls = topPlayers.map((player: { userName: any; }) => ({
-    url: `https://www.aomworld.pro/player/${player.userName}`,
+  const playerUrls = topPlayers.map((player: { rlUserId: any; }) => ({
+    url: `https://www.aomworld.pro/player/${player.rlUserId}`,
     lastModified: new Date(),
     changeFrequency: 'daily' as const,
     priority: 0.7,
@@ -46,7 +46,7 @@ async function fetchTopPlayers() {
         consoleMatchType: 15,
         searchPlayer: "",
         page: 1,
-        count: 100, // Fetch top 100 players for the sitemap
+        count: 100, 
         sortColumn: "rank",
         sortDirection: "ASC",
       }),

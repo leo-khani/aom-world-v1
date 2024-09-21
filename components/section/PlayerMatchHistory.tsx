@@ -41,7 +41,7 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
 
       const result = await response.json();
       console.log({ result });
-      return result; // Assume this returns exactly two items
+      return result;
     } catch (error) {
       console.error("Error fetching data:", error);
       return [null, null]; // Ensure fallback to nulls if error occurs

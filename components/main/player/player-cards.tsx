@@ -17,6 +17,7 @@ import {
 } from "@tabler/icons-react";
 import toast from "react-hot-toast";
 import { LeaderboardPlayer } from "@/types/getPlayerRanksTypes";
+import { CountryFlagByUserId } from "./PlayerFlag";
 
 // Types
 interface PlayerHeaderProfileProps {
@@ -71,6 +72,8 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
         </div>
       </div>
       <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2">
+        <CountryFlagByUserId profileId={item.rlUserId.toString()} />
+        <Divider />
         <StatItem
           icon={<IconHash size={16} />}
           value={item.rank}
@@ -188,8 +191,3 @@ const StatItem: React.FC<{
 );
 
 const Divider: React.FC = () => <div className="hidden sm:block">|</div>;
-
-// TODO: Add error handling for API calls
-// TODO: Implement lazy loading for Avatar and other images
-// TODO: Consider using React.memo for performance optimization on frequently re-rendered components
-// TODO: Explore using CSS modules or styled-components for more maintainable styles

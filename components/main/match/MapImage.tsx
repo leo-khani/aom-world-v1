@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface MapImageProps {
@@ -12,14 +12,36 @@ const MapImage: React.FC<MapImageProps> = ({
   width = 100,
   height = 100,
 }) => {
+  const [imageSrc, setImageSrc] = useState<string>("/maps/the_unknown.png");
+
   // Function to format the map name for the image source
   const formatMapName = (name: string): string => {
     return name.replace(/^rm_/, "");
   };
 
+  useEffect(() => {
+    const formattedMapName = formatMapName(mapname);
+    const potentialSrc = `/maps/${formattedMapName}.png`;
+
+    // Check if the image exists
+    fetch(potentialSrc)
+      .then((res) => {
+        if (res.ok) {
+          setImageSrc(potentialSrc);
+        } else {
+          console.warn(`Image for map ${mapname} not found, using default.`);
+          setImageSrc("/maps/the_unknown.png");
+        }
+      })
+      .catch(() => {
+        console.warn(`Error loading image for map ${mapname}, using default.`);
+        setImageSrc("/maps/the_unknown.png");
+      });
+  }, [mapname]);
+
   return (
     <Image
-      src={`/maps/${formatMapName(mapname)}.png`}
+      src={imageSrc}
       alt={`Map: ${mapname}`}
       className="rounded-md border-2 border-neutral-600"
       width={width}
@@ -29,8 +51,3 @@ const MapImage: React.FC<MapImageProps> = ({
 };
 
 export default MapImage;
-
-// TODO: Implement error handling for missing map images
-// TODO: Add lazy loading for images to improve performance
-// TODO: Consider implementing a fallback image for unknown map names
-// TODO: Explore using next/image's built-in optimization features
