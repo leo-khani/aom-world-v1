@@ -9,7 +9,6 @@ import {
   TableRow,
   TableCell,
   Progress,
-  Card,
   Tooltip,
   Chip,
   Image,
