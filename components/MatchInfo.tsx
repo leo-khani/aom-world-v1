@@ -12,6 +12,7 @@ import CivImage from "./main/match/CivImage";
 import { CounterDisplay, StatDisplay } from "./main/match/PlayerCard";
 import Link from "next/link";
 import { apiData } from "@/config/api";
+import { Spinner } from "@nextui-org/react";
 
 interface MatchInfoProps {
   userID: string;
@@ -82,7 +83,12 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
       .replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center">
+        <Spinner color="success" />
+      </div>
+    );
   if (error) return <div>{error}</div>;
 
   return (

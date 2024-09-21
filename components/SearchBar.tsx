@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Spinner } from "@nextui-org/react";
 import { IconCaretUpDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { apiData } from "@/config/api";
@@ -142,7 +142,11 @@ const SearchBar = () => {
   };
 
   if (!isMounted) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center">
+        <Spinner color="success" size="lg" />
+      </div>
+    );
   }
 
   return (

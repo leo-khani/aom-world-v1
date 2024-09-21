@@ -1,6 +1,12 @@
 "use client";
 
-import { Tabs, Tab, BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
+import {
+  Tabs,
+  Tab,
+  BreadcrumbItem,
+  Breadcrumbs,
+  Spinner,
+} from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import {
   PlayerHeaderProfile,
@@ -56,7 +62,11 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
   const matchTypeNames = ["Solo", "Team"];
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center">
+        <Spinner color="success" size="lg" />
+      </div>
+    );
   }
 
   if (!Array.isArray(items) || items.every((item) => item === null)) {

@@ -155,7 +155,12 @@ const StatisticsMain = () => {
             className="bg-neutral-700"
             content={`${cellValue}% win rate`}
           >
-            <Progress value={cellValue} size="sm" color="success" />
+            <Progress
+              value={cellValue}
+              label={`${cellValue}%`}
+              size="sm"
+              color="success"
+            />
           </Tooltip>
         );
       case "pick_rate":

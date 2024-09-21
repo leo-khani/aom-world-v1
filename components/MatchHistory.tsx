@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -182,8 +183,18 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
     return `${days} Days ago`;
   };
 
-  if (!userID) return <div>Loading...</div>;
-  if (loading) return <div>Loading match history...</div>;
+  if (!userID)
+    return (
+      <div className="flex justify-center items-center">
+        <Spinner color="success" size="lg" />
+      </div>
+    );
+  if (loading)
+    return (
+      <div className="flex justify-center items-center">
+        <Spinner color="success" size="lg" />
+      </div>
+    );
   if (error) return <div>{error}</div>;
 
   return (
