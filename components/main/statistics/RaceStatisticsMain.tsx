@@ -27,8 +27,18 @@ interface RaceMatchup {
   total_matches: number;
 }
 
+function isValidMatchup(matchup: RaceMatchup): boolean {
+  return (
+    matchup.race_id_1 !== matchup.race_id_2 &&
+    matchup.wins_race_1 >= 0 &&
+    matchup.wins_race_2 >= 0 &&
+    matchup.total_matches >= 0 &&
+    matchup.total_matches === matchup.wins_race_1 + matchup.wins_race_2
+  );
+}
+
 const RaceStatisticsMain = () => {
-  const [data, setData] = useState<RaceMatchup[] | null>(null);
+  const [data, setData] = useState<RaceMatchup[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -39,7 +49,8 @@ const RaceStatisticsMain = () => {
           throw new Error("Network response was not ok");
         }
         const result = await response.json();
-        setData(result.data);
+        const validData = result.data.filter(isValidMatchup);
+        setData(validData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -58,31 +69,34 @@ const RaceStatisticsMain = () => {
     );
   }
 
-  if (!data) {
+  if (data.length === 0) {
     return <div>No data available</div>;
   }
 
-  const filteredData = data.filter(
-    (matchup) =>
-      matchup.race_id_1 !== matchup.race_id_2 && matchup.total_matches > 0
-  );
-
-  const groupedData = filteredData.reduce((acc, matchup) => {
-    const id1 = matchup.race_id_1;
-    const id2 = matchup.race_id_2;
-
-    if (!acc[id1]) {
-      acc[id1] = [];
+  const filteredData = data.reduce((acc, matchup) => {
+    const key = [matchup.race_id_1, matchup.race_id_2].sort().join("-");
+    if (!acc[key] || matchup.total_matches > acc[key].total_matches) {
+      acc[key] = matchup;
     }
-    if (!acc[id2]) {
-      acc[id2] = [];
-    }
+    return acc;
+  }, {} as Record<string, RaceMatchup>);
 
-    acc[id1].push(matchup);
-    acc[id2].push(matchup);
+  const uniqueMatchups = Object.values(filteredData);
+
+  const groupedData = uniqueMatchups.reduce((acc, matchup) => {
+    const addToGroup = (id: number, isMainRace: boolean) => {
+      if (!acc[id]) acc[id] = [];
+      acc[id].push({
+        ...matchup,
+        isMainRace,
+      });
+    };
+
+    addToGroup(matchup.race_id_1, true);
+    addToGroup(matchup.race_id_2, false);
 
     return acc;
-  }, {} as Record<number, RaceMatchup[]>);
+  }, {} as Record<number, (RaceMatchup & { isMainRace: boolean })[]>);
 
   return (
     <Card className="p-4">
@@ -118,75 +132,60 @@ const RaceStatisticsMain = () => {
                   <CivName civid={Number(key)} /> WINS
                 </TableColumn>
                 <TableColumn>OPPONENT WINS</TableColumn>
-                <TableColumn>WIN RATE RACE 1</TableColumn>
+                <TableColumn>WIN RATE</TableColumn>
               </TableHeader>
               <TableBody items={civMatchups}>
                 {(item) => {
-                  const isCivOneMain = item.race_id_1 === Number(key);
+                  const wins = item.isMainRace
+                    ? item.wins_race_1
+                    : item.wins_race_2;
+                  const opponentWins = item.isMainRace
+                    ? item.wins_race_2
+                    : item.wins_race_1;
+                  const totalMatches = item.total_matches;
+                  const winRate =
+                    totalMatches > 0 ? (wins / totalMatches) * 100 : 0;
+
                   return (
                     <TableRow key={`${item.race_id_1}-${item.race_id_2}`}>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          {isCivOneMain ? (
-                            <>
-                              <Link href={`/gods/${item.race_id_1}`}>
-                                <CivImage
-                                  width={42}
-                                  height={42}
-                                  civid={item.race_id_1.toString()}
-                                />
-                              </Link>
-                              vs
-                              <Link href={`/gods/${item.race_id_2}`}>
-                                <CivImage
-                                  width={42}
-                                  height={42}
-                                  civid={item.race_id_2.toString()}
-                                />
-                              </Link>
-                            </>
-                          ) : (
-                            <>
-                              <Link href={`/gods/${item.race_id_2}`}>
-                                <CivImage
-                                  width={42}
-                                  height={42}
-                                  civid={item.race_id_2.toString()}
-                                />
-                              </Link>
-                              vs
-                              <Link href={`/gods/${item.race_id_1}`}>
-                                <CivImage
-                                  width={42}
-                                  height={42}
-                                  civid={item.race_id_1.toString()}
-                                />
-                              </Link>
-                            </>
-                          )}
+                          <Link href={`/gods/${key}`}>
+                            <CivImage width={42} height={42} civid={key} />
+                          </Link>
+                          vs
+                          <Link
+                            href={`/gods/${
+                              item.isMainRace ? item.race_id_2 : item.race_id_1
+                            }`}
+                          >
+                            <CivImage
+                              width={42}
+                              height={42}
+                              civid={(item.isMainRace
+                                ? item.race_id_2
+                                : item.race_id_1
+                              ).toString()}
+                            />
+                          </Link>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Chip size="sm">{item.total_matches}</Chip>
+                        <Chip size="sm">{totalMatches}</Chip>
                       </TableCell>
                       <TableCell>
-                        <Chip size="sm">{item.wins_race_1}</Chip>
+                        <Chip size="sm">{wins}</Chip>
                       </TableCell>
                       <TableCell>
-                        <Chip size="sm">{item.wins_race_2}</Chip>
+                        <Chip size="sm">{opponentWins}</Chip>
                       </TableCell>
                       <TableCell>
                         <Tooltip
                           className="bg-neutral-800"
-                          content={`${(
-                            (item.wins_race_1 / item.total_matches) *
-                            100
-                          ).toFixed(2)}% win rate`}
+                          content={`${winRate.toFixed(2)}% win rate`}
                         >
                           <Progress
-                            value={
-                              (item.wins_race_1 / item.total_matches) * 100
-                            }
+                            value={winRate}
                             color="success"
                             showValueLabel={true}
                             className="max-w-md"

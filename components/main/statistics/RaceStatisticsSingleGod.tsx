@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import CivImage, { CivName, CivPortrait } from "../match/CivImage";
 import Loading from "@/components/Loading";
+import { civilizationsNames, godPerks } from "@/data/gods";
 
 interface RaceStatisticsSingleGodProps {
   id: number;
@@ -66,6 +67,9 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
     );
   }
 
+  const godName = civilizationsNames[id];
+  const perks = godPerks[godName] || [];
+
   const columns = [
     { key: "matchup", label: "Matchup" },
     { key: "total_matches", label: "Total Matches" },
@@ -112,12 +116,19 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
 
   return (
     <Card className="p-4">
-      <div className="flex flex-col-2 justify-center items-center gap-2 mb-4">
+      <div className="flex flex-col-2 justify-center items-start gap-2 mb-4">
         <div>
           <CivPortrait civid={id} />
         </div>
-        <div className="w-72 h-60 bg-neutral-700 rounded-lg border border-neutral-800 p-2">
-          test
+        <div className="w-72 h-60 bg-neutral-800 rounded-lg p-4 overflow-y-auto">
+          <h3 className="text-lg font-semibold mb-2">God Perks</h3>
+          <ul className="list-disc pl-4">
+            {perks.map((perk, index) => (
+              <li key={index} className="text-sm mb-1">
+                {perk}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
       <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
