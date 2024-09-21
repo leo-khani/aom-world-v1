@@ -112,12 +112,17 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
 
   return (
     <Card className="p-4">
-      <div className="flex flex-col justify-center items-center gap-2 mb-4">
-        <CivPortrait civid={id} />
-        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-          <CivName civid={id} />
-        </h2>
+      <div className="flex flex-col-2 justify-center items-center gap-2 mb-4">
+        <div>
+          <CivPortrait civid={id} />
+        </div>
+        <div className="w-72 h-60 bg-neutral-700 rounded-lg border border-neutral-800 p-2">
+          test
+        </div>
       </div>
+      <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+        <CivName civid={id} />
+      </h2>
       <Table aria-label="Race matchup statistics">
         <TableHeader columns={columns}>
           {(column) => (

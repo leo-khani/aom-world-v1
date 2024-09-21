@@ -12,10 +12,12 @@ import {
   Tooltip,
   Chip,
   Link,
+  Spacer,
 } from "@nextui-org/react";
 import CivImage, { CivName } from "../match/CivImage";
-import { IconArrowNarrowRight } from "@tabler/icons-react";
+import { IconArrowNarrowRight, IconChartAreaLine } from "@tabler/icons-react";
 import Loading from "@/components/Loading";
+import TitleSection from "@/components/ui/title-section";
 
 interface RaceMatchup {
   race_id_1: number;
@@ -84,7 +86,12 @@ const RaceStatisticsMain = () => {
 
   return (
     <Card className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Race Matchup Statistics</h2>
+      <TitleSection
+        title={"Gods Matchup Statistics"}
+        icon={<IconChartAreaLine size={32} />}
+      />
+      <Spacer y={4} />
+
       {Object.keys(groupedData).map((key) => {
         const civMatchups = groupedData[Number(key)];
 

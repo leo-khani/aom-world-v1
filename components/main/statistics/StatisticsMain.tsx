@@ -1,4 +1,5 @@
 "use client";
+import TitleSection from "@/components/ui/title-section";
 import { apiData } from "@/config/api";
 import {
   Table,
@@ -12,8 +13,10 @@ import {
   Tooltip,
   Chip,
   Image,
+  Spacer,
 } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
+import { IconChartPie } from "@tabler/icons-react";
 import React, { useState, useEffect } from "react";
 
 // Mapping civilization IDs to names
@@ -175,9 +178,13 @@ const StatisticsMain = () => {
   };
 
   return (
-    <Card className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Statistics</h2>
-      <p className="mb-4">Total Matches: {data.match_count}</p>
+    <div className="p-4">
+      <TitleSection
+        title={"Statistics"}
+        icon={<IconChartPie size={32} />}
+        subTitle={`Total Matches: ${data.match_count}`}
+      />
+      <Spacer y={4} />
       <Table aria-label="God Statistics" selectionMode="single">
         <TableHeader columns={columns}>
           {(column) => (
@@ -194,7 +201,7 @@ const StatisticsMain = () => {
           )}
         </TableBody>
       </Table>
-    </Card>
+    </div>
   );
 };
 
