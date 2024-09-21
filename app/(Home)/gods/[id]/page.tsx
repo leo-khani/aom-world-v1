@@ -1,18 +1,17 @@
 import GodsPageClient from "@/components/clientPage/GodsPageClient";
 import { civilizationPortrait, civilizationsNames } from "@/data/gods";
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 
 type Props = {
   params: { id: string };
 };
 
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = Number(params.id);
   const godName = civilizationsNames[id] || "Unknown God";
-  const godImage = civilizationPortrait[id] || "/gods/egyptians/major-gods/UI_god_pantheon_egyptian.png";
+  const godImage =
+    civilizationPortrait[id] ||
+    "/gods/egyptians/major-gods/UI_god_pantheon_egyptian.png";
 
   return {
     title: `${godName} Statistics - Age of Mythology: Retold`,
@@ -31,6 +30,6 @@ export async function generateMetadata(
   };
 }
 
-export default function GodsPage({ params }: Props) {
+export default function GodsPage() {
   return <GodsPageClient />;
 }
