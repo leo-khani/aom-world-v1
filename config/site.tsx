@@ -2,6 +2,7 @@ import {
   IconBinoculars,
   IconChartBar,
   IconHome,
+  IconMoodSilence,
   IconTrophy,
 } from "@tabler/icons-react";
 
@@ -29,9 +30,9 @@ export const siteConfig = {
       icon: <IconChartBar stroke={2} size={16} />,
     },
     {
-      name: "Watch",
-      link: "/watch",
-      icon: <IconBinoculars stroke={2} size={16} />,
+      name: "Gods",
+      link: "/gods-statistics",
+      icon: <IconMoodSilence stroke={2} size={16} />,
     },
   ],
 };
