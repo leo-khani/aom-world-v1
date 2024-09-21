@@ -3,10 +3,6 @@ import { Spinner } from "@nextui-org/react";
 import { IconQuestionMark } from "@tabler/icons-react";
 import React from "react";
 
-interface ReturnData {
-  profiles: { country: string }[];
-}
-
 export const CountryFlagByUserId: React.FC<{
   profileId?: string;
 }> = ({ profileId }) => {
