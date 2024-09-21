@@ -1,15 +1,23 @@
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Fetch top players for the sitemap from 5 pages
-  const topPlayers = await fetchTopPlayers(20);
+  // Fetch top players for the sitemap
+  const topPlayers = await fetchTopPlayers(5);
 
   const playerUrls = topPlayers.map((player: { rlUserId: any; name: string }) => ({
     url: `https://www.aomworld.pro/player/${player.rlUserId}`,
     lastModified: new Date(),
     changeFrequency: 'daily' as const,
     priority: 0.7,
-    title: `${player.name}'s Profile`, // Add title for player pages
+    title: `${player.name}'s Profile`,
+  }));
+
+  const godUrls = Array.from({ length: 13 }, (_, i) => i + 1).map(godId => ({
+    url: `https://www.aomworld.pro/gods/${godId}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+    title: `God ${godId} Statistics`,
   }));
 
   return [
@@ -36,9 +44,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'daily',
       priority: 0.7,
-      title: 'AOM World Pro - Statistics', // Add title for statistics page
     },
     ...playerUrls,
+    ...godUrls,
   ];
 }
 

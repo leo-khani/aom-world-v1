@@ -13,6 +13,22 @@ export const civilizationsNames: { [key: number]: string } = {
     12: "Gaia",
     13: "Freyr",
   };
+
+  export const civilizationPortrait: { [key: number]: string } = {
+    1: "/gods/greeks/major-gods/zeus_portrait.png",
+    2: "/gods/greeks/major-gods/hades_portrait.png",
+    3: "/gods/greeks/major-gods/poseidon_portrait.png",
+    4: "/gods/egyptians/major-gods/ra_portrait.png",
+    5: "/gods/egyptians/major-gods/isis_portrait.png",
+    6: "/gods/egyptians/major-gods/set_portrait.png",
+    7: "/gods/norse/major-gods/thor_portrait.png",
+    8: "/gods/norse/major-gods/odin_portrait.png",
+    9: "/gods/norse/major-gods/loki_portrait.png",
+    10: "/gods/atlantean/major-gods/kronos_portrait.png",
+    11: "/gods/atlantean/major-gods/oranos_portrait.png",
+    12: "/gods/atlantean/major-gods/gaia_portrait.png",
+    13: "/gods/norse/major-gods/freyr_portrait.png",
+  };
   
   export const godPerks: { [key: string]: string[] } = {
     Zeus: [
