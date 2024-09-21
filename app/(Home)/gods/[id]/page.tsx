@@ -1,10 +1,4 @@
-"use client";
-import { CivName } from "@/components/main/match/CivImage";
-import RaceStatisticsSingleGod from "@/components/main/statistics/RaceStatisticsSingleGod";
-import Feedback from "@/components/section/Feedback";
-import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
-import { useParams } from "next/navigation";
-import React from "react";
+import GodsPageClient from "@/components/clientPage/GodsPageClient";
 import { civilizationPortrait, civilizationsNames } from "@/data/gods";
 import type { Metadata, ResolvingMetadata } from "next";
 
@@ -18,7 +12,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const id = Number(params.id);
   const godName = civilizationsNames[id] || "Unknown God";
-  const godImage = civilizationPortrait[id] || "/default-god-image.png";
+  const godImage = civilizationPortrait[id] || "/gods/egyptians/major-gods/UI_god_pantheon_egyptian.png";
 
   return {
     title: `${godName} Statistics - Age of Mythology: Retold`,
@@ -37,21 +31,6 @@ export async function generateMetadata(
   };
 }
 
-export default function GodsPage() {
-  const params = useParams<{ id: string }>();
-  return (
-    <div className="container mx-auto py-8 flex flex-col gap-1">
-      <Breadcrumbs className="py-4 mx-4">
-        <BreadcrumbItem href="/">Home</BreadcrumbItem>
-        <BreadcrumbItem href="/gods-statistics">Gods</BreadcrumbItem>
-        <BreadcrumbItem isCurrent>
-          <CivName civid={Number(params?.id)} />
-        </BreadcrumbItem>
-      </Breadcrumbs>
-      <Feedback />
-      <div className="mx-4">
-        <RaceStatisticsSingleGod id={Number(params?.id)} />
-      </div>
-    </div>
-  );
+export default function GodsPage({ params }: Props) {
+  return <GodsPageClient />;
 }
