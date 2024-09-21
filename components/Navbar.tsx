@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import SearchBar from "./SearchBar";
-import { IconMenu, IconX } from "@tabler/icons-react";
+import { IconBrandDiscord, IconMenu, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import FocusTrap from "focus-trap-react";
 
@@ -94,6 +94,15 @@ const NavigationItems = () => (
 // Search and Donate component
 const SearchAndDonate = () => (
   <div className="flex flex-col sm:flex-row items-center mt-4 lg:mt-0">
+    <Link href={siteConfig.socialLinks.discord} className="mr-3">
+      <Button
+        isIconOnly
+        className="text-md py-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-400 sm:w-full "
+        color="primary"
+      >
+        <IconBrandDiscord className="text-white" size={24} />
+      </Button>
+    </Link>
     <SearchBar />
     <div className="mt-4 sm:mt-0 sm:ml-4">
       <a href="https://www.buymeacoffee.com/mr_nibo">

@@ -12,6 +12,13 @@ export const siteConfig = {
   description: "AOM World",
   url: "https://aomworld.com",
 
+  socialLinks: {
+    twitter: "https://twitter.com/aomworldpro",
+    github: "https://github.com/aomworldpro",
+    discord: "https://discord.gg/KQsyeqnkfx",
+    instagram: "https://instagram.com/aomworldpro",
+  },
+
   navbarItems: [
     {
       name: "Home",
