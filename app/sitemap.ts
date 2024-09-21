@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch top players for the sitemap
-  const topPlayers = await fetchTopPlayers(5);
+  const topPlayers = await fetchTopPlayers(15);
 
   const playerUrls = topPlayers.map((player: { rlUserId: any; name: string }) => ({
     url: `https://www.aomworld.pro/player/${player.rlUserId}`,
