@@ -1,13 +1,17 @@
 import React from "react";
 import RaceStatisticsMain from "@/components/main/statistics/RaceStatisticsMain";
+import Feedback from "@/components/section/Feedback";
 
 // SEO Metadata
 
 // Player Page Component
 export default function PlayerPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <RaceStatisticsMain />
+    <div className="container mx-auto py-8 flex flex-col gap-1">
+      <Feedback />
+      <div className="mx-4">
+        <RaceStatisticsMain />
+      </div>
     </div>
   );
 }

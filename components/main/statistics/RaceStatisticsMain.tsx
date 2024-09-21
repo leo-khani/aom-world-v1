@@ -15,6 +15,7 @@ import {
 } from "@nextui-org/react";
 import CivImage, { CivName } from "../match/CivImage";
 import { IconArrowNarrowRight } from "@tabler/icons-react";
+import Loading from "@/components/Loading";
 
 interface RaceMatchup {
   race_id_1: number;
@@ -48,7 +49,11 @@ const RaceStatisticsMain = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
   }
 
   if (!data) {

@@ -12,6 +12,7 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import CivImage, { CivName, CivPortrait } from "../match/CivImage";
+import Loading from "@/components/Loading";
 
 interface RaceStatisticsSingleGodProps {
   id: number;
@@ -58,7 +59,11 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
   }
 
   const columns = [
