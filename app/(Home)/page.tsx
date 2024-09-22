@@ -5,7 +5,7 @@ import YoutubeVideos from "@/components/section/YoutubeVideos";
 
 export default function Home() {
   return (
-    <div className="">
+    <div>
       <Hotkey />
       <Feedback />
       <Leaderboard length={10} showLoadMoreBtn />

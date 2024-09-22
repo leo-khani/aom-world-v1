@@ -10,6 +10,7 @@ import {
   TableCell,
   Progress,
   Tooltip,
+  Link,
 } from "@nextui-org/react";
 import CivImage, { CivName, CivPortrait } from "../match/CivImage";
 import Loading from "@/components/Loading";
@@ -33,6 +34,19 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
   const [matchups, setMatchups] = useState<RaceMatchup[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const normalizeMatchup = (matchup: RaceMatchup, id: number): RaceMatchup => {
+    if (matchup.race_id_1 === id) {
+      return matchup;
+    }
+    return {
+      race_id_1: matchup.race_id_2,
+      race_id_2: matchup.race_id_1,
+      wins_race_1: matchup.wins_race_2,
+      wins_race_2: matchup.wins_race_1,
+      total_matches: matchup.total_matches,
+    };
+  };
+
   useEffect(() => {
     const fetchMatchups = async () => {
       try {
@@ -42,13 +56,20 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
         }
         const result = await response.json();
 
-        // Filter matchups that involve the specified civilization
+        // Filter matchups that involve the specified civilization and exclude self-matchups
         const filteredMatchups = result.data.filter(
           (matchup: RaceMatchup) =>
-            matchup.race_id_1 === id || matchup.race_id_2 === id
+            (matchup.race_id_1 === id || matchup.race_id_2 === id) &&
+            matchup.race_id_1 !== matchup.race_id_2
         );
 
-        setMatchups(filteredMatchups);
+        // Sort matchups by total matches
+        const sortedMatchups = filteredMatchups.sort(
+          (a: { total_matches: number }, b: { total_matches: number }) =>
+            b.total_matches - a.total_matches
+        );
+
+        setMatchups(sortedMatchups);
       } catch (error) {
         console.error("Error fetching matchups:", error);
       } finally {
@@ -77,25 +98,19 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
   ];
 
   const renderCell = (matchup: RaceMatchup, columnKey: string) => {
-    const isCivOne = matchup.race_id_1 === id;
-    const wins = isCivOne ? matchup.wins_race_1 : matchup.wins_race_2;
-    const totalMatches = matchup.total_matches;
+    const normalizedMatchup = normalizeMatchup(matchup, id);
+    const wins = normalizedMatchup.wins_race_1;
+    const totalMatches = normalizedMatchup.total_matches;
     const winRate = totalMatches > 0 ? (wins / totalMatches) * 100 : 0;
-
-    if (matchup.race_id_1 === id && matchup.race_id_2 === id) {
-      return null;
-    }
 
     switch (columnKey) {
       case "matchup":
         return (
           <div className="flex items-center gap-2">
-            <CivImage civid={id.toString()} /> vs{" "}
-            {isCivOne ? (
-              <CivImage civid={matchup.race_id_2.toString()} />
-            ) : (
-              <CivImage civid={matchup.race_id_1.toString()} />
-            )}
+            <CivImage civid={normalizedMatchup.race_id_1.toString()} /> vs{" "}
+            <Link href={`/gods/${normalizedMatchup.race_id_2}`}>
+              <CivImage civid={normalizedMatchup.race_id_2.toString()} />
+            </Link>
           </div>
         );
       case "total_matches":
@@ -120,7 +135,7 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
         <div>
           <CivPortrait civid={id} />
         </div>
-        <div className="w-72 h-60 bg-neutral-800 rounded-lg p-4 overflow-y-auto">
+        <div className="w-72 h-full bg-neutral-800 rounded-lg p-4 overflow-y-auto">
           <h3 className="text-lg font-semibold mb-2">God Perks</h3>
           <ul className="list-disc pl-4">
             {perks.map((perk, index) => (
@@ -134,7 +149,11 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
       <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
         <CivName civid={id} />
       </h2>
-      <Table aria-label="Race matchup statistics">
+      <Table
+        aria-label="Race matchup statistics"
+        selectionMode="single"
+        isStriped
+      >
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>

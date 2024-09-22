@@ -67,12 +67,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <script
-        defer
-        data-domain="aomworld.pro"
-        src="https://plausible.io/js/script.js"
-      ></script>
       <body className={`${sen.variable} antialiased font-sen`}>
+        <script
+          defer
+          data-domain="aomworld.pro"
+          src="https://plausible.io/js/script.js"
+        ></script>
         <Analytics />
         <Header />
         <NextUIProvider>

@@ -4,15 +4,17 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="text-neutral-300 py-8 px-4">
-      <div className="">
-        <div className="mt-8 pt-8 border-t border-neutral-800 text-center">
-          <p className="text-sm">
-            Made with ❤️ by Leo Khani | © {currentYear} All Rights Reserved
-          </p>
+    <>
+      <footer className="text-neutral-300 py-8 px-4">
+        <div className="">
+          <div className="mt-8 pt-8 border-t border-neutral-800 text-center">
+            <p className="text-sm">
+              Made with ❤️ by Leo Khani | © {currentYear} All Rights Reserved
+            </p>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 };
 

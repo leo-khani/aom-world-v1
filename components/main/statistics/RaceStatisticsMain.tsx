@@ -13,6 +13,8 @@ import {
   Chip,
   Link,
   Spacer,
+  Accordion,
+  AccordionItem,
 } from "@nextui-org/react";
 import CivImage, { CivName } from "../match/CivImage";
 import { IconArrowNarrowRight, IconChartAreaLine } from "@tabler/icons-react";
@@ -105,101 +107,113 @@ const RaceStatisticsMain = () => {
         icon={<IconChartAreaLine size={32} />}
       />
       <Spacer y={4} />
+      <Accordion>
+        {Object.keys(groupedData).map((key) => {
+          const civMatchups = groupedData[Number(key)];
 
-      {Object.keys(groupedData).map((key) => {
-        const civMatchups = groupedData[Number(key)];
-
-        return (
-          <div key={key} className="mb-6">
-            <h3 className="text-xl font-semibold mb-2 flex justify-between items-center gap-2 py-4 px-5">
-              <div className="flex items-center gap-2 text-yellow-500">
-                <CivImage civid={key} />
-                <CivName civid={Number(key)} />
-              </div>
-              <div>
-                <Link href={`/gods/${key}`}>
-                  <div className="flex items-center gap-2 font-semibold text-white">
-                    God Info <IconArrowNarrowRight size={18} />
+          return (
+            <AccordionItem
+              key={key}
+              aria-label={`Accordion ${key}`}
+              title={<CivName civid={Number(key)} />}
+              startContent={<CivImage civid={key} />}
+              classNames={{
+                title: "flex items-center gap-2 text-yellow-500",
+              }}
+            >
+              <div key={key} className="mb-6">
+                <h3 className="text-xl font-semibold mb-2 flex justify-end items-center gap-2 py-4 px-5">
+                  <div>
+                    <Link href={`/gods/${key}`}>
+                      <div className="flex items-center gap-2 font-semibold text-white">
+                        God Info <IconArrowNarrowRight size={18} />
+                      </div>
+                    </Link>
                   </div>
-                </Link>
-              </div>
-            </h3>
-            <Table aria-label={`Matchups for Civilization ${key}`}>
-              <TableHeader>
-                <TableColumn>MATCHUP</TableColumn>
-                <TableColumn>TOTAL MATCHES</TableColumn>
-                <TableColumn className="uppercase flex items-center gap-1">
-                  <CivName civid={Number(key)} /> WINS
-                </TableColumn>
-                <TableColumn>OPPONENT WINS</TableColumn>
-                <TableColumn>WIN RATE</TableColumn>
-              </TableHeader>
-              <TableBody items={civMatchups}>
-                {(item) => {
-                  const wins = item.isMainRace
-                    ? item.wins_race_1
-                    : item.wins_race_2;
-                  const opponentWins = item.isMainRace
-                    ? item.wins_race_2
-                    : item.wins_race_1;
-                  const totalMatches = item.total_matches;
-                  const winRate =
-                    totalMatches > 0 ? (wins / totalMatches) * 100 : 0;
+                </h3>
+                <Table
+                  aria-label={`Matchups for Civilization ${key}`}
+                  isStriped
+                >
+                  <TableHeader>
+                    <TableColumn>MATCHUP</TableColumn>
+                    <TableColumn>TOTAL MATCHES</TableColumn>
+                    <TableColumn className="uppercase flex items-center gap-1">
+                      <CivName civid={Number(key)} /> WINS
+                    </TableColumn>
+                    <TableColumn>OPPONENT WINS</TableColumn>
+                    <TableColumn>WIN RATE</TableColumn>
+                  </TableHeader>
+                  <TableBody items={civMatchups}>
+                    {(item) => {
+                      const wins = item.isMainRace
+                        ? item.wins_race_1
+                        : item.wins_race_2;
+                      const opponentWins = item.isMainRace
+                        ? item.wins_race_2
+                        : item.wins_race_1;
+                      const totalMatches = item.total_matches;
+                      const winRate =
+                        totalMatches > 0 ? (wins / totalMatches) * 100 : 0;
 
-                  return (
-                    <TableRow key={`${item.race_id_1}-${item.race_id_2}`}>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Link href={`/gods/${key}`}>
-                            <CivImage width={42} height={42} civid={key} />
-                          </Link>
-                          vs
-                          <Link
-                            href={`/gods/${
-                              item.isMainRace ? item.race_id_2 : item.race_id_1
-                            }`}
-                          >
-                            <CivImage
-                              width={42}
-                              height={42}
-                              civid={(item.isMainRace
-                                ? item.race_id_2
-                                : item.race_id_1
-                              ).toString()}
-                            />
-                          </Link>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Chip size="sm">{totalMatches}</Chip>
-                      </TableCell>
-                      <TableCell>
-                        <Chip size="sm">{wins}</Chip>
-                      </TableCell>
-                      <TableCell>
-                        <Chip size="sm">{opponentWins}</Chip>
-                      </TableCell>
-                      <TableCell>
-                        <Tooltip
-                          className="bg-neutral-800"
-                          content={`${winRate.toFixed(2)}% win rate`}
-                        >
-                          <Progress
-                            value={winRate}
-                            color="success"
-                            showValueLabel={true}
-                            className="max-w-md"
-                          />
-                        </Tooltip>
-                      </TableCell>
-                    </TableRow>
-                  );
-                }}
-              </TableBody>
-            </Table>
-          </div>
-        );
-      })}
+                      return (
+                        <TableRow key={`${item.race_id_1}-${item.race_id_2}`}>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Link href={`/gods/${key}`}>
+                                <CivImage width={42} height={42} civid={key} />
+                              </Link>
+                              vs
+                              <Link
+                                href={`/gods/${
+                                  item.isMainRace
+                                    ? item.race_id_2
+                                    : item.race_id_1
+                                }`}
+                              >
+                                <CivImage
+                                  width={42}
+                                  height={42}
+                                  civid={(item.isMainRace
+                                    ? item.race_id_2
+                                    : item.race_id_1
+                                  ).toString()}
+                                />
+                              </Link>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Chip size="sm">{totalMatches}</Chip>
+                          </TableCell>
+                          <TableCell>
+                            <Chip size="sm">{wins}</Chip>
+                          </TableCell>
+                          <TableCell>
+                            <Chip size="sm">{opponentWins}</Chip>
+                          </TableCell>
+                          <TableCell>
+                            <Tooltip
+                              className="bg-neutral-800"
+                              content={`${winRate.toFixed(2)}% win rate`}
+                            >
+                              <Progress
+                                value={winRate}
+                                color="success"
+                                showValueLabel={true}
+                                className="max-w-md"
+                              />
+                            </Tooltip>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }}
+                  </TableBody>
+                </Table>
+              </div>{" "}
+            </AccordionItem>
+          );
+        })}
+      </Accordion>
     </Card>
   );
 };
