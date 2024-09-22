@@ -17,6 +17,7 @@ import CivImage from "../match/CivImage";
 import Link from "next/link";
 import Feedback from "@/components/section/Feedback";
 import CivStatisticsChart from "./CivStatisticsChart";
+import Loading from "@/components/Loading";
 
 // Mapping civilization IDs to names
 const civilizationNames = {
@@ -71,7 +72,11 @@ const StatisticsMain = () => {
   }, [apiurl]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
   }
 
   if (!data || !data.data) {
@@ -128,7 +133,7 @@ const StatisticsMain = () => {
   };
 
   return (
-    <div className="mx-4 flex flex-col gap-4 justify-center items-center  ">
+    <div className="mx-4 flex flex-col gap-4">
       <div className="py-4">
         <TitleSection
           title="Statistics"

@@ -73,6 +73,7 @@ export default function RootLayout({
           data-domain="aomworld.pro"
           src="https://plausible.io/js/script.js"
         ></script>
+
         <Analytics />
         <Header />
         <NextUIProvider>
