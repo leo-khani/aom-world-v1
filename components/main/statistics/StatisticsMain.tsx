@@ -9,14 +9,14 @@ import {
   TableRow,
   TableCell,
   Progress,
-  Tooltip,
-  Chip,
-  Image,
-  Spacer,
 } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
-import { IconChartPie } from "@tabler/icons-react";
+import { IconChartPie, IconExternalLink } from "@tabler/icons-react";
 import React, { useState, useEffect } from "react";
+import CivImage from "../match/CivImage";
+import Link from "next/link";
+import Feedback from "@/components/section/Feedback";
+import CivStatisticsChart from "./CivStatisticsChart";
 
 // Mapping civilization IDs to names
 const civilizationNames = {
@@ -35,34 +35,15 @@ const civilizationNames = {
   13: "Freyr",
 };
 
-// Mapping civilization IDs to icon paths
-const civilizationIcons = {
-  1: "/gods/greeks/major-gods/zeus_icon.png",
-  2: "/gods/greeks/major-gods/hades_icon.png",
-  3: "/gods/greeks/major-gods/poseidon_icon.png",
-  4: "/gods/egyptians/major-gods/ra_icon.png",
-  5: "/gods/egyptians/major-gods/isis_icon.png",
-  6: "/gods/egyptians/major-gods/set_icon.png",
-  7: "/gods/norse/major-gods/thor_icon.png",
-  8: "/gods/norse/major-gods/odin_icon.png",
-  9: "/gods/norse/major-gods/loki_icon.png",
-  10: "/gods/atlantean/major-gods/kronos_icon.png",
-  11: "/gods/atlantean/major-gods/oranos_icon.png",
-  12: "/gods/atlantean/major-gods/gaia_icon.png",
-  13: "/gods/norse/major-gods/freyr_icon.png",
-};
-
 const StatisticsMain = () => {
-  // Type for the API response data structure
   interface StatisticsData {
     match_count: number;
-    items: Array<{
-      civilization_id: number;
-      count: number;
+    data: Array<{
+      id: number;
+      winner_race_id: number;
       wins: number;
-      losses: number;
+      total_matches: number;
       win_rate: number;
-      pick_rate: number;
     }>;
   }
 
@@ -70,7 +51,6 @@ const StatisticsMain = () => {
   const [loading, setLoading] = useState(true);
   const apiurl = apiData.url + apiData.public.getStatistics;
 
-  // Fetch data from the API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,7 +60,6 @@ const StatisticsMain = () => {
         }
         const result = await response.json();
         setData(result);
-        console.log(result);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -92,107 +71,89 @@ const StatisticsMain = () => {
   }, [apiurl]);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Progress
-          size="sm"
-          isIndeterminate
-          label="Loading..."
-          color="success"
-          aria-label="Loading..."
-          className="max-w-md"
-        />
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
-  if (!data || !data.items) {
+  if (!data || !data.data) {
     return <p>No data available</p>;
   }
 
-  const columns = [
-    { key: "civilization_id", label: "GOD" },
-    { key: "count", label: "MATCHES" },
-    { key: "wins", label: "WINS" },
-    { key: "losses", label: "LOSSES" },
-    { key: "win_rate", label: "WIN RATE" },
-    { key: "pick_rate", label: "PICK RATE" },
-  ];
+  // Calculate max and min win rates
+  const winRates = data.data.map((item) => item.win_rate);
+  const maxWinRate = Math.max(...winRates);
+  const minWinRate = Math.min(...winRates);
 
-  // Render the content of each cell based on the column
-  const renderCell = (
-    item: {
-      [x: string]: any;
-      civilization_id?: number;
-      count?: number;
-      wins?: number;
-      losses?: number;
-      win_rate?: number;
-      pick_rate?: number;
-    },
-    columnKey: Key
-  ) => {
-    const cellValue = item[columnKey];
-
-    switch (columnKey) {
-      case "civilization_id":
-        return (
-          <div className="flex items-center gap-2">
-            <Image
-              src={
-                civilizationIcons[cellValue as keyof typeof civilizationIcons]
-              }
-              alt={
-                civilizationNames[cellValue as keyof typeof civilizationNames]
-              }
-              width={32}
-              height={32}
-            />
-            {civilizationNames[cellValue as keyof typeof civilizationNames]}
-          </div>
-        );
-      case "win_rate":
-        return (
-          <Tooltip
-            className="bg-neutral-700"
-            content={`${cellValue}% win rate`}
-          >
-            <Progress
-              value={cellValue}
-              label={`${cellValue}%`}
-              size="sm"
-              color="success"
-            />
-          </Tooltip>
-        );
-      case "pick_rate":
-        return (
-          <Chip size="sm" variant="flat">
-            {cellValue}%
-          </Chip>
-        );
-      default:
-        return cellValue;
+  const getColor = (winRate: number) => {
+    if (winRate >= maxWinRate - (maxWinRate - minWinRate) * 0.25) {
+      return "success"; // High win rate
+    } else if (winRate >= minWinRate + (maxWinRate - minWinRate) * 0.25) {
+      return "warning"; // Medium win rate
+    } else {
+      return "danger"; // Low win rate
     }
   };
 
+  const columns = [
+    { key: "winner_race_id", label: "GOD" },
+    { key: "total_matches", label: "MATCHES" },
+    { key: "wins", label: "WINS" },
+    { key: "win_rate", label: "WIN RATE" },
+  ];
+
+  const renderCell = (item: { [key: string]: any }, columnKey: Key) => {
+    const cellValue = item[columnKey];
+
+    if (columnKey === "winner_race_id") {
+      return (
+        <div className="flex items-center gap-2">
+          <Link href={`/gods/${cellValue}`} className="flex items-center gap-2">
+            <CivImage civid={cellValue} />
+            {civilizationNames[cellValue as keyof typeof civilizationNames]}
+
+            <IconExternalLink size={16} />
+          </Link>
+        </div>
+      );
+    } else if (columnKey === "win_rate") {
+      const color = getColor(cellValue);
+      return (
+        <Progress
+          value={cellValue}
+          color={color}
+          label={`${cellValue.toFixed(2)}%`}
+        />
+      );
+    }
+    return cellValue;
+  };
+
   return (
-    <div className="p-4">
-      <TitleSection
-        title={"Statistics"}
-        icon={<IconChartPie size={32} />}
-        subTitle={`Total Matches: ${data.match_count}`}
-      />
-      <Spacer y={4} />
-      <Table aria-label="God Statistics" selectionMode="single">
+    <div className="mx-4 flex flex-col gap-4 justify-center items-center  ">
+      <div className="py-4">
+        <TitleSection
+          title="Statistics"
+          subTitle={`Total Matches: ${data.match_count}`}
+          icon={<IconChartPie size={32} />}
+        />
+      </div>
+      <div className="w-full">
+        <Feedback />
+      </div>
+
+      <Table
+        aria-label="God Statistics"
+        selectionMode="single"
+        className=""
+        isStriped
+      >
         <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={data.items}>
+        <TableBody items={data.data}>
           {(item) => (
-            <TableRow key={item.civilization_id}>
+            <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
@@ -200,6 +161,9 @@ const StatisticsMain = () => {
           )}
         </TableBody>
       </Table>
+      <div className="bg-neutral-900 p-4 rounded-lg w-full">
+        <CivStatisticsChart data={data.data} />
+      </div>
     </div>
   );
 };
