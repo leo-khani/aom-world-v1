@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@nextui-org/react";
 import { siteConfig } from "@/config/site";
+import Link from "next/link";
 
 const DiscordPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -64,13 +65,14 @@ const DiscordPopup = () => {
               <p className="text-sm text-white dark:text-gray-200 mb-2">
                 Connect with our community for updates and discussions.
               </p>
-              <Button
-                startContent={<IconBrandDiscordFilled />}
-                href={siteConfig.socialLinks.discord}
-                className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition duration-300 text-sm"
-              >
-                Join Now
-              </Button>
+              <Link href={siteConfig.socialLinks.discord}>
+                <Button
+                  startContent={<IconBrandDiscordFilled />}
+                  className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition duration-300 text-sm"
+                >
+                  Join Now
+                </Button>
+              </Link>
             </div>
           </div>
         </motion.div>
