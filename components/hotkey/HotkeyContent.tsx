@@ -74,18 +74,26 @@ const HotkeyContent = () => {
     const fetchXmlContent = async (url: string) => {
       try {
         const response = await fetch(url);
+
         if (!response.ok) {
           throw new Error("Failed to fetch XML content");
         }
-        const text = await response.text();
-        console.log("Fetched XML:", text); // Log the fetched XML content
-        const parsedData = await parseXmlToJson(text);
+
+        // Get the response as an ArrayBuffer (to handle binary data)
+        const buffer = await response.arrayBuffer();
+
+        // Decode the buffer using UTF-16
+        const decoder = new TextDecoder("utf-16");
+        const decodedText = decoder.decode(new Uint8Array(buffer));
+
+        // Parse the decoded XML string into JSON
+        const parsedData = await parseXmlToJson(decodedText);
         setParsedHotkeys(parsedData);
       } catch (err) {
         console.error("Error fetching XML content:", err);
+        setError("Failed to fetch XML content");
       }
     };
-
     fetchHotkey();
   }, [id]);
 
