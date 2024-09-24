@@ -114,14 +114,7 @@ const SearchAndDonate = () => (
         />
       </a>
     </div>
-    <div className="mt-4 sm:mt-0 sm:ml-4 hidden">
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
-    </div>
+    <div className="mt-4 sm:mt-0 sm:ml-4 hidden"></div>
   </div>
 );
 

@@ -67,27 +67,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${sen.variable} antialiased font-sen`}>
-          <script
-            defer
-            data-domain="aomworld.pro"
-            src="https://plausible.io/js/script.js"
-          ></script>
+    <html lang="en">
+      <body className={`${sen.variable} antialiased font-sen`}>
+        <script
+          defer
+          data-domain="aomworld.pro"
+          src="https://plausible.io/js/script.js"
+        ></script>
 
-          <Analytics />
-          <Header />
-          <NextUIProvider>
-            <main className="container mx-auto dark text-foreground bg-background">
-              <Toaster position="bottom-right" />
-              {children}
-            </main>
-          </NextUIProvider>
-          <Footer />
-        </body>
-      </html>
-    </ClerkProvider>
+        <Analytics />
+        <Header />
+        <NextUIProvider>
+          <main className="container mx-auto dark text-foreground bg-background">
+            <Toaster position="bottom-right" />
+            {children}
+          </main>
+        </NextUIProvider>
+        <Footer />
+      </body>
+    </html>
   );
 }
 
