@@ -7,7 +7,6 @@ import SearchBar from "./SearchBar";
 import { IconBrandDiscord, IconMenu, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import FocusTrap from "focus-trap-react";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 // Animation variants
 const menuVariants = {

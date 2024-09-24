@@ -6,7 +6,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/Header";
 import Footer from "@/components/main/Footer";
-import { ClerkProvider } from "@clerk/nextjs";
 
 // Font configuration
 const sen = Sen({
