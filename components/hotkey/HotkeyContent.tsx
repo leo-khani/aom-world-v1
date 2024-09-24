@@ -7,6 +7,7 @@ import Loading from "../Loading";
 import TitleSection from "../ui/title-section";
 import { HowToInstall } from "./HotkeyCollection";
 import { HotkeyCardBig } from "./HotkeyCard";
+import { parseXmlToJson } from "@/utils/parseXmlToJson";
 
 interface ApiRes {
   id: number;
@@ -23,24 +24,28 @@ interface ApiRes {
   download_url: string;
 }
 
+interface ParsedHotkey {
+  [group: string]: {
+    [key: string]: string;
+  };
+}
+
 const HotkeyContent = () => {
   const { id } = useParams();
   const [hotkey, setHotkey] = useState<ApiRes | null>(null);
+  const [parsedHotkeys, setParsedHotkeys] = useState<ParsedHotkey | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchHotkey = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/private/getHotkey?id=${id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const response = await fetch(`/api/private/getHotkey?id=${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch hotkey");
@@ -48,12 +53,13 @@ const HotkeyContent = () => {
         const data = await response.json();
         if (Array.isArray(data) && data.length > 0) {
           setHotkey(data[0]);
+          fetchXmlContent(data[0].download_url);
         } else if (typeof data === "object" && data !== null) {
           setHotkey(data);
+          fetchXmlContent(data.download_url);
         } else {
           setError("No hotkey found");
         }
-        console.log(hotkey);
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -65,8 +71,40 @@ const HotkeyContent = () => {
       }
     };
 
+    const fetchXmlContent = async (url: string) => {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Failed to fetch XML content");
+        }
+        const text = await response.text();
+        console.log("Fetched XML:", text); // Log the fetched XML content
+        const parsedData = await parseXmlToJson(text);
+        setParsedHotkeys(parsedData);
+      } catch (err) {
+        console.error("Error fetching XML content:", err);
+      }
+    };
+
     fetchHotkey();
   }, [id]);
+
+  const renderHotkeys = () => {
+    if (!parsedHotkeys) return null;
+
+    return Object.entries(parsedHotkeys).map(([group, keys]) => (
+      <div key={group} className="mb-4">
+        <h3 className="text-lg font-bold">{group}</h3>
+        <ul className="list-disc pl-5">
+          {Object.entries(keys).map(([key, value]) => (
+            <li key={key}>
+              <span className="font-semibold">{key}:</span> {value}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ));
+  };
 
   if (loading) {
     return (
@@ -104,6 +142,12 @@ const HotkeyContent = () => {
     <div className="flex flex-col gap-4">
       <HowToInstall />
       <HotkeyCardBig {...hotkey} />
+      {parsedHotkeys && (
+        <div className="mt-4">
+          <h2 className="text-2xl font-bold mb-4">Hotkey Configuration:</h2>
+          {renderHotkeys()}
+        </div>
+      )}
     </div>
   );
 };
