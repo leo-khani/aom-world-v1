@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import { Key } from "@react-types/shared";
 import { IconChartPie, IconExternalLink } from "@tabler/icons-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import CivImage from "../match/CivImage";
 import Link from "next/link";
 import Feedback from "@/components/section/Feedback";
@@ -36,21 +36,29 @@ const civilizationNames = {
   13: "Freyr",
 };
 
-const StatisticsMain = () => {
-  interface StatisticsData {
-    match_count: number;
-    data: Array<{
-      id: number;
-      winner_race_id: number;
-      wins: number;
-      total_matches: number;
-      win_rate: number;
-    }>;
-  }
+interface StatisticsData {
+  match_count: number;
+  data: Array<{
+    id: number;
+    winner_race_id: number;
+    wins: number;
+    total_matches: number;
+    win_rate: number;
+  }>;
+}
 
+const StatisticsMain = () => {
   const [data, setData] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const apiurl = apiData.url + apiData.public.getStatistics;
+
+  const [sortDescriptor, setSortDescriptor] = useState<{
+    column: Key;
+    direction: "ascending" | "descending";
+  }>({
+    column: "win_rate",
+    direction: "descending",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,22 +79,25 @@ const StatisticsMain = () => {
     fetchData();
   }, [apiurl]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loading />
-      </div>
-    );
-  }
+  const sortedItems = useMemo(() => {
+    if (!data || !data.data) return [];
+    return [...data.data].sort((a, b) => {
+      const first = a[sortDescriptor.column as keyof typeof a];
+      const second = b[sortDescriptor.column as keyof typeof b];
+      const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-  if (!data || !data.data) {
-    return <p>No data available</p>;
-  }
+      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+    });
+  }, [data, sortDescriptor]);
 
-  // Calculate max and min win rates
-  const winRates = data.data.map((item) => item.win_rate);
-  const maxWinRate = Math.max(...winRates);
-  const minWinRate = Math.min(...winRates);
+  const { maxWinRate, minWinRate } = useMemo(() => {
+    if (!data || !data.data) return { maxWinRate: 0, minWinRate: 0 };
+    const winRates = data.data.map((item) => item.win_rate);
+    return {
+      maxWinRate: Math.max(...winRates),
+      minWinRate: Math.min(...winRates),
+    };
+  }, [data]);
 
   const getColor = (winRate: number) => {
     if (winRate >= maxWinRate - (maxWinRate - minWinRate) * 0.25) {
@@ -99,10 +110,10 @@ const StatisticsMain = () => {
   };
 
   const columns = [
-    { key: "winner_race_id", label: "GOD" },
-    { key: "total_matches", label: "MATCHES" },
-    { key: "wins", label: "WINS" },
-    { key: "win_rate", label: "WIN RATE" },
+    { key: "winner_race_id", label: "GOD", sortable: true },
+    { key: "total_matches", label: "MATCHES", sortable: true },
+    { key: "wins", label: "WINS", sortable: true },
+    { key: "win_rate", label: "WIN RATE", sortable: true },
   ];
 
   const renderCell = (item: { [key: string]: any }, columnKey: Key) => {
@@ -114,7 +125,6 @@ const StatisticsMain = () => {
           <Link href={`/gods/${cellValue}`} className="flex items-center gap-2">
             <CivImage civid={cellValue} />
             {civilizationNames[cellValue as keyof typeof civilizationNames]}
-
             <IconExternalLink size={16} />
           </Link>
         </div>
@@ -131,6 +141,18 @@ const StatisticsMain = () => {
     }
     return cellValue;
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
+  }
+
+  if (!data || !data.data) {
+    return <p>No data available</p>;
+  }
 
   return (
     <div className="mx-4 flex flex-col gap-4">
@@ -150,13 +172,26 @@ const StatisticsMain = () => {
         selectionMode="single"
         className=""
         isStriped
+        sortDescriptor={sortDescriptor}
+        onSortChange={(descriptor) => {
+          if (descriptor.column) {
+            setSortDescriptor(
+              descriptor as {
+                column: Key;
+                direction: "ascending" | "descending";
+              }
+            );
+          }
+        }}
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
+            <TableColumn key={column.key} allowsSorting>
+              {column.label}
+            </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={data.data}>
+        <TableBody items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

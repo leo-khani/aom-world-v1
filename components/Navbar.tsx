@@ -107,7 +107,7 @@ const SearchAndDonate = () => (
     <div className="mt-4 sm:mt-0 sm:ml-4">
       <a href="https://www.buymeacoffee.com/mr_nibo">
         <img
-          src="https://img.buymeacoffee.com/button-api/?text=Coffee&emoji=&slug=mr_nibo&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff"
+          src="https://img.buymeacoffee.com/button-api/?text=Support&emoji=&slug=mr_nibo&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff"
           alt="Buy Me A Coffee"
           className="h-10"
         />
