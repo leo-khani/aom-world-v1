@@ -1,9 +1,9 @@
-import BodyCard from "@/components/main/BodyCard";
+import HotkeyCollection from "@/components/hotkey/HotkeyCollection";
 
 export default function HotkeyPage() {
   return (
     <div>
-      <BodyCard />
+      <HotkeyCollection />
     </div>
   );
 }

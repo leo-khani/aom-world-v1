@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar";
 import { IconBrandDiscord, IconMenu, IconX } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import FocusTrap from "focus-trap-react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 // Animation variants
 const menuVariants = {
@@ -112,6 +113,14 @@ const SearchAndDonate = () => (
           className="h-10"
         />
       </a>
+    </div>
+    <div className="mt-4 sm:mt-0 sm:ml-4 hidden">
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
     </div>
   </div>
 );

@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/Header";
 import Footer from "@/components/main/Footer";
+import { ClerkProvider } from "@clerk/nextjs";
 
 // Font configuration
 const sen = Sen({
@@ -66,25 +67,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${sen.variable} antialiased font-sen`}>
-        <script
-          defer
-          data-domain="aomworld.pro"
-          src="https://plausible.io/js/script.js"
-        ></script>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${sen.variable} antialiased font-sen`}>
+          <script
+            defer
+            data-domain="aomworld.pro"
+            src="https://plausible.io/js/script.js"
+          ></script>
 
-        <Analytics />
-        <Header />
-        <NextUIProvider>
-          <main className="container mx-auto dark text-foreground bg-background">
-            <Toaster position="bottom-right" />
-            {children}
-          </main>
-        </NextUIProvider>
-        <Footer />
-      </body>
-    </html>
+          <Analytics />
+          <Header />
+          <NextUIProvider>
+            <main className="container mx-auto dark text-foreground bg-background">
+              <Toaster position="bottom-right" />
+              {children}
+            </main>
+          </NextUIProvider>
+          <Footer />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
 

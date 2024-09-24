@@ -3,6 +3,7 @@ import {
   IconChartBar,
   IconHome,
   IconMoodSilence,
+  IconSquareF0,
   IconTrophy,
 } from "@tabler/icons-react";
 
@@ -35,6 +36,11 @@ export const siteConfig = {
       name: "Statistics",
       link: "/statistics",
       icon: <IconChartBar stroke={2} size={16} />,
+    },
+    {
+      name: "Hotkeys",
+      link: "/hotkey",
+      icon: <IconSquareF0 stroke={2} size={16} />,
     },
     {
       name: "Gods",
