@@ -1,4 +1,5 @@
 import DiscordPopup from "@/components/DiscordPopup";
+import { HotkeyBar } from "@/components/hotkey/HotkeyCollection";
 import Leaderboard from "@/components/main/Leaderboard";
 import Feedback from "@/components/section/Feedback";
 import Hotkey from "@/components/section/Hotkey";
@@ -8,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <DiscordPopup />
-      <Hotkey />
+      <HotkeyBar />
       <Feedback />
       <Leaderboard length={10} showLoadMoreBtn />
       <YoutubeVideos />
