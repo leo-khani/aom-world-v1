@@ -2,7 +2,6 @@ import DiscordPopup from "@/components/DiscordPopup";
 import { HotkeyBar } from "@/components/hotkey/HotkeyCollection";
 import Leaderboard from "@/components/main/Leaderboard";
 import Feedback from "@/components/section/Feedback";
-import Hotkey from "@/components/section/Hotkey";
 import YoutubeVideos from "@/components/section/YoutubeVideos";
 
 export default function Home() {
