@@ -31,9 +31,7 @@ const HotkeyCollection = () => {
   useEffect(() => {
     const fetchHotkeys = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/private/getHotkey"
-        );
+        const response = await fetch("/api/private/getHotkey");
         if (!response.ok) {
           throw new Error("Failed to fetch hotkeys");
         }
