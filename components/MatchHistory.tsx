@@ -19,7 +19,7 @@ import {
 import Link from "next/link";
 import MapImage from "./main/match/MapImage";
 import CivImage from "./main/match/CivImage";
-import { apiData } from "@/config/api";
+import apiDataRelative from "@/config/api";
 // Types for the match history data
 interface MatchHistoryItem {
   matchhistory_id: number;
@@ -99,7 +99,7 @@ const MatchHistory: React.FC<MatchHistoryProps> = ({ userID }) => {
       if (!userID) return;
       try {
         const response = await fetch(
-          `${apiData.url}${apiData.public.getPlayerMatchHistory}`,
+          `${apiDataRelative.public.player.getPlayerMatchHistory}`,
           {
             method: "POST",
             headers: {

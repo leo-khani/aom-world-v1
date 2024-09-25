@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import apiDataRelative from "@/config/api";
 
 const HotkeyAddNew: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -52,10 +53,13 @@ const HotkeyAddNew: React.FC = () => {
       formData.append("description", description);
       formData.append("xmlFile", xmlFile);
 
-      const response = await fetch("/api/private/addHotkey", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${apiDataRelative.private.hotkey.addHotkey}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();

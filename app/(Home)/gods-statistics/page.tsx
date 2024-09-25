@@ -1,11 +1,27 @@
 import React from "react";
 import RaceStatisticsMain from "@/components/main/statistics/RaceStatisticsMain";
 import Feedback from "@/components/section/Feedback";
+import { Metadata } from "next";
 
-// SEO Metadata
+export async function generateMetadata(): Promise<Metadata> {
+  /**
+   * Generates metadata for the Gods Statistics page.
+   *
+   * @returns {Promise<Metadata>} A promise resolving to the generated metadata.
+   */
+  return {
+    title: "Gods Statistics",
+    description: "Statistics for all gods",
+  } as const;
+}
 
-// Player Page Component
-export default function PlayerPage() {
+/**
+ * The Gods Statistics page component.
+ *
+ * @returns {React.ReactElement} A div containing the RaceStatisticsMain component
+ * and the Feedback component.
+ */
+export default function GodsStatisticsPage(): React.ReactElement {
   return (
     <div className="container mx-auto py-8 flex flex-col gap-1">
       <Feedback />
@@ -15,10 +31,3 @@ export default function PlayerPage() {
     </div>
   );
 }
-
-// TODO: Implement error boundary for handling API fetch errors
-// TODO: Add loading state while fetching player data
-// TODO: Implement server-side rendering for improved SEO and performance
-// TODO: Add filters for different game modes (1v1, team games, etc.)
-// TODO: Implement schema markup for rich search results
-// TODO: Add section for favorite gods and most-played civilizations

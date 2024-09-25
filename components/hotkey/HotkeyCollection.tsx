@@ -11,6 +11,7 @@ import {
 import Loading from "../Loading";
 import { Card, CardBody } from "@nextui-org/react";
 import Link from "next/link";
+import apiDataRelative from "@/config/api";
 
 interface ApiRes {
   id: number;
@@ -35,7 +36,9 @@ const HotkeyCollection = () => {
   useEffect(() => {
     const fetchHotkeys = async () => {
       try {
-        const response = await fetch("/api/private/getHotkey");
+        const response = await fetch(
+          `${apiDataRelative.private.hotkey.getHotkey}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch hotkeys");
         }
@@ -122,7 +125,9 @@ export const HotkeyBar = () => {
   useEffect(() => {
     const fetchHotkeys = async () => {
       try {
-        const response = await fetch("/api/private/getHotkey");
+        const response = await fetch(
+          `${apiDataRelative.private.hotkey.getHotkey}`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch hotkeys");
         }

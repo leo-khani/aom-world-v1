@@ -105,13 +105,7 @@ const SearchAndDonate = () => (
     </Link>
     <SearchBar />
     <div className="mt-4 sm:mt-0 sm:ml-4">
-      <a href="https://www.buymeacoffee.com/mr_nibo">
-        <img
-          src="https://img.buymeacoffee.com/button-api/?text=Support&emoji=&slug=mr_nibo&button_colour=FFDD00&font_colour=000000&font_family=Lato&outline_colour=000000&coffee_colour=ffffff"
-          alt="Buy Me A Coffee"
-          className="h-10"
-        />
-      </a>
+      <SupportMe />
     </div>
     <div className="mt-4 sm:mt-0 sm:ml-4 hidden"></div>
   </div>
@@ -147,7 +141,7 @@ const Navbar = () => {
               variants={menuVariants}
               className="w-full overflow-hidden bg-background lg:hidden"
             >
-              <div className="px-4 sm:px-6 lg:px-8 py-4">
+              <div className="px-4 sm:px-6 lg:px-8 py-4 flex flex-col justify-center items-center gap-2">
                 <NavigationItems />
                 <SearchAndDonate />
               </div>
@@ -156,6 +150,19 @@ const Navbar = () => {
         </AnimatePresence>
       </nav>
     </FocusTrap>
+  );
+};
+
+const SupportMe = () => {
+  return (
+    <Link href={siteConfig.socialLinks.donate}>
+      <Button
+        startContent={<div>☕</div>}
+        className="bg-yellow-300 font-semibold"
+      >
+        Support Me
+      </Button>
+    </Link>
   );
 };
 

@@ -1,13 +1,13 @@
 "use client";
 
 import { IconNewSection } from "@tabler/icons-react";
-import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Loading from "../Loading";
 import TitleSection from "../ui/title-section";
 import { HowToInstall } from "./HotkeyCollection";
 import { HotkeyCardBig } from "./HotkeyCard";
 import { parseXmlToJson } from "@/utils/parseXmlToJson";
+import apiDataRelative from "@/config/api";
 
 interface ApiRes {
   id: number;
@@ -30,8 +30,11 @@ interface ParsedHotkey {
   };
 }
 
-const HotkeyContent = () => {
-  const { id } = useParams();
+interface HotkeyContentProps {
+  id: string;
+}
+
+export default function HotkeyContent({ id }: HotkeyContentProps) {
   const [hotkey, setHotkey] = useState<ApiRes | null>(null);
   const [parsedHotkeys, setParsedHotkeys] = useState<ParsedHotkey | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,12 +43,15 @@ const HotkeyContent = () => {
   useEffect(() => {
     const fetchHotkey = async () => {
       try {
-        const response = await fetch(`/api/private/getHotkey?id=${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `${apiDataRelative.private.hotkey.getHotkey}?id=${id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch hotkey");
@@ -158,6 +164,4 @@ const HotkeyContent = () => {
       )}
     </div>
   );
-};
-
-export default HotkeyContent;
+}

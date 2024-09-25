@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/Header";
 import Footer from "@/components/main/Footer";
+import BannerUpdate from "@/components/alert/BannerUpdate";
 
 // Font configuration
 const sen = Sen({
@@ -75,9 +76,10 @@ export default function RootLayout({
         ></script>
 
         <Analytics />
+        <BannerUpdate />
         <Header />
         <NextUIProvider>
-          <main className="container mx-auto dark text-foreground bg-background">
+          <main className="container mx-auto dark text-foreground bg-background ">
             <Toaster position="bottom-right" />
             {children}
           </main>

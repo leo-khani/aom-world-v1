@@ -20,6 +20,7 @@ import CivImage, { CivName } from "../match/CivImage";
 import { IconArrowNarrowRight, IconChartAreaLine } from "@tabler/icons-react";
 import Loading from "@/components/Loading";
 import TitleSection from "@/components/ui/title-section";
+import apiDataRelative from "@/config/api";
 
 interface RaceMatchup {
   race_id_1: number;
@@ -46,7 +47,9 @@ const RaceStatisticsMain = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/getRaceStatistics");
+        const response = await fetch(
+          `${apiDataRelative.public.getRaceStatistics}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

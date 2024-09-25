@@ -1,21 +1,32 @@
+import Loading from "@/components/Loading";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-// Dynamically import the LeaderBoard component
 const LeaderBoard = dynamic(() => import("@/components/main/Leaderboard"), {
   ssr: false,
 });
 
-interface LeaderBoardPageProps {
+/**
+ * A Next.js page component that renders a leaderboard for a specific match type.
+ * @param {{ params: { matchType: string } }} props The props object containing the match type.
+ * @returns {JSX.Element} A React component element containing the Leaderboard component.
+ */
+export default function LeaderBoardPage({
+  params: { matchType },
+}: {
   params: { matchType: string };
-}
-
-export default function LeaderBoardPage({ params }: LeaderBoardPageProps) {
-  const matchType = params.matchType;
+}): JSX.Element {
+  const matchTypeNumber = Number(matchType) || 1;
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <LeaderBoard mode={Number(matchType) || 1} />
+    <Suspense
+      fallback={
+        <div>
+          <Loading />
+        </div>
+      }
+    >
+      <LeaderBoard mode={matchTypeNumber} />
     </Suspense>
   );
 }

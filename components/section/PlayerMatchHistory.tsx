@@ -12,7 +12,7 @@ import {
   PlayerHeaderProfile,
   PlayerCardRankSolo,
 } from "../main/player/player-cards";
-import { apiData } from "@/config/api";
+import apiDataRelative from "@/config/api";
 import { LeaderboardPlayer } from "@/types/getPlayerRanksTypes";
 import MatchHistory from "../MatchHistory";
 
@@ -27,7 +27,7 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
   const fetchPlayerData = async (): Promise<(LeaderboardPlayer[] | null)[]> => {
     try {
       const response = await fetch(
-        `${apiData.url}${apiData.public.getPlayerRanks}`,
+        `${apiDataRelative.public.player.getPlayerRanks}`,
         {
           method: "POST",
           headers: {

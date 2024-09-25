@@ -1,6 +1,5 @@
 "use client";
 import TitleSection from "@/components/ui/title-section";
-import { apiData } from "@/config/api";
 import {
   Table,
   TableHeader,
@@ -18,6 +17,7 @@ import Link from "next/link";
 import Feedback from "@/components/section/Feedback";
 import CivStatisticsChart from "./CivStatisticsChart";
 import Loading from "@/components/Loading";
+import { apiDataAbsolute } from "@/config/api";
 
 // Mapping civilization IDs to names
 const civilizationNames = {
@@ -50,7 +50,7 @@ interface StatisticsData {
 const StatisticsMain = () => {
   const [data, setData] = useState<StatisticsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const apiurl = apiData.url + apiData.public.getStatistics;
+  const apiurl = apiDataAbsolute.public.getStatistics;
 
   const [sortDescriptor, setSortDescriptor] = useState<{
     column: Key;

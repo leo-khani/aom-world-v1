@@ -1,4 +1,4 @@
-import { apiData } from "@/config/api";
+import apiDataRelative from "@/config/api";
 import { Spinner } from "@nextui-org/react";
 import { IconQuestionMark } from "@tabler/icons-react";
 import React from "react";
@@ -12,15 +12,18 @@ export const CountryFlagByUserId: React.FC<{
   const fetchPlayerData = async (): Promise<any | null> => {
     try {
       setLoading(true);
-      const response = await fetch(`${apiData.public.getPlayerSteam}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          profileId: profileId,
-        }),
-      });
+      const response = await fetch(
+        `${apiDataRelative.public.player.getPlayerSteam}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            profileId: profileId,
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -35,7 +38,7 @@ export const CountryFlagByUserId: React.FC<{
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
-      return [null]; // Ensure fallback to nulls if error occurs
+      return [null];
     }
   };
 

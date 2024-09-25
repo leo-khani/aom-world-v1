@@ -1,6 +1,6 @@
 "use client";
 
-import { apiData } from "@/config/api";
+import apiDataRelative from "@/config/api";
 import React, { useEffect, useState } from "react";
 import PlayerMatchHistory from "./section/PlayerMatchHistory";
 
@@ -15,7 +15,7 @@ const Player: React.FC<PlayerProps> = ({ playerId }) => {
     const fetchPlayerData = async () => {
       try {
         const response = await fetch(
-          `${apiData.url}${apiData.public.getPlayerElo}?userId=${playerId}&matchType=1`
+          `${apiDataRelative.public.getPlayerElo}?userId=${playerId}&matchType=1`
         );
 
         if (!response.ok) {

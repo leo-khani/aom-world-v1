@@ -15,6 +15,7 @@ import {
 import CivImage, { CivName, CivPortrait } from "../match/CivImage";
 import Loading from "@/components/Loading";
 import { civilizationsNames, godPerks } from "@/data/gods";
+import apiDataRelative from "@/config/api";
 
 interface RaceStatisticsSingleGodProps {
   id: number;
@@ -50,7 +51,9 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
   useEffect(() => {
     const fetchMatchups = async () => {
       try {
-        const response = await fetch(`/api/getRaceStatistics`);
+        const response = await fetch(
+          `${apiDataRelative.public.getRaceStatistics}`
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

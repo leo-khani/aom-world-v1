@@ -1,11 +1,10 @@
 import React from "react";
 import Player from "@/components/Player";
 import { Metadata } from "next";
-import { apiData } from "@/config/api";
+import { apiDataAbsolute } from "@/config/api";
 
 export const revalidate = 0;
 
-// SEO Metadata
 export async function generateMetadata({
   params: { playerId },
 }: {
@@ -16,7 +15,7 @@ export async function generateMetadata({
 
   if (playerId) {
     playerName = await fetch(
-      `${apiData.url}${apiData.public.getPlayerElo}?userId=${playerId}&matchType=1`
+      `${apiDataAbsolute.public.getPlayerElo}?userId=${playerId}&matchType=1`
     )
       .then((res) => res.json())
       .then((data) => data.player_name);
@@ -69,10 +68,3 @@ export default function PlayerPage({
     </div>
   );
 }
-
-// TODO: Implement error boundary for handling API fetch errors
-// TODO: Add loading state while fetching player data
-// TODO: Implement server-side rendering for improved SEO and performance
-// TODO: Add filters for different game modes (1v1, team games, etc.)
-// TODO: Implement schema markup for rich search results
-// TODO: Add section for favorite gods and most-played civilizations

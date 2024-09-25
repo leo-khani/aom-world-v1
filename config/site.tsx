@@ -18,6 +18,7 @@ export const siteConfig = {
     github: "https://github.com/aomworldpro",
     discord: "https://discord.gg/KQsyeqnkfx",
     instagram: "https://instagram.com/aomworldpro",
+    donate: "https://buymeacoffee.com/mr_nibo",
   },
 
   navbarItems: [

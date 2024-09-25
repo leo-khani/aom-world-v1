@@ -11,7 +11,7 @@ import {
 import CivImage from "./main/match/CivImage";
 import { CounterDisplay, StatDisplay } from "./main/match/PlayerCard";
 import Link from "next/link";
-import { apiData } from "@/config/api";
+import apiDataRelative from "@/config/api";
 import { Spinner } from "@nextui-org/react";
 
 interface MatchInfoProps {
@@ -35,7 +35,7 @@ const MatchInfo: React.FC<MatchInfoProps> = ({ userID, matchID }) => {
       if (!userID) return;
       try {
         const response = await fetch(
-          `${apiData.url}${apiData.public.getPlayerMatchHistory}`,
+          `${apiDataRelative.public.player.getPlayerMatchHistory}`,
           {
             method: "POST",
             headers: {

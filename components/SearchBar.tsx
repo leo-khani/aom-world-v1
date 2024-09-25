@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Autocomplete, AutocompleteItem, Spinner } from "@nextui-org/react";
 import { IconCaretUpDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { apiData } from "@/config/api";
+import apiDataRelative from "@/config/api";
 
 // Define types
 interface Player {
@@ -69,25 +69,22 @@ const SearchBar = () => {
       if (searchValue.length < 3) {
         return;
       }
-      const response = await fetch(
-        `${apiData.url}${apiData.public.getLeaderboard}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            region: "7",
-            matchType: "1",
-            consoleMatchType: 15,
-            searchPlayer: searchValue,
-            page: 1,
-            count: 10,
-            sortColumn: "rank",
-            sortDirection: "ASC",
-          }),
-        }
-      );
+      const response = await fetch(`${apiDataRelative.public.getLeaderboard}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          region: "7",
+          matchType: "1",
+          consoleMatchType: 15,
+          searchPlayer: searchValue,
+          page: 1,
+          count: 10,
+          sortColumn: "rank",
+          sortDirection: "ASC",
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

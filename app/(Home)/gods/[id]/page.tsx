@@ -6,7 +6,13 @@ type Props = {
   params: { id: string };
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+/**
+ * Generates metadata for a god's statistics page.
+ * @param {Props} props The props object containing the god's ID.
+ * @returns {Promise<Metadata>} A promise resolving to the generated metadata.
+ */
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { params } = props;
   const id = Number(params.id);
   const godName = civilizationsNames[id] || "Unknown God";
   const godImage =
@@ -30,6 +36,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function GodsPage() {
+export default function GodsPage(): JSX.Element {
+  /**
+   * A page component for a god's statistics page.
+   * @param {Object} props The props object containing the god's ID.
+   * @param {string} props.params.id The ID of the god.
+   * @returns {JSX.Element} The rendered page component.
+   */
   return <GodsPageClient />;
 }
