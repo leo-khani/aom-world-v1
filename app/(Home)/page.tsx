@@ -9,7 +9,7 @@ import YoutubeVideos from "@/components/section/YoutubeVideos";
 /**
  * The Home page component, rendering the main layout of the application.
  *
- * @return {JSX.Element} The JSX element representing the Home page.
+ * @return {JSX.Element} The JSX elements representing the Home page.
  */
 export default function Home() {
   return (
