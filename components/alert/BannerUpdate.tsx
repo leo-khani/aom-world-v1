@@ -3,7 +3,7 @@ import { IconX } from "@tabler/icons-react";
 import React, { useState } from "react";
 
 const BannerUpdate: React.FC = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   const dismissBanner = () => {
     setIsVisible(false);
