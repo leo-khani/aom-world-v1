@@ -17,7 +17,7 @@ import Link from "next/link";
 import Feedback from "@/components/section/Feedback";
 import CivStatisticsChart from "./CivStatisticsChart";
 import Loading from "@/components/Loading";
-import apiDataRelative, { apiDataAbsolute } from "@/config/api";
+import apiDataRelative from "@/config/api";
 
 // Mapping civilization IDs to names
 const civilizationNames = {
