@@ -56,27 +56,37 @@ const Leaderboard: React.FC<leaderboardData> = ({
         },
         body: JSON.stringify({
           region: 7,
-          matchType: matchType,
+          matchType,
           consoleMatchType: 15,
           searchPlayer: "",
-          page: page,
-          count: rowsPerPage, // Use rowsPerPage here
+          page,
+          count: rowsPerPage,
           sortColumn: "rank",
           sortDirection: "ASC",
         }),
       });
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const error = new Error(
+          `Network response was not ok (${response.status} ${response.statusText})`
+        );
+        throw error;
       }
 
-      const result: LeaderboardData = await response.json();
+      const result = (await response.json()) as LeaderboardData;
+      if (!result.items || !Array.isArray(result.items)) {
+        throw new Error("Invalid response: items is not an array");
+      }
+
       setData(result.items);
-      setTotalItems(result.count);
+      setTotalItems(result.count ?? 0);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       setIsLoading(false);
+    } finally {
+      // Avoid unnecessary re-renders
+      setData((prev) => [...prev]);
     }
   };
 
@@ -87,6 +97,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
   const renderModeButtons = () => (
     <div className="flex flex-wrap gap-2 items-center justify-center sm:justify-end">
       {[
+        /* Each of these objects is a button */
         { id: 1, label: "Rank Solo", mobileLabel: "RM Solo" },
         { id: 2, label: "Rank Team", mobileLabel: "RM team" },
         { id: 3, label: "Deathmatch", mobileLabel: "DM solo" },
@@ -119,7 +130,7 @@ const Leaderboard: React.FC<leaderboardData> = ({
 
   return (
     <>
-      <div className="w-full overflow-x-auto px-4">
+      <div className="w-full overflow-x-auto">
         <Table
           isStriped
           aria-label="Leaderboard"
@@ -280,5 +291,4 @@ const Leaderboard: React.FC<leaderboardData> = ({
     </>
   );
 };
-
 export default Leaderboard;

@@ -13,6 +13,10 @@ export const siteConfig = {
   description: "AOM World",
   url: "https://aomworld.com",
 
+  logo: {
+    gameIcon: "/images/logo/game-icon.webp",
+  },
+
   socialLinks: {
     twitter: "https://twitter.com/aomworldpro",
     github: "https://github.com/aomworldpro",

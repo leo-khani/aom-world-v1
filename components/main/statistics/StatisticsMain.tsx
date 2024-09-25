@@ -14,7 +14,6 @@ import { IconChartPie, IconExternalLink } from "@tabler/icons-react";
 import React, { useState, useEffect, useMemo } from "react";
 import CivImage from "../match/CivImage";
 import Link from "next/link";
-import Feedback from "@/components/section/Feedback";
 import CivStatisticsChart from "./CivStatisticsChart";
 import Loading from "@/components/Loading";
 import apiDataRelative from "@/config/api";
@@ -111,8 +110,18 @@ const StatisticsMain = () => {
 
   const columns = [
     { key: "winner_race_id", label: "GOD", sortable: true },
-    { key: "total_matches", label: "MATCHES", sortable: true },
-    { key: "wins", label: "WINS", sortable: true },
+    {
+      key: "total_matches",
+      label: "MATCHES",
+      sortable: true,
+      className: "hidden sm:table-cell",
+    },
+    {
+      key: "wins",
+      label: "WINS",
+      sortable: true,
+      className: "hidden sm:table-cell",
+    },
     { key: "win_rate", label: "WIN RATE", sortable: true },
   ];
 
@@ -155,23 +164,19 @@ const StatisticsMain = () => {
   }
 
   return (
-    <div className="mx-4 flex flex-col gap-4">
-      <div className="py-4">
-        <TitleSection
-          title="Statistics"
-          subTitle={`Total Matches: ${data.match_count}`}
-          icon={<IconChartPie size={32} />}
-        />
-      </div>
-      <div className="w-full">
-        <Feedback />
-      </div>
-
+    <div className="flex flex-col gap-4">
       <Table
         aria-label="God Statistics"
         selectionMode="single"
         className=""
         isStriped
+        topContent={
+          <TitleSection
+            title="Statistics"
+            subTitle={`Total Matches: ${data.match_count}`}
+            icon={<IconChartPie size={32} />}
+          />
+        }
         sortDescriptor={sortDescriptor}
         onSortChange={(descriptor) => {
           if (descriptor.column) {
@@ -186,7 +191,11 @@ const StatisticsMain = () => {
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key} allowsSorting>
+            <TableColumn
+              key={column.key}
+              allowsSorting
+              className={column.className}
+            >
               {column.label}
             </TableColumn>
           )}
@@ -195,13 +204,19 @@ const StatisticsMain = () => {
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell
+                  className={
+                    columns.find((col) => col.key === columnKey)?.className
+                  }
+                >
+                  {renderCell(item, columnKey)}
+                </TableCell>
               )}
             </TableRow>
           )}
         </TableBody>
       </Table>
-      <div className="bg-neutral-900 p-4 rounded-lg w-full">
+      <div className="bg-zinc-900 p-4 rounded-xl w-full">
         <CivStatisticsChart data={data.data} />
       </div>
     </div>

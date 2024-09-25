@@ -32,7 +32,7 @@ const Feedback = () => {
       {isBannerOpen && (
         <>
           <div
-            className={`bg-indigo-700 p-2 px-4 rounded-lg border border-indigo-700 flex justify-between items-center text-sm mx-4 mb-2 transition-all duration-300 ${
+            className={`bg-zinc-800 p-2 rounded-lg border border-zinc-950 flex justify-between items-center text-sm transition-all duration-300 ${
               isClosing ? "opacity-0 transform" : "opacity-100"
             }`}
           >
@@ -41,7 +41,7 @@ const Feedback = () => {
               your feedback or suggestions.
             </div>
             <div className="flex gap-2">
-              <Button onPress={onOpen} size="sm" className="bg-indigo-950">
+              <Button onPress={onOpen} size="sm" className="bg-zinc-950">
                 Give Feedback
               </Button>
 
@@ -49,7 +49,7 @@ const Feedback = () => {
                 isIconOnly
                 size="sm"
                 onClick={() => closeBanner()}
-                className="bg-indigo-950"
+                className="bg-zinc-950"
               >
                 <IconX size={16} />
               </Button>

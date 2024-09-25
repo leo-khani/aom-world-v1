@@ -1,16 +1,26 @@
 import DiscordPopup from "@/components/DiscordPopup";
-import { HotkeyBar } from "@/components/hotkey/HotkeyCollection";
 import Leaderboard from "@/components/main/Leaderboard";
+import StatisticsMain from "@/components/main/statistics/StatisticsMain";
 import Feedback from "@/components/section/Feedback";
+import GodsSectionContent from "@/components/section/GodsSection/GodsSectionContent";
+import HeroSection from "@/components/section/Hero/HeroSection";
 import YoutubeVideos from "@/components/section/YoutubeVideos";
 
 export default function Home() {
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <DiscordPopup />
-      <HotkeyBar />
+      <HeroSection />
+      <GodsSectionContent />
       <Feedback />
-      <Leaderboard length={10} showLoadMoreBtn />
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="w-full lg:w-2/3">
+          <Leaderboard length={20} showLoadMoreBtn />
+        </div>
+        <div className="w-full lg:w-1/3">
+          <StatisticsMain />
+        </div>
+      </div>
       <YoutubeVideos />
     </div>
   );

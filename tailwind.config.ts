@@ -11,6 +11,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        '13': 'repeat(13, minmax(0, 1fr))',
+      },
+      gridColumn: {
+        'span-13': 'span 13 / span 13',
+      },
+      gridColumnStart: {
+        '13': '13',
+        '14': '14',
+      },
+      gridColumnEnd: {
+        '14': '14',
+      },
       fontFamily: {
         inter: ['var(--font-inter)', 'sans-serif'],
         'playfair-display': ['var(--font-playfair-display)', 'serif'],

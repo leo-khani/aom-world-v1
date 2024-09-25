@@ -79,9 +79,9 @@ export default function RootLayout({
         <BannerUpdate />
         <Header />
         <NextUIProvider>
-          <main className="container mx-auto dark text-foreground bg-background ">
+          <main className="container mx-auto dark text-foreground bg-background">
             <Toaster position="bottom-right" />
-            {children}
+            <div className="mx-4 sm:mx-2 md:mx-0">{children}</div>
           </main>
         </NextUIProvider>
         <Footer />
