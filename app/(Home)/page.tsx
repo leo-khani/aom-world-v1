@@ -6,6 +6,11 @@ import GodsSectionContent from "@/components/section/GodsSection/GodsSectionCont
 import HeroSection from "@/components/section/Hero/HeroSection";
 import YoutubeVideos from "@/components/section/YoutubeVideos";
 
+/**
+ * The Home page component, rendering the main layout of the application.
+ *
+ * @return {JSX.Element} The JSX element representing the Home page.
+ */
 export default function Home() {
   return (
     <div className="flex flex-col gap-2">
