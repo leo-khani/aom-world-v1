@@ -153,7 +153,7 @@ const Navbar = () => {
   );
 };
 
-const SupportMe = () => {
+export const SupportMe = () => {
   return (
     <Link href={siteConfig.socialLinks.donate}>
       <Button
