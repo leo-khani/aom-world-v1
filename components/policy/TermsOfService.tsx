@@ -3,9 +3,9 @@
 import React from "react";
 import {
   IconGavel,
-  IconUserCheck,
+  IconChartBar,
   IconAlertTriangle,
-  IconCoin,
+  IconEye,
   IconMessageReport,
   IconRefresh,
 } from "@tabler/icons-react";
@@ -22,43 +22,44 @@ const TermsOfService = () => {
           <Section
             icon={<IconGavel size={24} />}
             title="The Binding Scroll"
-            content="By accessing Aomworld.pro, you're not just entering a website, you're joining a realm. These terms are your binding scroll - they govern your adventures here. Read them carefully, brave explorer, for they are the laws of our digital land."
+            content="By accessing Aomworld.pro, you're not just entering a website, you're joining a realm of leaderboards and stats. These terms are your binding scroll - they govern your adventures here. Read them carefully, brave explorer, for they are the laws of our digital land of rankings and achievements."
           />
 
           <Section
-            icon={<IconUserCheck size={24} />}
-            title="Your Heroic Identity"
-            content="To embark on quests in Aomworld.pro, you must create an account. Choose your username wisely, for it is your banner in our realm. You are the guardian of your account - keep your login details secret, safe, and away from the prying eyes of dungeon trolls."
+            icon={<IconChartBar size={24} />}
+            title="The Hall of Legends"
+            content="Aomworld.pro is the grand Hall of Legends, showcasing leaderboards and statistics for gaming realms. While we strive for accuracy in our ancient records, even the wisest sages can err. Should you spot a discrepancy in the rankings, alert our scribes posthaste."
           />
 
           <Section
             icon={<IconAlertTriangle size={24} />}
-            title="Code of Conduct"
-            content="In our realm, honor is paramount. Cheating, harassment, or any form of malicious behavior are grave offenses. Such actions may result in banishment from our lands. Be excellent to each other, and let fair play be your guiding star."
+            title="Code of Honor"
+            content="In our realm, honor is paramount. Attempts to manipulate leaderboards, submit false data, or engage in any form of trickery are grave offenses. Such actions may result in banishment from our lands. Let fair play be your guiding star as you climb the ranks of legend."
           />
 
           <Section
-            icon={<IconCoin size={24} />}
-            title="The Royal Treasury"
-            content="Some areas of our realm may require tribute (payment). All transactions are conducted through our secure Royal Treasury. Prices are displayed in your local currency. Remember, purchases are final - choose wisely before exchanging your gold coins."
+            icon={<IconEye size={24} />}
+            title="The All-Seeing Eye"
+            content="Our mystic seers collect minimal data to power our arcane services, including the tracking of views through IP divination. We do not yet offer personal quarters (user accounts) in our realm. Consult our Privacy Scroll for more details on how we handle the essence of data."
           />
 
           <Section
             icon={<IconMessageReport size={24} />}
             title="Ye Olde Feedback Scroll"
-            content="Your voice matters in shaping our realm. Use the Feedback Scroll to share your thoughts, report bugs, or suggest improvements. While we value your input, remember that by submitting ideas, you grant us the right to use them to enhance Aomworld.pro."
+            content="Your voice shapes our realm. Use the Feedback Scroll to share your thoughts, report bugs in our matrix, or suggest improvements to our leaderboards. While we value your input, remember that by submitting ideas, you grant us the right to use them to enhance the Aomworld.pro experience for all adventurers."
           />
 
           <Section
             icon={<IconRefresh size={24} />}
             title="Evolving Lore"
-            content="As our realm grows, so too may these terms. We'll notify you of significant changes, but it's your responsibility to check this scroll periodically. Your continued use of Aomworld.pro after changes means you accept the updated terms."
+            content="As our realm grows, so too may these terms. We'll notify you of significant changes, but it's your responsibility to check this scroll periodically. Your continued use of Aomworld.pro after changes means you accept the updated terms, brave adventurer."
           />
         </div>
 
         <p className="mt-12 text-sm text-center text-indigo-300">
-          Last updated: {new Date().toLocaleDateString()}. May these terms guide
-          your journey through the vast landscapes of Aomworld.pro.
+          Last updated: {new Date().toLocaleDateString()}. Themis. May these
+          terms guide your journey through the vast leaderboards and statistics
+          of Aomworld.pro.
         </p>
       </div>
     </div>

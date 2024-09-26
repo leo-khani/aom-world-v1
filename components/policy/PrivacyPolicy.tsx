@@ -3,7 +3,7 @@
 import React from "react";
 import {
   IconShield,
-  IconUser,
+  IconChartBar,
   IconLock,
   IconWorld,
   IconAlertCircle,
@@ -22,44 +22,44 @@ const PrivacyPolicy = () => {
           <Section
             icon={<IconShield size={24} />}
             title="Our Commitment to Your Privacy"
-            content="At Aomworld.pro, we believe in transparency and respect for your digital footprint. Our approach to privacy is proactive, not reactive. We're not just complying with regulations; we're setting a new standard for user data protection in the gaming community."
+            content="At Aomworld.pro, we prioritize your privacy. We've adopted a minimalist approach to data collection, ensuring that your personal information remains yours."
           />
 
           <Section
-            icon={<IconUser size={24} />}
-            title="Your Digital Identity"
-            content="We understand that your online presence is an extension of you. The information you share with us - like your username, email, and gaming preferences - is treated with the utmost care. We use this data solely to enhance your Aomworld.pro experience, never to exploit or monetize."
+            icon={<IconChartBar size={24} />}
+            title="Limited Data Collection"
+            content="We do not collect any personal data from our users. The only information we gather is anonymous analytics data, which helps us improve our service and user experience."
           />
 
           <Section
             icon={<IconLock size={24} />}
-            title="Fortress-Level Security"
-            content="Your data is protected by state-of-the-art security measures. We employ end-to-end encryption, regular security audits, and a dedicated cybersecurity team to ensure your information is as safe as a dragon's hoard."
+            title="Third-Party Analytics Security"
+            content="The analytics data we collect is securely managed by a trusted third-party application. This ensures that the limited data we do collect is handled with the highest standards of security and privacy."
           />
 
           <Section
             icon={<IconWorld size={24} />}
-            title="Global Gaming, Local Privacy"
-            content="While we connect gamers worldwide, we respect local privacy laws. Whether you're raiding from Rome or strategizing in Seoul, your data is handled in compliance with your local regulations, including GDPR, CCPA, and others."
+            title="Global Standards, Local Compliance"
+            content="While we operate globally, we ensure our minimal data collection practices comply with local privacy laws, including GDPR and CCPA."
           />
 
           <Section
             icon={<IconAlertCircle size={24} />}
             title="Transparency is Our Policy"
-            content="We believe you have the right to know what data we collect and how we use it. You can request a comprehensive report of your data at any time. If you choose to leave our platform, we ensure complete data deletion - no questions asked."
+            content="We believe in complete transparency. Our analytics collection is designed to be anonymous, but if you have any questions about our practices, we're always here to provide clear, honest answers."
           />
 
           <Section
             icon={<IconMail size={24} />}
             title="Open Communication"
-            content="Have concerns or questions? Our dedicated Privacy Guardian team is just a message away. Reach out to us at nibogamesinfo@gmail.com or through our 24/7 Discord support channel."
+            content="Have concerns or questions? We're just a message away. Reach out to us at nibogamesinfo@gmail.com or through our Discord support channel."
           />
         </div>
 
         <p className="mt-12 text-sm text-center text-indigo-300">
-          Last fortified: {new Date().toLocaleDateString()}. We regularly update
-          our privacy measures to stay ahead in the ever-evolving digital
-          landscape.
+          Last updated: {new Date().toLocaleDateString()}. Themis. We regularly
+          review our privacy measures to ensure they align with our commitment
+          to minimal data collection and maximum user privacy.
         </p>
       </div>
     </div>
