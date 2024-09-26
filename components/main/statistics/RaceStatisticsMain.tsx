@@ -43,6 +43,13 @@ function isValidMatchup(matchup: RaceMatchup): boolean {
 const RaceStatisticsMain = () => {
   const [data, setData] = useState<RaceMatchup[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sortConfig, setSortConfig] = useState<{
+    key: string;
+    direction: string;
+  }>({
+    key: "opponent_wins",
+    direction: "descending",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,6 +110,41 @@ const RaceStatisticsMain = () => {
     return acc;
   }, {} as Record<number, (RaceMatchup & { isMainRace: boolean })[]>);
 
+  const sortedData = (data: Array<RaceMatchup & { isMainRace: boolean }>) => {
+    return data.sort((a, b) => {
+      let aValue, bValue;
+
+      switch (sortConfig.key) {
+        case "total_matches":
+          aValue = a.total_matches;
+          bValue = b.total_matches;
+          break;
+        case "wins":
+          aValue = a.isMainRace ? a.wins_race_1 : a.wins_race_2;
+          bValue = b.isMainRace ? b.wins_race_1 : b.wins_race_2;
+          break;
+        case "opponent_wins":
+          aValue = a.isMainRace ? a.wins_race_2 : a.wins_race_1;
+          bValue = b.isMainRace ? b.wins_race_2 : b.wins_race_1;
+          break;
+        default:
+          return 0;
+      }
+
+      if (aValue < bValue) return sortConfig.direction === "ascending" ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === "ascending" ? 1 : -1;
+      return 0;
+    });
+  };
+
+  const requestSort = (key: string) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
   return (
     <Card className="p-4">
       <TitleSection
@@ -112,7 +154,7 @@ const RaceStatisticsMain = () => {
       <Spacer y={4} />
       <Accordion>
         {Object.keys(groupedData).map((key) => {
-          const civMatchups = groupedData[Number(key)];
+          const civMatchups = sortedData(groupedData[Number(key)]);
 
           return (
             <AccordionItem
@@ -139,12 +181,21 @@ const RaceStatisticsMain = () => {
                   isStriped
                 >
                   <TableHeader>
-                    <TableColumn>MATCHUP</TableColumn>
-                    <TableColumn>TOTAL MATCHES</TableColumn>
-                    <TableColumn className="uppercase flex items-center gap-1">
+                    <TableColumn onClick={() => requestSort("matchup")}>
+                      MATCHUP
+                    </TableColumn>
+                    <TableColumn onClick={() => requestSort("total_matches")}>
+                      TOTAL MATCHES
+                    </TableColumn>
+                    <TableColumn
+                      onClick={() => requestSort("wins")}
+                      className="uppercase flex items-center gap-1"
+                    >
                       <CivName civid={Number(key)} /> WINS
                     </TableColumn>
-                    <TableColumn>OPPONENT WINS</TableColumn>
+                    <TableColumn onClick={() => requestSort("opponent_wins")}>
+                      OPPONENT WINS
+                    </TableColumn>
                     <TableColumn>WIN RATE</TableColumn>
                   </TableHeader>
                   <TableBody items={civMatchups}>

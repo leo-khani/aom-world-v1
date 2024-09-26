@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Card,
   Table,
@@ -11,11 +11,14 @@ import {
   Progress,
   Tooltip,
   Link,
+  Input,
+  SortDescriptor,
 } from "@nextui-org/react";
-import CivImage, { CivName, CivPortrait } from "../match/CivImage";
+import CivImage, { CivName, CivPortrait, CivTitle } from "../match/CivImage";
 import Loading from "@/components/Loading";
 import { civilizationsNames, godPerks } from "@/data/gods";
 import apiDataRelative from "@/config/api";
+import { IconSearch } from "@tabler/icons-react";
 
 interface RaceStatisticsSingleGodProps {
   id: number;
@@ -34,6 +37,11 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
 }) => {
   const [matchups, setMatchups] = useState<RaceMatchup[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [filterValue, setFilterValue] = useState("");
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "win_rate",
+    direction: "descending",
+  });
 
   const normalizeMatchup = (matchup: RaceMatchup, id: number): RaceMatchup => {
     if (matchup.race_id_1 === id) {
@@ -59,20 +67,13 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
         }
         const result = await response.json();
 
-        // Filter matchups that involve the specified civilization and exclude self-matchups
         const filteredMatchups = result.data.filter(
           (matchup: RaceMatchup) =>
             (matchup.race_id_1 === id || matchup.race_id_2 === id) &&
             matchup.race_id_1 !== matchup.race_id_2
         );
 
-        // Sort matchups by total matches
-        const sortedMatchups = filteredMatchups.sort(
-          (a: { total_matches: number }, b: { total_matches: number }) =>
-            b.total_matches - a.total_matches
-        );
-
-        setMatchups(sortedMatchups);
+        setMatchups(filteredMatchups);
       } catch (error) {
         console.error("Error fetching matchups:", error);
       } finally {
@@ -83,21 +84,46 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
     fetchMatchups();
   }, [id]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loading />
-      </div>
-    );
-  }
+  const filteredMatchups = useMemo(() => {
+    let filtered = matchups.filter((matchup) => {
+      const normalizedMatchup = normalizeMatchup(matchup, id);
+      const opponentCivName =
+        civilizationsNames[normalizedMatchup.race_id_2].toLowerCase();
+      return opponentCivName.includes(filterValue.toLowerCase());
+    });
 
-  const godName = civilizationsNames[id];
-  const perks = godPerks[godName] || [];
+    return filtered.sort((a, b) => {
+      const first = normalizeMatchup(a, id);
+      const second = normalizeMatchup(b, id);
+
+      let cmp = 0;
+
+      if (sortDescriptor.column === "total_matches") {
+        cmp = first.total_matches - second.total_matches;
+      } else if (sortDescriptor.column === "win_rate") {
+        const winRateA =
+          first.total_matches > 0
+            ? (first.wins_race_1 / first.total_matches) * 100
+            : 0;
+        const winRateB =
+          second.total_matches > 0
+            ? (second.wins_race_1 / second.total_matches) * 100
+            : 0;
+        cmp = winRateA - winRateB;
+      }
+
+      if (sortDescriptor.direction === "descending") {
+        cmp *= -1;
+      }
+
+      return cmp;
+    });
+  }, [matchups, id, filterValue, sortDescriptor]);
 
   const columns = [
     { key: "matchup", label: "Matchup" },
-    { key: "total_matches", label: "Total Matches" },
-    { key: "win_rate", label: "Win Rate" },
+    { key: "total_matches", label: "Total Matches", sortable: true },
+    { key: "win_rate", label: "Win Rate", sortable: true },
   ];
 
   const renderCell = (matchup: RaceMatchup, columnKey: string) => {
@@ -111,9 +137,14 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
         return (
           <div className="flex items-center gap-2">
             <CivImage civid={normalizedMatchup.race_id_1.toString()} /> vs{" "}
-            <Link href={`/gods/${normalizedMatchup.race_id_2}`}>
-              <CivImage civid={normalizedMatchup.race_id_2.toString()} />
-            </Link>
+            <Tooltip
+              content={civilizationsNames[normalizedMatchup.race_id_2]}
+              className="bg-neutral-800"
+            >
+              <Link href={`/gods/${normalizedMatchup.race_id_2}`}>
+                <CivImage civid={normalizedMatchup.race_id_2.toString()} />
+              </Link>
+            </Tooltip>
           </div>
         );
       case "total_matches":
@@ -132,8 +163,19 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
+  }
+
+  const godName = civilizationsNames[id];
+  const perks = godPerks[godName] || [];
+
   return (
-    <Card className="p-4">
+    <Card className="p-6">
       <div className="flex flex-col-2 justify-center items-start gap-2 mb-4">
         <div>
           <CivPortrait civid={id} />
@@ -149,20 +191,40 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
           </ul>
         </div>
       </div>
-      <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-        <CivName civid={id} />
-      </h2>
+
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold flex flex-col items-start gap-1">
+          <CivName civid={id} />
+          <span className="text-slate-300 text-xs">
+            <CivTitle civid={id} />
+          </span>
+        </h2>
+        <Input
+          isClearable
+          className="w-full sm:max-w-[44%]"
+          placeholder="Search by civilization..."
+          startContent={<IconSearch className="text-default-300" />}
+          value={filterValue}
+          onClear={() => setFilterValue("")}
+          onValueChange={(value) => setFilterValue(value)}
+        />
+      </div>
+
       <Table
         aria-label="Race matchup statistics"
         selectionMode="single"
         isStriped
+        sortDescriptor={sortDescriptor}
+        onSortChange={setSortDescriptor}
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
+            <TableColumn key={column.key} allowsSorting={column.sortable}>
+              {column.label}
+            </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={matchups}>
+        <TableBody items={filteredMatchups}>
           {(item) => (
             <TableRow key={`${item.race_id_1}-${item.race_id_2}`}>
               {(columnKey) => (

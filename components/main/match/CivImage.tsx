@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { godNames } from "@/data/gods";
 
 // Define the props interface for the MapImage component
 interface MapImageProps {
@@ -55,6 +56,17 @@ const civilizationsNames: { [key: number]: string } = {
   11: "Oranos",
   12: "Gaia",
   13: "Freyr",
+};
+
+export const CivTitle = ({ civid }: { civid: number }) => {
+  const godName = civilizationsNames[civid];
+  const god = godNames[godName];
+
+  if (!god) {
+    return <div>Unknown God</div>;
+  }
+
+  return <div>{god.title}</div>;
 };
 
 export const CivName = ({ civid }: { civid: number }) => {

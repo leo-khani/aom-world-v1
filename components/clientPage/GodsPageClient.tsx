@@ -19,7 +19,7 @@ export default function GodsPageClient() {
         </BreadcrumbItem>
       </Breadcrumbs>
       <Feedback />
-      <div className="mx-4">
+      <div className="">
         <RaceStatisticsSingleGod id={Number(params?.id)} />
       </div>
     </div>
