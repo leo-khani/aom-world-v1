@@ -72,7 +72,7 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
   }
 
   if (!Array.isArray(items) || items.every((item) => item === null)) {
-    return <div>No data available</div>;
+    return <div>Nodata available</div>;
   }
 
   return (
