@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { Button } from "@nextui-org/react";
 import { IconBrandSteam, IconBrandXbox } from "@tabler/icons-react";
+import Link from "next/link";
 
 const HeroSection = () => {
   return (
@@ -35,20 +36,24 @@ const HeroSection = () => {
         <div className=" bg-indigo-700 p-2 px-4 rounded-lg border border-indigo-700 flex justify-between items-center text-sm transition-all duration-300 ">
           <div>Buy the Age of Mythology: Retold Game</div>
           <div className="flex gap-2">
-            <Button
-              size="sm"
-              className="bg-indigo-950"
-              startContent={<IconBrandXbox size={18} />}
-            >
-              Xbox Store
-            </Button>
-            <Button
-              size="sm"
-              className="bg-indigo-950"
-              startContent={<IconBrandSteam size={18} />}
-            >
-              Steam
-            </Button>
+            <Link href={siteConfig.socialLinks.gameXbox}>
+              <Button
+                size="sm"
+                className="bg-indigo-950"
+                startContent={<IconBrandXbox size={18} />}
+              >
+                Xbox Store
+              </Button>
+            </Link>
+            <Link href={siteConfig.socialLinks.gameSteam}>
+              <Button
+                size="sm"
+                className="bg-indigo-950"
+                startContent={<IconBrandSteam size={18} />}
+              >
+                Steam
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

@@ -27,6 +27,9 @@ export const siteConfig = {
     discord: "https://discord.gg/KQsyeqnkfx",
     instagram: "https://instagram.com/aomworldpro",
     donate: "https://buymeacoffee.com/mr_nibo",
+    gameXbox: "https://www.xbox.com/en-US/games/age-of-mythology-retold",
+    gameSteam:
+      "https://store.steampowered.com/app/1934680/Age_of_Mythology_Retold/",
   },
 
   navbarItems: [
