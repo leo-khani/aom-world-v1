@@ -20,6 +20,8 @@ export const apiDataAbsolute = {
             getPlayerMatchHistory: createAbsolutePath("/player/getPlayerMatchHistory"),
             getPlayerRanks: createAbsolutePath("/player/getPlayerRanks"),
             getPlayerSteam: createAbsolutePath("/player/getPlayerSteam"),
+            getPlayerStats: createAbsolutePath("/player/getPlayerStats"),
+        
         }
     },
     private: {
@@ -46,6 +48,7 @@ const apiDataRelative = {
             getPlayerMatchHistory: createRelativePath("/player/getPlayerMatchHistory"),
             getPlayerRanks: createRelativePath("/player/getPlayerRanks"),
             getPlayerSteam: createRelativePath("/player/getPlayerSteam"),
+            getPlayerStats: createRelativePath("/player/getPlayerStats"),
         }
     },
     private: {
