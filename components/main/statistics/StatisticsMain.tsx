@@ -14,7 +14,6 @@ import { IconChartPie, IconExternalLink } from "@tabler/icons-react";
 import React, { useState, useEffect, useMemo } from "react";
 import CivImage from "../match/CivImage";
 import Link from "next/link";
-import CivStatisticsChart from "./CivStatisticsChart";
 import Loading from "@/components/Loading";
 import apiDataRelative from "@/config/api";
 
@@ -216,9 +215,10 @@ const StatisticsMain = () => {
           )}
         </TableBody>
       </Table>
-      <div className="bg-zinc-900 p-4 rounded-xl w-full">
-        <CivStatisticsChart data={data.data} />
-      </div>
+
+      {/* <div className="bg-zinc-900 p-4 rounded-xl w-full">
+          <CivStatisticsChart data={data.data} />
+        </div> */}
     </div>
   );
 };
