@@ -7,6 +7,11 @@ import Image from "next/image";
 
 const youtubeData = [
   {
+    title: "Age of Mythology Retold BEST Settings and Hotkeys",
+    url: "https://www.youtube.com/watch?v=dkgQKqaUpUM&ab_channel=BoitT.V",
+    image: "/content/youtube-videos/06.jpg",
+  },
+  {
     title: "Age of Mythology: Retold - Official Trailer",
     url: "https://www.youtube.com/watch?v=O67dQQ9ZAqs&ab_channel=AgeofEmpires",
 
@@ -46,7 +51,7 @@ const YoutubeVideos = () => {
         btnLink="/watch"
       />
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 py-2">
-        {youtubeData.map((video, index) => (
+        {youtubeData.slice(0, 5).map((video, index) => (
           <Card key={index} className="flex flex-col h-full">
             <CardBody className="flex-grow">
               <Image

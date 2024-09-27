@@ -1,4 +1,5 @@
 import DiscordPopup from "@/components/DiscordPopup";
+import { HotkeyBar } from "@/components/hotkey/HotkeyCollection";
 import Leaderboard from "@/components/main/Leaderboard";
 import StatisticsMain from "@/components/main/statistics/StatisticsMain";
 import Feedback from "@/components/section/Feedback";
@@ -18,6 +19,7 @@ export default function Home() {
       <HeroSection />
       <GodsSectionContent />
       <Feedback />
+      <HotkeyBar />
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="w-full lg:w-2/3">
           <Leaderboard length={20} showLoadMoreBtn />

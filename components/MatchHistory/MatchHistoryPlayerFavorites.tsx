@@ -100,6 +100,9 @@ export const MatchHistoryPlayerFavorites: React.FC<
           </span>
         </div>
       ))}
+      <span className="text-xs">
+        This is in beta and may not be accurate...
+      </span>
     </div>
   );
 };
