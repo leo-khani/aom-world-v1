@@ -85,7 +85,7 @@ const RaceStatisticsSingleGod: React.FC<RaceStatisticsSingleGodProps> = ({
   }, [id]);
 
   const filteredMatchups = useMemo(() => {
-    let filtered = matchups.filter((matchup) => {
+    const filtered = matchups.filter((matchup) => {
       const normalizedMatchup = normalizeMatchup(matchup, id);
       const opponentCivName =
         civilizationsNames[normalizedMatchup.race_id_2].toLowerCase();
