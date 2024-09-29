@@ -15,8 +15,8 @@ import {
 import apiDataRelative from "@/config/api";
 import { LeaderboardPlayer } from "@/types/getPlayerRanksTypes";
 import MatchHistory from "../MatchHistory";
-import MatchHistoryPlayerFavorites from "../MatchHistory/MatchHistoryPlayerFavorites";
-import { IconStar } from "@tabler/icons-react";
+//import MatchHistoryPlayerFavorites from "../MatchHistory/MatchHistoryPlayerFavorites";
+//import { IconStar } from "@tabler/icons-react";
 
 interface PlayerMatchHistoryProps {
   username: string;
@@ -117,7 +117,7 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
         </div>
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="w-full lg:w-1/5 mb-4 lg:mb-0 ">
-            <div className="mb-5 bg-zinc-900 rounded-xl p-4">
+            {/* <div className="mb-5 bg-zinc-900 rounded-xl p-4">
               {" "}
               <h2 className="flex gap-2 items-center text-sm font-semibold">
                 <IconStar size={18} /> Player Favorites
@@ -135,7 +135,7 @@ const PlayerMatchHistory = ({ username }: PlayerMatchHistoryProps) => {
                   />
                 )
               )}
-            </div>
+            </div> */}
             <PlayerCardRankSolo isLoading={isLoading}>
               {items.map((item, index) => (
                 <div
