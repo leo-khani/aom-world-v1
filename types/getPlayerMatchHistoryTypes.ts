@@ -1,4 +1,5 @@
 export interface MatchHistoryResponse {
+    [x: string]: any;
     result: {
       code: number;
       message: string;

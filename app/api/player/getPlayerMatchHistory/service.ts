@@ -2,7 +2,7 @@ import { supabase } from "@/client/supabase";
 import { MatchHistoryResponse, Profile } from "@/types/getPlayerMatchHistoryTypes";
 
 export const getPlayerMatchHistory = async (
-  playerId: string
+  playerId: string,
 ): Promise<MatchHistoryResponse> => {
   const url = `https://athens-live-api.worldsedgelink.com/community/leaderboard/getRecentMatchHistory?title=athens&profile_ids=${encodeURIComponent(
     JSON.stringify([playerId])

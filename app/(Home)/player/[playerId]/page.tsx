@@ -1,7 +1,7 @@
 import React from "react";
-import Player from "@/components/Player";
 import { Metadata } from "next";
 import { apiDataAbsolute } from "@/config/api";
+import PlayerClient from "@/components/player/PlayerClient";
 
 export const revalidate = 0;
 
@@ -60,11 +60,15 @@ export default function PlayerPage({
   params: { playerId: string };
 }) {
   return (
+    <>
+      <PlayerClient playerId={params.playerId} />
+      {/* 
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6 hidden">
         {params.playerId}'s AoM: Retold Profile
       </h1>
       <Player playerId={params.playerId} />
-    </div>
+    </div>*/}
+    </>
   );
 }

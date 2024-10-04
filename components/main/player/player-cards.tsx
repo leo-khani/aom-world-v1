@@ -50,8 +50,8 @@ export const PlayerHeaderProfile: React.FC<PlayerHeaderProfileProps> = ({
   const progressColor = getProgressColor(item.winPercent);
 
   return (
-    <div className="flex flex-col gap-2 px-2">
-      <div className="flex flex-col sm:flex-row items-center gap-4">
+    <div className="flex flex-col gap-2 px-2 items-center">
+      <div className="flex flex-col items-center gap-4 ">
         <Avatar
           src={item.avatarUrl}
           size="lg"
