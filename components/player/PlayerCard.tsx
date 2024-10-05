@@ -40,30 +40,17 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   // data is loaded.
   const [loading, setLoading] = React.useState(true);
 
-  // If there is no profile data, return an error message.
-  // This should never happen, as the component should
-  // only be rendered if there is profile data.
-  if (!profile) return <>No profile data</>;
-
-  // If there is no leaderboard data, return an error message.
-  // This should never happen, as the component should
-  // only be rendered if there is leaderboard data.
-  if (!playerLeaderboard) return <>No leaderboard data</>;
-
-  // When the component is mounted, check if the profile
-  // and leaderboard data is loaded. If it is, set the
-  // loading state to false.
+  // Ensure useEffect is called unconditionally
   useEffect(() => {
     if (profile && playerLeaderboard) {
       setLoading(false);
     }
   }, [profile, playerLeaderboard]);
 
-  // This function takes a win percentage and returns
-  // a color based on the percentage. If the win
-  // percentage is 65% or higher, the color is green.
-  // If it is between 50% and 64%, the color is yellow.
-  // If it is below 50%, the color is red.
+  if (!profile) return <>No profile data</>;
+
+  if (!playerLeaderboard) return <>No leaderboard data</>;
+
   const getProgressColor = (
     winPercent: number
   ): "success" | "warning" | "danger" => {

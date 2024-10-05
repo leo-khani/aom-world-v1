@@ -7,6 +7,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/Header";
 import Footer from "@/components/main/Footer";
 import BannerUpdate from "@/components/alert/BannerUpdate";
+import Head from "next/head";
 
 // Font configuration
 const sen = Sen({
@@ -69,13 +70,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sen.variable} antialiased font-sen`}>
+      <Head>
+        <script
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "odq4zs1l4l");
+            `,
+          }}
+        />
         <script
           defer
           data-domain="aomworld.pro"
           src="https://plausible.io/js/script.js"
         ></script>
-
+      </Head>
+      <body className={`${sen.variable} antialiased font-sen`}>
         <Analytics />
         <BannerUpdate />
         <Header />

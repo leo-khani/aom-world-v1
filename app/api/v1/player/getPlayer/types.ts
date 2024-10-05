@@ -1,5 +1,5 @@
-import { MatchHistory, MatchHistoryResponse, Profile } from "@/types/getPlayerMatchHistoryTypes";
-import { LeaderboardData, LeaderboardItem } from "@/types/leaderboardTypes";
+import { MatchHistory } from "@/types/getPlayerMatchHistoryTypes";
+import { LeaderboardItem } from "@/types/leaderboardTypes";
 
 
 export interface PlayerProfile {

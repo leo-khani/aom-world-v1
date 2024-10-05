@@ -1,71 +1,104 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PlayerCard from "./PlayerCard";
 import apiRouteRelative from "@/config/apiRoute";
 import { ReturnData } from "@/app/api/v1/player/getPlayer/types";
 import { Tabs, Tab } from "@nextui-org/react";
-import { PlayerHeaderProfile } from "../main/player/player-cards";
 
 interface PlayerClientProps {
   playerId: string;
 }
 
 const PlayerClient: React.FC<PlayerClientProps> = ({ playerId }) => {
-  const [dataPlayer, setDataPlayer] = useState<ReturnData>();
+  const [dataPlayerSolo, setDataPlayerSolo] = useState<ReturnData>();
 
-  const fetchData = async () => {
+  const [dataPlayerTeam, setDataPlayerTeam] = useState<ReturnData>();
+
+  const fetchDataSoloRank = async () => {
     try {
       const response = await fetch(
         `${apiRouteRelative.routes.Player.getPlayer}?userId=${playerId}`,
         {
-          method: "Post",
+          method: "POST", // "Post" should be uppercase
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ playerId }),
+          body: JSON.stringify({
+            playerId: Number(playerId),
+            matchType: 1,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const result = await response.json();
+      setDataPlayerSolo(result);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchDataTeamRank = async () => {
+    try {
+      const response = await fetch(
+        `${apiRouteRelative.routes.Player.getPlayer}?userId=${playerId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            playerId: Number(playerId),
+            matchType: 2,
+          }),
         }
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
       const result = await response.json();
-      setDataPlayer(result);
+      setDataPlayerTeam(result);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
   useEffect(() => {
-    fetchData();
-    console.log(dataPlayer);
+    fetchDataSoloRank();
+    fetchDataTeamRank();
+    console.log(setDataPlayerSolo);
   }, [playerId]);
 
-  if (!dataPlayer) {
+  if (!dataPlayerSolo || !dataPlayerTeam) {
     return <div>Loading...</div>;
   }
 
-  if (!dataPlayer.player) {
+  if (!dataPlayerSolo.player || !dataPlayerTeam.player) {
     return <div>No player found</div>;
   }
 
-  if (!dataPlayer.player_leaderboard) {
+  if (
+    !dataPlayerSolo.player_leaderboard ||
+    !dataPlayerTeam.player_leaderboard
+  ) {
     return <div>No player leaderboard found</div>;
   }
-  const data = dataPlayer;
+
   return (
     <div>
       <Tabs
         aria-label="Options"
         className="bg-transparent"
         placement="start"
-        //defaultSelectedKey={"rmsolo" : "rmteam"}
+        defaultSelectedKey={dataPlayerSolo ? "rmsolo" : "rmteam"}
       >
         <Tab
           key="rmsolo"
           title="Solo"
           className="text-sm"
-          //isDisabled={!items[0]}
+          isDisabled={!dataPlayerSolo}
         >
           <PlayerCard
-            profile={dataPlayer.player}
-            playerLeaderboard={data.player_leaderboard}
+            profile={dataPlayerSolo.player}
+            playerLeaderboard={dataPlayerSolo.player_leaderboard}
           />
         </Tab>
 
@@ -73,11 +106,11 @@ const PlayerClient: React.FC<PlayerClientProps> = ({ playerId }) => {
           key="rmteam"
           title="Team"
           className="text-sm"
-          //isDisabled={!items[1]}
+          isDisabled={!dataPlayerTeam}
         >
           <PlayerCard
-            profile={dataPlayer.player}
-            playerLeaderboard={data.player_leaderboard}
+            profile={dataPlayerTeam.player}
+            playerLeaderboard={dataPlayerTeam.player_leaderboard}
           />
         </Tab>
       </Tabs>
