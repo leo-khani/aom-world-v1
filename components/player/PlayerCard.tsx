@@ -81,14 +81,13 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
               {/* If the component is not loading, show the player's avatar. */}
               <Avatar
                 radius="md"
-                size="md"
                 radioGroup="player-card"
                 itemProp="image"
                 itemScope
                 itemType="http://schema.org/Person"
                 src={playerLeaderboard.avatarUrl}
                 alt={profile.alias}
-                className="w-32 h-32 shadow-lg"
+                className="w-20 h-20 shadow-lg"
               />
             </div>
 
