@@ -19,7 +19,6 @@ export default function Home() {
       <HeroSection />
       <GodsSectionContent />
       <Feedback />
-      <HotkeyBar />
       <div className="flex flex-col lg:flex-row gap-4">
         <div className="w-full lg:w-2/3">
           <Leaderboard length={15} showLoadMoreBtn />
@@ -28,6 +27,7 @@ export default function Home() {
           <StatisticsMain />
         </div>
       </div>
+      <HotkeyBar />
       <YoutubeVideos />
     </div>
   );
