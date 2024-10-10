@@ -1,7 +1,6 @@
 import DiscordPopup from "@/components/DiscordPopup";
 import { HotkeyBar } from "@/components/hotkey/HotkeyCollection";
 import Leaderboard from "@/components/main/Leaderboard";
-import StatisticsMain from "@/components/main/statistics/StatisticsMain";
 import Feedback from "@/components/section/Feedback";
 import GodsSectionContent from "@/components/section/GodsSection/GodsSectionContent";
 import HeroSection from "@/components/section/Hero/HeroSection";
