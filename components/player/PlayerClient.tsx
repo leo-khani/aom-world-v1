@@ -11,9 +11,9 @@ interface PlayerClientProps {
 }
 
 const PlayerClient: React.FC<PlayerClientProps> = ({ playerId }) => {
-  const [dataPlayerSolo, setDataPlayerSolo] = useState<ReturnData>();
+  const [dataPlayerSolo, setDataPlayerSolo] = useState<ReturnData | null>(null);
 
-  const [dataPlayerTeam, setDataPlayerTeam] = useState<ReturnData>();
+  const [dataPlayerTeam, setDataPlayerTeam] = useState<ReturnData | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>("rmsolo"); // Add state to track the selected tab
 
   const fetchDataSoloRank = async () => {
@@ -93,29 +93,6 @@ const PlayerClient: React.FC<PlayerClientProps> = ({ playerId }) => {
     console.log(setDataPlayerSolo);
   }, [playerId]);
 
-  if (!dataPlayerSolo || !dataPlayerTeam) {
-    return <div>Loading...</div>;
-  }
-
-  if (!dataPlayerSolo.player || !dataPlayerTeam.player) {
-    return <div>No player found</div>;
-  }
-
-  if (
-    !dataPlayerSolo.player_leaderboard ||
-    !dataPlayerTeam.player_leaderboard
-  ) {
-    return <div>No player leaderboard found</div>;
-  }
-
-  if (!dataPlayerSolo.solo_rank || !dataPlayerTeam.solo_rank) {
-    return <div>No solo rank found</div>;
-  }
-
-  if (!dataPlayerSolo.team_rank || !dataPlayerTeam.team_rank) {
-    return <div>No team rank found</div>;
-  }
-
   return (
     <div>
       <div className="p-5">
@@ -133,10 +110,12 @@ const PlayerClient: React.FC<PlayerClientProps> = ({ playerId }) => {
             className="text-sm"
             isDisabled={!dataPlayerSolo}
           >
-            <PlayerCard
-              profile={dataPlayerSolo.player}
-              playerLeaderboard={dataPlayerSolo.player_leaderboard}
-            />
+            {dataPlayerSolo && dataPlayerSolo.player && (
+              <PlayerCard
+                profile={dataPlayerSolo.player}
+                playerLeaderboard={dataPlayerSolo.player_leaderboard}
+              />
+            )}
           </Tab>
 
           <Tab
@@ -145,10 +124,12 @@ const PlayerClient: React.FC<PlayerClientProps> = ({ playerId }) => {
             className="text-sm"
             isDisabled={!dataPlayerTeam}
           >
-            <PlayerCard
-              profile={dataPlayerTeam.player}
-              playerLeaderboard={dataPlayerTeam.player_leaderboard}
-            />
+            {dataPlayerTeam && dataPlayerTeam.player && (
+              <PlayerCard
+                profile={dataPlayerTeam.player}
+                playerLeaderboard={dataPlayerTeam.player_leaderboard}
+              />
+            )}
           </Tab>
         </Tabs>
       </div>

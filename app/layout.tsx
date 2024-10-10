@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Sen } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import { Analytics } from "@vercel/analytics/react";
 import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/Header";
 import Footer from "@/components/main/Footer";
 import BannerUpdate from "@/components/alert/BannerUpdate";
 import Head from "next/head";
+import MobileInstallPopup from "@/components/MobileInstallPopup";
 
 // Font configuration
 const sen = Sen({
@@ -82,7 +82,7 @@ export default function RootLayout({
         ></script>
       </Head>
       <body className={`${sen.variable} antialiased font-sen`}>
-        <Analytics />
+        <MobileInstallPopup />
         <BannerUpdate />
         <Header />
         <NextUIProvider>

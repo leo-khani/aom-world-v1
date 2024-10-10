@@ -16,17 +16,12 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-2">
       <DiscordPopup />
-      <HeroSection />
-      <GodsSectionContent />
       <Feedback />
       <div className="flex flex-col lg:flex-row gap-4">
-        <div className="w-full lg:w-2/3">
-          <Leaderboard length={15} showLoadMoreBtn />
-        </div>
-        <div className="w-full lg:w-1/3">
-          <StatisticsMain />
-        </div>
+        <Leaderboard length={15} showLoadMoreBtn />
       </div>
+      <HeroSection />
+      <GodsSectionContent />
       <HotkeyBar />
       <YoutubeVideos />
     </div>

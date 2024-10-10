@@ -79,7 +79,7 @@ const NavigationItems = () => (
       >
         <Link
           href={item.link}
-          className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-yellow-500 mr-4"
+          className="block mt-0 lg:inline-block lg:mt-0 text-white hover:text-yellow-500 mr-4"
         >
           <Button className="text-md py-2 rounded-md bg-transparent text-white hover:bg-neutral-800 sm:w-full">
             {item.icon}
@@ -93,8 +93,8 @@ const NavigationItems = () => (
 
 // Search and Donate component
 const SearchAndDonate = () => (
-  <div className="flex flex-col sm:flex-row items-center mt-4 lg:mt-0">
-    <Link href={siteConfig.socialLinks.discord} className="mr-3">
+  <div className="flex sm:flex-row items-center mt-4 lg:mt-0 gap-4">
+    <Link href={siteConfig.socialLinks.discord}>
       <Button
         isIconOnly
         className="text-md py-2 rounded-xl bg-indigo-500 text-white hover:bg-indigo-400 sm:w-full "
@@ -103,11 +103,9 @@ const SearchAndDonate = () => (
         <IconBrandDiscord className="text-white" size={24} />
       </Button>
     </Link>
-    <SearchBar />
-    <div className="mt-4 sm:mt-0 sm:ml-4">
+    <div className="">
       <SupportMe />
     </div>
-    <div className="mt-4 sm:mt-0 sm:ml-4 hidden"></div>
   </div>
 );
 
@@ -128,8 +126,14 @@ const Navbar = () => {
             <MobileMenuButton onClick={toggleMenu} isOpen={isMenuOpen} />
             <div className="hidden lg:flex lg:items-center lg:w-auto">
               <NavigationItems />
+              <div className="hidden sm:block px-4">
+                <SearchBar />
+              </div>
               <SearchAndDonate />
             </div>
+          </div>
+          <div className="py-4 block sm:hidden">
+            <SearchBar />
           </div>
         </div>
         <AnimatePresence>
@@ -141,7 +145,7 @@ const Navbar = () => {
               variants={menuVariants}
               className="w-full overflow-hidden bg-background lg:hidden"
             >
-              <div className="px-4 sm:px-6 lg:px-8 py-4 flex flex-col justify-center items-center gap-2">
+              <div className="flex flex-col justify-center items-center gap-2 pb-5">
                 <NavigationItems />
                 <SearchAndDonate />
               </div>
