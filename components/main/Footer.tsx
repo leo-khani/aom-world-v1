@@ -37,16 +37,7 @@ const Footer: React.FC = () => {
                   ))}
                 </ul>
               </div>
-              <div>
-                <ul className="flex flex-col justify-center items-center gap-1">
-                  <li>
-                    <SupportMe />
-                  </li>
-                  <div className="w-5/6">
-                    <Feedback closeBtn={false} />
-                  </div>
-                </ul>
-              </div>
+
               <div></div>
             </div>
           </div>

@@ -1,5 +1,3 @@
-// PlayerMatchHistoryContent.tsx
-
 import React, { useEffect, useState } from "react";
 import {
   Spinner,
@@ -24,7 +22,6 @@ import apiDataRelative from "@/config/api";
 import ImageMap from "../tools/ImageMap";
 import CivImage from "../main/match/CivImage";
 
-// Types for the match history data
 export interface MatchHistoryResponse {
   result: {
     code: number;
@@ -116,7 +113,6 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
   } | null>(null);
 
   useEffect(() => {
-    // Fetch match history data for the given user ID
     const fetchMatchHistory = async () => {
       if (!userID) return;
 
@@ -140,13 +136,11 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
 
         const data: MatchHistoryResponse = await response.json();
 
-        // Sort matches by date in descending order and take the most recent ones
         const sortedMatches = data.matchHistoryStats.sort((a, b) => {
-          return b.startgametime - a.startgametime; // Latest matches first
+          return b.startgametime - a.startgametime;
         });
 
-        // Limit the number of displayed matches if needed
-        const numberOfMatchesToShow = 20; // Show only the latest 20 matches
+        const numberOfMatchesToShow = 20;
         const latestMatches = sortedMatches.slice(0, numberOfMatchesToShow);
 
         setMatchHistory(latestMatches);
@@ -162,17 +156,13 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
     fetchMatchHistory();
   }, [userID]);
 
-  // Helper functions
-
-  // Format the map name for display
   const formatMapName = (mapname: string) => {
     return mapname
-      .replace(/^rm_/, "") // Remove "rm_"
-      .replace(/_/g, " ") // Replace underscores with spaces
-      .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize first letter of each word
+      .replace(/^rm_/, "")
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  // Format the match type ID into a human-readable string
   const matchIdFormatter = (matchId: number) => {
     switch (matchId) {
       case 0:
@@ -190,7 +180,6 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
     }
   };
 
-  // Calculate match duration from start and end times
   const matchDuration = (startTime: number, endTime: number) => {
     const duration = endTime - startTime;
     const minutes = Math.floor(duration / 60);
@@ -198,7 +187,6 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
     return `${minutes}m ${seconds}s`;
   };
 
-  // Format the match date as relative time
   const matchDate = (startgametime: number) => {
     const date = new Date(startgametime * 1000);
     const now = new Date();
@@ -210,7 +198,6 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
     return `${days} Days ago`;
   };
 
-  // Get the rating change for the current user
   const getRatingChange = (match: MatchHistory) => {
     const currentPlayerData = match.matchhistorymember.find(
       (member) => member.profile_id === userID
@@ -240,7 +227,6 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
     return <div className="text-gray-500">N/A</div>;
   };
 
-  // Sorting function
   const requestSort = (key: string) => {
     let direction: "ascending" | "descending" = "ascending";
     if (
@@ -253,7 +239,6 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
     setSortConfig({ key, direction });
   };
 
-  // Memoized sorted match history
   const sortedMatchHistory = React.useMemo(() => {
     if (sortConfig !== null) {
       return [...matchHistory].sort((a, b) => {
@@ -275,7 +260,6 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
     return matchHistory;
   }, [matchHistory, sortConfig]);
 
-  // Render component
   if (!userID)
     return (
       <div className="flex justify-center items-center">
@@ -293,15 +277,14 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
   return (
     <div>
       <div className="w-full overflow-x-auto sm:overflow-x-visible">
-        <div className="w-[800px] sm:w-full">
+        <div className="w-full sm:w-full">
           {matchHistory && matchHistory.length > 0 ? (
             <Table
               aria-label="Match History Table"
-              className=""
               topContent={
                 <>
-                  <div className="flex w-full gap-2 items-center text-2xl font-bold pt-4">
-                    <IconSkull size={32} />
+                  <div className="flex w-full gap-2 items-center text-xl sm:text-2xl font-bold pt-4">
+                    <IconSkull size={24} />
                     Recent Games
                   </div>
                   <hr className="border-neutral-600" />
@@ -310,49 +293,58 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
             >
               <TableHeader>
                 <TableColumn
-                  className="uppercase text-xs font-semibold cursor-pointer"
+                  className="uppercase text-[10px] sm:text-xs font-semibold cursor-pointer"
                   onClick={() => requestSort("mapname")}
                 >
                   Map / Mode / Duration
                 </TableColumn>
                 <TableColumn
-                  className="uppercase text-xs font-semibold text-right cursor-pointer"
+                  className="uppercase text-[10px] sm:text-xs font-semibold text-right cursor-pointer"
                   onClick={() => requestSort("startgametime")}
                 >
                   Date
                 </TableColumn>
                 <TableColumn
-                  className="uppercase text-xs font-semibold cursor-pointer"
+                  className="uppercase text-[10px] sm:text-xs font-semibold cursor-pointer"
                   onClick={() => requestSort("newrating")}
                 >
                   Rating Δ
                 </TableColumn>
-                <TableColumn className="uppercase text-xs font-semibold">
+                <TableColumn className="uppercase text-[10px] sm:text-xs font-semibold">
                   Team(s)
                 </TableColumn>
               </TableHeader>
               <TableBody>
                 {sortedMatchHistory.map((match) => (
                   <TableRow key={match.id}>
-                    <TableCell className="">
-                      <div className="flex items-center gap-4">
-                        <ImageMap
-                          mapname={match.mapname}
-                          width={100}
-                          height={100}
-                        />
-                        <div className="flex flex-col gap-2">
-                          <div className="flex gap-1 text-sm">
-                            <Tooltip
-                              content={match.id.toString()}
-                              className="bg-neutral-700"
-                            >
-                              <IconInfoCircleFilled size={18} />
-                            </Tooltip>
-                            {match.description}
+                    <TableCell>
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="block sm:hidden">
+                          <ImageMap
+                            mapname={match.mapname}
+                            width={50}
+                            height={50}
+                          />
+                        </div>
+                        <div className="hidden sm:block">
+                          <ImageMap mapname={match.mapname} />
+                        </div>
+
+                        <div className="flex flex-col gap-1 sm:gap-2">
+                          <div className="hidden sm:block">
+                            <div className="flex gap-1 text-xs">
+                              <Tooltip
+                                content={match.id.toString()}
+                                className="bg-neutral-700"
+                              >
+                                <IconInfoCircleFilled size={14} />
+                              </Tooltip>
+
+                              {match.description}
+                            </div>
                           </div>
                           <div>{formatMapName(match.mapname)}</div>
-                          <div>
+                          <div className="flex flex-col sm:flex-row gap-1">
                             {matchIdFormatter(match.matchtype_id)}{" "}
                             <span className="text-neutral-400">
                               {matchDuration(
@@ -365,33 +357,34 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      <span className=" text-sm">
+                      <span className="text-xs sm:text-sm">
                         {matchDate(match.startgametime)}
                       </span>
                       {match.matchtype_id === 0 ? (
-                        <div className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1 cursor-not-allowed">
-                          No Summary <IconPacman size={18} />
+                        <div className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1 cursor-not-allowed text-[10px] sm:text-xs">
+                          No Summary <IconPacman size={14} />
                         </div>
                       ) : (
                         <Link
                           href={`/match/${userID}/${match.id}`}
-                          className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1"
+                          className="flex gap-1 items-center text-right justify-end text-white/60 hover:text-white hover:underline duration-200 mt-1 text-[10px] sm:text-xs"
                         >
-                          View Summary <IconPacman size={18} />
+                          View Summary <IconPacman size={14} />
                         </Link>
                       )}
                     </TableCell>
-                    <TableCell className="text-md">
-                      <div className="text-center">
+                    <TableCell className="text-md ">
+                      <div className="text-center text-[10px] sm:text-xs">
                         {match.matchtype_id !== 0 ? (
                           getRatingChange(match)
                         ) : (
-                          <div className="text-neutral-400 text-xs">N/A</div>
+                          <div className="text-neutral-400 text-[10px] sm:text-xs">
+                            N/A
+                          </div>
                         )}
                       </div>
                     </TableCell>
                     <TableCell className="flex flex-row gap-2">
-                      {/* Teams */}
                       {Object.entries(
                         match.matchhistorymember.reduce(
                           (
@@ -405,8 +398,8 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
                           {}
                         )
                       ).map(([teamId, members]) => (
-                        <div key={teamId} className="mb-2 gap-4 w-1/2">
-                          <div className="font-bold">
+                        <div key={teamId} className="mb-2 gap-3 sm:gap-4 w-1/2">
+                          <div className="font-bold text-xs sm:text-sm">
                             Team {parseInt(teamId) + 1}
                           </div>
                           <div className="flex flex-col">
@@ -421,9 +414,9 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
                               return (
                                 <div
                                   key={member.profile_id}
-                                  className="flex flex-col gap-2 bg-neutral-800 p-2 m-2 rounded-md w-full"
+                                  className="flex flex-col gap-1 sm:gap-2 bg-neutral-800 p-1 sm:p-2 m-1 sm:m-2 rounded-md w-full"
                                 >
-                                  <div className="flex flex-row items-center gap-2 ">
+                                  <div className="flex flex-row items-center gap-1 sm:gap-2">
                                     <CivImage
                                       civid={member.civilization_id.toString()}
                                     />
@@ -450,7 +443,7 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
                                           </div>
                                         )}
                                       </div>
-                                      <div>
+                                      <div className="text-xs sm:text-sm">
                                         {match.matchtype_id !== 0 && (
                                           <span>
                                             {member.newrating -
@@ -460,7 +453,7 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
                                                 {member.newrating}
                                                 <div className="text-green-500 flex items-center gap-1">
                                                   <IconArrowNarrowUp
-                                                    size={16}
+                                                    size={12}
                                                   />
                                                   {member.newrating -
                                                     member.oldrating}
@@ -471,7 +464,7 @@ const PlayerMatchHistoryContent: React.FC<PlayerMatchHistoryContentProps> = ({
                                                 {member.newrating}
                                                 <span className="text-red-500 flex items-center gap-1">
                                                   <IconArrowNarrowDown
-                                                    size={16}
+                                                    size={12}
                                                   />
                                                   {member.newrating -
                                                     member.oldrating}

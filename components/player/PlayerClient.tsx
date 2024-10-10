@@ -6,6 +6,7 @@ import { ReturnData } from "@/app/api/v1/player/getPlayer/types";
 import { Tabs, Tab } from "@nextui-org/react";
 import PlayerLastMatchCard from "./PlayerLastMatchCard";
 import PlayerMatchHistoryContent from "./PlayerMatchHistoryContent";
+import MatchHistory from "../MatchHistory";
 
 interface PlayerClientProps {
   playerId: string;
@@ -119,41 +120,43 @@ const PlayerClient: React.FC<PlayerClientProps> = ({ playerId }) => {
 
   return (
     <div>
-      <Tabs
-        aria-label="Options"
-        className="bg-transparent"
-        placement="start"
-        defaultSelectedKey="rmsolo" // Solo tab is selected by default
-        selectedKey={selectedTab} // Bind the selected tab to state
-        onSelectionChange={(key) => setSelectedTab(key as string)} // Update selected tab state
-      >
-        <Tab
-          key="rmsolo"
-          title="Solo"
-          className="text-sm"
-          isDisabled={!dataPlayerSolo}
+      <div className="p-5">
+        <Tabs
+          aria-label="Options"
+          className="bg-transparent"
+          placement="start"
+          defaultSelectedKey="rmsolo" // Solo tab is selected by default
+          selectedKey={selectedTab} // Bind the selected tab to state
+          onSelectionChange={(key) => setSelectedTab(key as string)} // Update selected tab state
         >
-          <PlayerCard
-            profile={dataPlayerSolo.player}
-            playerLeaderboard={dataPlayerSolo.player_leaderboard}
-          />
-        </Tab>
+          <Tab
+            key="rmsolo"
+            title="Solo"
+            className="text-sm"
+            isDisabled={!dataPlayerSolo}
+          >
+            <PlayerCard
+              profile={dataPlayerSolo.player}
+              playerLeaderboard={dataPlayerSolo.player_leaderboard}
+            />
+          </Tab>
 
-        <Tab
-          key="rmteam"
-          title="Team"
-          className="text-sm"
-          isDisabled={!dataPlayerTeam}
-        >
-          <PlayerCard
-            profile={dataPlayerTeam.player}
-            playerLeaderboard={dataPlayerTeam.player_leaderboard}
-          />
-        </Tab>
-      </Tabs>
+          <Tab
+            key="rmteam"
+            title="Team"
+            className="text-sm"
+            isDisabled={!dataPlayerTeam}
+          >
+            <PlayerCard
+              profile={dataPlayerTeam.player}
+              playerLeaderboard={dataPlayerTeam.player_leaderboard}
+            />
+          </Tab>
+        </Tabs>
+      </div>
 
-      <div className="flex justify-center mt-4">
-        {/* Conditionally render last match and second last match based on the selected tab */}
+      {/* <div className="flex justify-center mt-4">
+       
         <PlayerLastMatchCard
           lastMatch={
             selectedTab === "rmsolo"
@@ -166,7 +169,7 @@ const PlayerClient: React.FC<PlayerClientProps> = ({ playerId }) => {
               : dataPlayerTeam.team_rank.second_last_match
           }
         />
-      </div>
+      </div> */}
 
       <PlayerMatchHistoryContent userID={Number(playerId)} />
     </div>
