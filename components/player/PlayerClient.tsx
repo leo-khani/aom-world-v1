@@ -4,9 +4,7 @@ import PlayerCard from "./PlayerCard";
 import apiRouteRelative from "@/config/apiRoute";
 import { ReturnData } from "@/app/api/v1/player/getPlayer/types";
 import { Tabs, Tab } from "@nextui-org/react";
-import PlayerLastMatchCard from "./PlayerLastMatchCard";
 import PlayerMatchHistoryContent from "./PlayerMatchHistoryContent";
-import MatchHistory from "../MatchHistory";
 
 interface PlayerClientProps {
   playerId: string;

@@ -1,7 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
 import { apiDataAbsolute } from "@/config/api";
-import Player from "@/components/Player";
 import PlayerClient from "@/components/player/PlayerClient";
 
 export const revalidate = 0;

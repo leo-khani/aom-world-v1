@@ -2,8 +2,6 @@ import { siteConfig } from "@/config/site";
 import { Spacer } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
-import { SupportMe } from "../Navbar";
-import Feedback from "../section/Feedback";
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();

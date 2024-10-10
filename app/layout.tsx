@@ -7,7 +7,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import Header from "@/components/Header";
 import Footer from "@/components/main/Footer";
 import BannerUpdate from "@/components/alert/BannerUpdate";
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Head from "next/head";
 
 // Font configuration
 const sen = Sen({
