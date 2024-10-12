@@ -14,6 +14,7 @@ export default function InstallPopup() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isMobile, setIsMobile] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -23,13 +24,11 @@ export default function InstallPopup() {
     window.addEventListener("resize", checkMobile);
 
     const handleBeforeInstallPrompt = (e: Event) => {
-      // Prevent Chrome 67 and earlier from automatically showing the prompt
       e.preventDefault();
-      // Stash the event so it can be triggered later
       setDeferredPrompt(e);
+      setIsInstallable(true);
     };
 
-    // Listen for the 'beforeinstallprompt' event
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
@@ -42,29 +41,27 @@ export default function InstallPopup() {
   }, []);
 
   useEffect(() => {
-    if (isMobile) {
+    if (isMobile && isInstallable) {
       onOpen();
     }
-  }, [isMobile, onOpen]);
+  }, [isMobile, isInstallable, onOpen]);
 
   const handleInstall = async () => {
     if (deferredPrompt) {
-      // Show the install prompt
       deferredPrompt.prompt();
-      // Wait for the user to respond to the prompt
       const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") {
-        console.log("User accepted the install prompt");
-      } else {
-        console.log("User dismissed the install prompt");
-      }
-      // Clear the saved prompt since it can't be used again
+      console.log(
+        `User ${
+          outcome === "accepted" ? "accepted" : "dismissed"
+        } the install prompt`
+      );
       setDeferredPrompt(null);
+      setIsInstallable(false);
     }
     onOpenChange();
   };
 
-  if (!isMobile) return null;
+  if (!isMobile || !isInstallable) return null;
 
   return (
     <Modal
