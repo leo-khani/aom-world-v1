@@ -11,16 +11,17 @@ import YoutubeVideos from "@/components/section/YoutubeVideos";
  *
  * @return {JSX.Element} The JSX elements representing the Home page.
  */
+
 export default function Home() {
   return (
     <div className="flex flex-col gap-2">
       <DiscordPopup />
+      <HeroSection />
+      <GodsSectionContent />
       <Feedback />
       <div className="flex flex-col lg:flex-row gap-4">
         <Leaderboard length={15} showLoadMoreBtn />
       </div>
-      <HeroSection />
-      <GodsSectionContent />
       <HotkeyBar />
       <YoutubeVideos />
     </div>

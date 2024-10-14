@@ -8,7 +8,7 @@ import Link from "next/link";
 const HeroSection = () => {
   return (
     <div
-      className="relative w-full h-96"
+      className="relative w-full h-72"
       style={{ aspectRatio: `${32} / ${9}` }}
     >
       <Image
@@ -27,8 +27,8 @@ const HeroSection = () => {
           <Image
             src={siteConfig.logo.gameIcon}
             alt="aom logo"
-            width={512}
-            height={512}
+            width={312}
+            height={312}
           />
         </div>
       </div>
