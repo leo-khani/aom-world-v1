@@ -4,20 +4,22 @@ import { godNames } from "@/data/gods";
 
 const GodsSectionContent: React.FC = () => {
   return (
-    <>
-      <div className="grid grid-cols-4 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-13 gap-2 items-center justify-center">
-        {Object.values(godNames).map((god, index) => (
-          <GodsSectionCard
-            key={index}
-            id={god.id}
-            src={`${god.img}`}
-            alt={god.name}
-            name={god.name}
-            description={god.title}
-          />
+    <div className="overflow-x-auto px-4 py-2">
+      <div className="flex gap-2 max-w-min md:min-w-max">
+        {Object.values(godNames).map((god) => (
+          <div className="flex-shrink-0 w-full md:w-auto" key={god.id}>
+            <GodsSectionCard
+              key={god.id}
+              id={god.id}
+              src={`${god.img}`}
+              alt={god.name}
+              name={god.name}
+              description={god.title}
+            />
+          </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
