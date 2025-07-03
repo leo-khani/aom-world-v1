@@ -49,6 +49,7 @@ export async function POST(req: NextRequest) {
     const { region, matchType, consoleMatchType, searchPlayer, page, count, sortColumn, sortDirection } = await req.json();
     
     const response = await getLeaderboard(region, matchType, consoleMatchType, searchPlayer, page, count, sortColumn, sortDirection);
+    console;
     return NextResponse.json(response);
   } catch (error) {
     console.error('Error:', error);
