@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import {
-  Autocomplete,
-  AutocompleteItem,
-  Skeleton,
-  Spinner,
-} from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Skeleton } from "@nextui-org/react";
 import { IconCaretUpDown } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import apiDataRelative from "@/config/api";
